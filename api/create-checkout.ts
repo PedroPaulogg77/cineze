@@ -1,10 +1,16 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { createClient } from '@supabase/supabase-js';
+
+function gerarOrderNsu(): string {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+    return `cineze-${timestamp}-${random}`;
+}
 
 export default async function handler(
     request: VercelRequest,
     response: VercelResponse
 ) {
-    // CORS configuration for local testing if needed
     response.setHeader('Access-Control-Allow-Credentials', 'true');
     response.setHeader('Access-Control-Allow-Origin', '*');
     response.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -23,30 +29,55 @@ export default async function handler(
 
     const { nome, email, phone } = request.body || {};
 
+    if (!email) {
+        return response.status(400).json({ error: 'Email obrigatório' });
+    }
+
+    // 1. Salvar pedido no Supabase antes de ir para InfinitePay
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+        console.error("Credenciais Supabase ausentes");
+        return response.status(500).json({ error: "Configuração de banco ausente" });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const orderNsu = gerarOrderNsu();
+
+    const { error: insertError } = await supabase
+        .from('pedidos')
+        .insert({ order_nsu: orderNsu, email: email.toLowerCase().trim(), status: 'pendente' });
+
+    if (insertError) {
+        console.error("Erro ao salvar pedido:", insertError);
+        return response.status(500).json({ error: "Erro ao registrar pedido" });
+    }
+
+    // 2. Criar link de checkout na InfinitePay
     try {
         const payload = {
             handle: "cineze",
             items: [
                 {
                     quantity: 1,
-                    price: 100, // R$ 1,00 temporário para teste - alterar para 6700 depois
+                    price: 6700,
                     description: "Diagnóstico Empresarial Cineze"
                 }
             ],
-            redirect_url: "https://diagnostico.cineze.com.br",
+            order_nsu: orderNsu,
+            redirect_url: `https://diagnostico.cineze.com.br/acesso?order_nsu=${orderNsu}`,
             webhook_url: "https://diagnostico.cineze.com.br/api/webhook/infinitepay",
             customer: {
                 name: nome || "",
-                email: email || "",
+                email: email.toLowerCase().trim(),
                 phone_number: phone || ""
             }
         };
 
         const res = await fetch('https://api.infinitepay.io/invoices/public/checkout/links', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
 
@@ -54,29 +85,19 @@ export default async function handler(
 
         if (!res.ok) {
             console.error("InfinitePay error:", data);
-            return response.status(res.status).json({
-                error: "Erro ao gerar checkout na InfinitePay",
-                details: data
-            });
+            return response.status(res.status).json({ error: "Erro ao gerar checkout", details: data });
         }
 
-        // Try to extract the URL from different common structural responses
-        let url = "";
-        if (data.url) {
-            url = data.url;
-        } else if (data.data?.attributes?.url) {
-            url = data.data.attributes.url;
-        } else if (data.website_url) {
-            url = data.website_url;
-        } else if (data.payment_url) {
-            url = data.payment_url;
-        } else {
-            url = data; // If it's a string or fallback to raw
+        const url = data.url ?? data.link ?? data.checkout_url ?? data.payment_url ?? data.data?.attributes?.url ?? "";
+
+        if (!url) {
+            console.error("InfinitePay não retornou URL:", data);
+            return response.status(502).json({ error: "Link de pagamento não gerado" });
         }
 
-        return response.status(200).json({ url, raw: data });
+        return response.status(200).json({ url });
     } catch (err: any) {
-        console.error("Error creating checkout:", err);
-        return response.status(500).json({ error: "Erro interno no servidor.", details: err.message });
+        console.error("Erro ao criar checkout:", err);
+        return response.status(500).json({ error: "Erro interno no servidor", details: err.message });
     }
 }
