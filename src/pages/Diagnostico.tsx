@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useSpring, useTransform } from "framer-motion";
 import {
     ArrowRight, ArrowLeft, CheckCircle2, Check, UserRound, Phone, MapPin,
@@ -134,6 +134,7 @@ const questions = [
 ];
 
 export default function Diagnostico() {
+    const [searchParams] = useSearchParams();
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [isScrolledHeader, setIsScrolledHeader] = useState(false);
@@ -142,6 +143,13 @@ export default function Diagnostico() {
     const [carouselIndex, setCarouselIndex] = useState(0);
     const [stepCarouselIndex, setStepCarouselIndex] = useState(0);
     const navigate = useNavigate();
+
+    // Check for "start" param to skip step 0
+    useEffect(() => {
+        if (searchParams.get("start") === "true") {
+            setStep(1);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         const interval = setInterval(() => {

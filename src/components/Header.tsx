@@ -75,7 +75,7 @@ export function Header() {
             transition={{ delay: 0.5, duration: 0.4 }}
           >
             <Button variant="hero" size="default" asChild className="group">
-              <Link to="/diagnostico">
+              <Link to="/diagnostico?start=true">
                 Diagnóstico Gratuito
               </Link>
             </Button>
@@ -123,7 +123,7 @@ export function Header() {
                 transition={{ delay: 0.4 }}
               >
                 <Button variant="hero" size="lg" className="mt-4 w-full" asChild>
-                  <Link to="/diagnostico">
+                  <Link to="/diagnostico?start=true">
                     Diagnóstico Gratuito
                   </Link>
                 </Button>

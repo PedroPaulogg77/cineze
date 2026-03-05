@@ -65,7 +65,7 @@ export function FinalCTA() {
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
               <Button variant="hero" size="xl" asChild className="w-full sm:w-auto text-sm sm:text-base whitespace-normal h-auto py-4">
                 <Link
-                  to="/diagnostico"
+                  to="/diagnostico?start=true"
                   className="group flex items-center justify-center gap-2 text-center"
                 >
                   AGENDAR DIAGNÓSTICO GRATUITO
