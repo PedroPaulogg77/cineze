@@ -179,3 +179,17 @@
   background-size: 200% 200%;
   animation: gradient-shift 8s ease infinite;
 }
+
+@keyframes grid-chess-move {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(40px, 40px);
+  }
+}
+
+.animate-grid-chess {
+  animation: grid-chess-move 2s linear infinite;
+}

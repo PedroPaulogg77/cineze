@@ -10,6 +10,7 @@ import Diagnostico from "./pages/Diagnostico";
 import DiagnosticoObrigadoA from "./pages/DiagnosticoObrigadoA";
 import DiagnosticoObrigadoB from "./pages/DiagnosticoObrigadoB";
 import Privacidade from "./pages/Privacidade";
+import Termos from "./pages/Termos";
 import { Footer } from "@/components/Footer";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const AppContent = () => {
         <Route path="/diagnostico/obrigado-a" element={<DiagnosticoObrigadoA />} />
         <Route path="/diagnostico/obrigado-b" element={<DiagnosticoObrigadoB />} />
         <Route path="/privacidade" element={<Privacidade />} />
+        <Route path="/termos" element={<Termos />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

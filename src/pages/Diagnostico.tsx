@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoCineze from "@/assets/logo-cineze.png";
+import { DiagnosticoFooter } from "@/components/DiagnosticoFooter";
 import parceiro1 from "@/assets/Logos/PARCEIRO 1.jpg";
 import parceiro2 from "@/assets/Logos/PARCEIRO 2.png";
 import parceiro3 from "@/assets/Logos/PARCEIRO 3.png";
@@ -729,6 +730,8 @@ export default function Diagnostico() {
                     </section>
 
                 </main>
+
+                <DiagnosticoFooter />
 
                 {/* Floating Bottom CTA for Mobile */}
                 <AnimatePresence>

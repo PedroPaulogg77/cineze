@@ -1,17 +1,29 @@
-import { CheckCircle2, Layout, Search, PenTool, ArrowRight, Cog, LayoutTemplate, MessageSquare } from "lucide-react";
+import { CheckCircle2, FileJson, TrendingUp, ArrowRight, Activity, PercentSquare, RefreshCcw, ShieldCheck, Star } from "lucide-react";
+import { DiagnosticoFooter } from "@/components/DiagnosticoFooter";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { GridVignetteBackground } from "@/components/ui/grid-vignette-background";
+import logoCineze from "@/assets/logo-cineze.png";
+import mockupTelas from "@/assets/mockup-telas.png";
+import { VerticalImageStack } from "@/components/VerticalImageStack";
 
 export default function DiagnosticoObrigadoA() {
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-primary/30">
             {/* Top Banner */}
-            <div className="bg-green-500/10 border-b border-green-500/20 text-center py-3 px-4 text-sm font-semibold text-green-400">
+            <div className="bg-green-500/10 border-b border-green-500/20 text-center py-3 px-4 text-sm font-semibold text-green-400 relative z-10">
                 Seu cadastro foi concluído. Em até 12 horas um consultor falará com você!
             </div>
 
             <main className="container mx-auto px-4 py-12 md:py-20 flex flex-col items-center">
-                <div className="max-w-5xl w-full">
+                <GridVignetteBackground
+                    size={40}
+                    horizontalVignetteSize={100}
+                    verticalVignetteSize={100}
+                    intensity={15}
+                    className="z-[-1]"
+                />
+
+                <div className="max-w-5xl w-full relative z-10">
 
                     {/* Success Message */}
                     <div className="text-center mb-12 space-y-4">
@@ -94,118 +106,217 @@ export default function DiagnosticoObrigadoA() {
                         </div>
                     </div>
 
-                    {/* Header */}
-                    <div className="text-center mb-16 space-y-6">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
-                            Enquanto isso — você quer já ter resultado em <span className="gradient-text">7 dias</span>?
-                        </h1>
-                        <div className="space-y-4 text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                            <p>Você já investe em tráfego. Isso significa que você não precisa aprender do zero.</p>
-                            <p>O problema provavelmente está em algum ponto da estrutura: <strong className="text-foreground">a landing page que não converte, o Google Meu Negócio abandonado, os criativos que cansaram, ou tudo isso junto.</strong></p>
-                            <p className="text-foreground font-medium text-xl pt-2">O Quick Start da Cineze resolve isso em 7 dias.</p>
-                        </div>
-                    </div>
-
-                    <div className="grid lg:grid-cols-5 gap-8 items-start">
-                        {/* Left Column: What's included */}
-                        <div className="lg:col-span-3 bg-card border border-border rounded-3xl p-8 md:p-10 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-32 bg-secondary/10 rounded-full blur-[100px] pointer-events-none" />
-
-                            <div className="relative z-10">
-                                <h2 className="text-2xl font-bold mb-8">O que inclui:</h2>
-
-                                <ul className="space-y-8">
-                                    <li className="flex gap-4 items-start">
-                                        <div className="bg-primary/10 border border-primary/20 p-2.5 rounded-xl text-primary mt-0.5">
-                                            <LayoutTemplate className="w-5 h-5" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-lg mb-1 text-foreground">Landing page do seu negócio</h3>
-                                            <p className="text-muted-foreground text-sm">Criada do zero ou refeita totalmente focada em conversão.</p>
-                                        </div>
-                                    </li>
-                                    <li className="flex gap-4 items-start">
-                                        <div className="bg-primary/10 border border-primary/20 p-2.5 rounded-xl text-primary mt-0.5">
-                                            <Search className="w-5 h-5" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-lg mb-1 text-foreground">Google Meu Negócio otimizado</h3>
-                                            <p className="text-muted-foreground text-sm">Configurado de ponta a ponta para buscas locais.</p>
-                                        </div>
-                                    </li>
-                                    <li className="flex gap-4 items-start">
-                                        <div className="bg-primary/10 border border-primary/20 p-2.5 rounded-xl text-primary mt-0.5">
-                                            <PenTool className="w-5 h-5" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-lg mb-1 text-foreground">3 criativos prontos</h3>
-                                            <p className="text-muted-foreground text-sm">Imagens ou roteiros prontos para rodar nos seus anúncios.</p>
-                                        </div>
-                                    </li>
-                                    <li className="flex gap-4 items-start">
-                                        <div className="bg-primary/10 border border-primary/20 p-2.5 rounded-xl text-primary mt-0.5">
-                                            <Cog className="w-5 h-5" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-lg mb-1 text-foreground">Prazo blindado</h3>
-                                            <p className="text-muted-foreground text-sm">Entregue em exatos 7 dias corridos a partir do kickoff.</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                    {/* Enquanto isso... Section */}
+                    {/* Header: Enquanto isso */}
+                    <div className="w-full max-w-4xl mx-auto mb-2 mb-20 px-4 md:px-0 mt-8">
+                        <div className="text-center mb-6">
+                            <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground mb-4 leading-tight">
+                                Não precisa esperar a ligação para começar.
+                            </h2>
                         </div>
 
-                        {/* Right Column: Checkout / Offer */}
-                        <div className="lg:col-span-2 flex flex-col h-full bg-gradient-to-b from-card to-background border border-border shadow-2xl shadow-primary/5 rounded-3xl p-8 sticky top-8">
-                            <div className="space-y-6 flex-1">
-                                <div className="space-y-4">
-                                    <div className="text-muted-foreground text-sm">
-                                        Fazer isso separado, com freelancers ou agências, custa entre <span className="line-through">R$ 2.000</span> e <span className="line-through">R$ 3.500</span>.
-                                    </div>
-                                    <div className="pt-4 pb-2 border-b border-border/50">
-                                        <p className="text-sm font-medium text-foreground mb-1">Com a Cineze, você paga:</p>
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-2xl text-muted-foreground">R$</span>
-                                            <span className="text-6xl font-black text-foreground">297</span>
-                                        </div>
-                                        <p className="text-xs text-muted-foreground mt-2">Uma vez só. Sem mensalidade.</p>
-                                    </div>
+                        <div className="w-full flex flex-col items-center text-center relative mt-4 md:mt-8">
+                            <div className="relative z-10 w-full flex flex-col items-center text-foreground">
+                                {/* Logo/Brand placeholder */}
+                                <div className="mb-6 md:mb-10 flex items-center justify-center">
+                                    <img src={logoCineze} alt="Cineze" className="h-8 md:h-12 w-auto object-contain shrink-0" />
                                 </div>
 
-                                <div className="bg-card/50 border border-border rounded-xl p-4">
-                                    <div className="flex items-start gap-3">
-                                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                                        <div>
-                                            <p className="text-sm font-bold text-foreground mb-1">Garantia Absoluta</p>
-                                            <p className="text-xs text-muted-foreground leading-relaxed">Se não entregar tudo em 7 dias: 100% do seu dinheiro de volta. Sem discussão.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                <h2 className="text-[26px] md:text-[40px] font-medium text-foreground mb-8 md:mb-12 leading-snug md:leading-tight max-w-[850px] tracking-tight w-full px-2 md:px-0">
+                                    Você quer já ter resultado em 7 dias —
+                                    <span className="bg-secondary text-secondary-foreground font-bold px-3 py-1 ml-2 mt-2 md:mt-0 inline-block rounded-md shadow-lg">mesmo antes da nossa conversa?</span>
+                                </h2>
 
-                            <div className="mt-8 space-y-6">
-                                <div className="space-y-3">
-                                    <Button className="w-full text-base h-16 shadow-lg glow-blue group font-bold tracking-wide" asChild>
+                                <div className="space-y-5 md:space-y-8 mb-10 md:mb-16 max-w-[700px] w-full px-4 md:px-0">
+                                    <p className="text-[15px] md:text-lg text-muted-foreground leading-relaxed font-normal">
+                                        Você já investe em tráfego — ou está prestes a começar. O problema quase nunca é falta de verba.
+                                    </p>
+
+                                    <p className="text-[15px] md:text-lg text-muted-foreground leading-relaxed font-normal">
+                                        É que os clientes chegam num lugar que não converte. O Google Meu Negócio está abandonado. Os criativos cansaram. Ou tudo isso junto.
+                                    </p>
+
+                                    <p className="text-[15px] md:text-lg text-muted-foreground leading-relaxed font-normal text-white">
+                                        O Quick Start da Cineze resolve a estrutura em 7 dias corridos — para que cada real que você investir em anúncio tenha para onde ir.
+                                    </p>
+                                </div>
+
+                                {/* Image Container (Substituted Video) */}
+                                <div className="w-[135%] md:w-full max-w-none md:max-w-[950px] relative z-20 -mb-6 md:-mb-14 pointer-events-none scale-110 md:scale-100">
+                                    <img
+                                        src={mockupTelas}
+                                        alt="Plataforma Cineze Mockup"
+                                        className="w-full h-auto object-contain"
+                                    />
+                                </div>
+
+                                {/* CTA Button */}
+                                <div className="relative z-10 w-full flex justify-center">
+                                    <Button className="w-full md:w-auto px-10 md:px-20 h-16 text-base font-bold tracking-wide shadow-[0_0_30px_rgba(6,183,216,0.3)] group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105" asChild>
                                         <a href="#">
-                                            QUERO MEU QUICK START POR R$ 297
-                                            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                            QUERO RESULTADO EM 7 DIAS →
+                                            {/* <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline" /> */}
                                         </a>
                                     </Button>
-                                    <div className="text-center text-xs text-muted-foreground">
-                                        Pagamento único. Sem mensalidade. Começa amanhã.
-                                    </div>
-                                </div>
-
-                                <div className="pt-4 text-center border-t border-border/30">
-                                    <p className="text-sm text-foreground mb-1">Prefere esperar a conversa com Pedro antes de decidir?</p>
-                                    <p className="text-xs text-muted-foreground">Tudo bem — ele vai te contatar em até 2h.</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Plataforma Section (Dashboards) - Mobile First */}
+                    <div className="mt-24 md:mt-40 w-full flex flex-col justify-center items-center max-w-6xl mx-auto px-4 md:px-0 mb-20 lg:mb-10">
+                        <div className="w-full flex flex-col lg:flex-row items-center lg:items-start justify-between gap-24 lg:gap-16">
+
+                            {/* Texto (Mobile: Topo, Desktop: Direita) */}
+                            <div className="w-full lg:w-1/2 flex flex-col space-y-6 lg:space-y-8 text-center lg:text-left order-1 lg:order-2 lg:pt-8">
+                                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight leading-tight">
+                                    ESTRUTURA PRONTA EM 7 DIAS. <span className="text-secondary glow-cyan">SEM VOCÊ PRECISAR ENTENDER DE MARKETING.</span>
+                                </h2>
+
+                                <div className="space-y-6 text-foreground/90 font-medium text-base md:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                                    <p>
+                                        A Cineze monta a <strong className="text-foreground">estrutura digital do seu negócio do zero</strong> — ou refaz o que não está funcionando.
+                                    </p>
+                                    <p>
+                                        Em 7 dias você tem uma <strong className="text-foreground">landing page focada em conversão</strong>, seu Google Meu Negócio otimizado para aparecer nas buscas locais e <strong className="text-foreground">3 criativos prontos para rodar</strong> nos seus anúncios.
+                                    </p>
+                                    <p className="text-foreground font-semibold">
+                                        Tudo entregue. Tudo configurado. Você só precisa aprovar.
+                                    </p>
+                                </div>
+
+                                {/* Botão Desktop (Escondido no mobile, pois o usuário quer abaixo da imagem) */}
+                                <div className="hidden lg:flex pt-4 justify-start">
+                                    <Button className="px-10 h-16 text-base font-bold tracking-wide shadow-lg glow-cyan group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105" asChild>
+                                        <a href="#">
+                                            COMEÇAR MEU QUICK START →
+                                        </a>
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {/* Carrossel Vertical (Mobile: Abaixo do texto, Desktop: Esquerda) */}
+                            <div className="w-full lg:w-1/2 flex flex-col items-center justify-center order-2 lg:order-1 relative min-h-[550px]">
+                                <VerticalImageStack />
+
+                                {/* Botão Mobile (Abaixo da imagem, escondido no desktop) */}
+                                <div className="w-full flex justify-center mt-48 lg:hidden px-2 relative z-40">
+                                    <Button className="w-full h-16 text-sm font-bold tracking-wide shadow-lg glow-cyan group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105" asChild>
+                                        <a href="#">
+                                            COMEÇAR MEU QUICK START →
+                                        </a>
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Oferta / Garantia Section */}
+                    <div className="w-full max-w-5xl mx-auto px-4 md:px-0 mt-16 md:mt-32 mb-10">
+                        {/* Section Title */}
+                        <div className="text-center mb-10 md:mb-16">
+                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight max-w-4xl mx-auto">
+                                Fazer isso separado, com freelancers ou agências, custa <span className="text-secondary glow-cyan">entre R$2.000 e R$3.500.</span>
+                            </h2>
+                            <p className="text-xl md:text-2xl font-bold text-foreground/80 mt-6">
+                                Com a Cineze, você paga uma vez e recebe tudo em 7 dias.
+                            </p>
+                        </div>
+
+                        {/* Glassmorphic Card */}
+                        <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row-reverse gap-12 md:gap-14 lg:gap-16 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] relative overflow-hidden">
+                            {/* Ambient Glows inside the card */}
+                            <div className="absolute -top-32 -left-32 p-40 bg-secondary/10 rounded-full blur-[120px] pointer-events-none" />
+                            <div className="absolute -bottom-32 -right-32 p-40 bg-secondary/10 rounded-full blur-[120px] pointer-events-none" />
+
+                            {/* Right Column (Benefits List) -> Now First in DOM for mobile Top */}
+                            <div className="relative z-10 lg:w-[45%] flex flex-col justify-center">
+                                <ul className="space-y-6 md:space-y-8 lg:pl-4">
+                                    {[
+                                        { title: "Landing page do seu negócio", desc: "Criada do zero ou refeita totalmente, focada em conversão. Com botão de WhatsApp, prova social e CTA claro." },
+                                        { title: "Google Meu Negócio otimizado", desc: "Configurado de ponta a ponta para aparecer nas buscas locais. Categoria, fotos, horário, descrição e primeiras avaliações." },
+                                        { title: "3 criativos prontos para anúncios", desc: "Imagens ou roteiros de vídeo no formato certo para Meta Ads. Prontos para subir na campanha no dia da entrega." },
+                                        { title: "Prazo blindado — 7 dias corridos", desc: "Kickoff no dia seguinte ao pagamento. Entrega total em exatos 7 dias úteis. Sem enrolação." }
+                                    ].map((item, index) => (
+                                        <li key={index} className="flex flex-col space-y-2 group">
+                                            <div className="flex items-center gap-3">
+                                                <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
+                                                <span className="text-lg md:text-xl text-foreground font-bold leading-tight">
+                                                    {item.title}
+                                                </span>
+                                            </div>
+                                            <p className="text-sm md:text-base text-muted-foreground leading-relaxed pl-8">
+                                                {item.desc}
+                                            </p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            {/* Left Column (Pricing & Guarantee) -> Second in DOM so bottom on mobile, but left on desktop */}
+                            <div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center mt-8 lg:mt-0 w-full">
+                                <p className="text-xl md:text-[22px] text-muted-foreground font-light mb-2 w-full text-center">
+                                    De <span className="line-through decoration-white/30 text-white/50">R$997</span> por apenas
+                                </p>
+
+                                <div className="flex flex-col items-center justify-center w-full mb-8 md:mb-12">
+                                    <div className="flex items-end text-secondary drop-shadow-[0_0_15px_rgba(6,183,216,0.3)]">
+                                        <span className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 mr-1">R$</span>
+                                        <span className="text-[110px] md:text-[140px] lg:text-[160px] font-black leading-none tracking-tighter">297</span>
+                                    </div>
+                                    <p className="text-lg md:text-xl text-foreground font-medium mt-2">
+                                        Uma vez só. Sem mensalidade. Começa amanhã.
+                                    </p>
+                                </div>
+
+                                {/* CTA Button */}
+                                <Button className="w-full h-16 md:h-20 text-[15px] md:text-lg font-bold tracking-wide shadow-[0_0_30px_rgba(6,183,216,0.25)] group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-[2rem] hover:scale-[1.03] mb-6 md:mb-8" asChild>
+                                    <a href="#">
+                                        QUERO MEU QUICK START POR R$297 →
+                                    </a>
+                                </Button>
+                                <p className="text-sm md:text-base text-muted-foreground mb-10 md:mb-12 text-center">
+                                    Prefere esperar a conversa com Pedro antes de decidir?<br />
+                                    <span className="text-foreground">Tudo bem — ele vai entrar em contato em até 12h.</span>
+                                </p>
+
+
+                                {/* Guarantee Box */}
+                                <div className="bg-white/[0.03] border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6 md:gap-8 relative overflow-hidden w-full">
+                                    <div className="flex-1 space-y-4 text-center sm:text-left relative z-10 w-full">
+                                        <p className="text-[13px] md:text-[14px] text-muted-foreground leading-relaxed">
+                                            Se a Cineze não entregar tudo dentro de 7 dias — landing page, Google Meu Negócio e os 3 criativos — <strong className="text-yellow-500 font-bold">você recebe 100% do valor de volta.</strong>
+                                        </p>
+                                        <p className="text-[13px] md:text-[14px] text-muted-foreground font-medium">
+                                            Sem formulário. Sem discussão. O risco é todo nosso.
+                                        </p>
+                                    </div>
+
+                                    {/* Gold Guarantee Seal */}
+                                    <div className="shrink-0 relative w-28 h-28 md:w-32 md:h-32 flex items-center justify-center z-10">
+                                        {/* Outer glowing border */}
+                                        <div className="absolute inset-0 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(234,179,8,0.2)]" style={{ background: "conic-gradient(from 0deg, #fef08a, #eab308, #a16207, #eab308, #fef08a)", padding: "4px" }}>
+                                            {/* Inner dark circle with dashed border */}
+                                            <div className="w-full h-full bg-[#1A1A1A] rounded-full flex flex-col items-center justify-center border-[3px] border-dashed border-yellow-500/50 p-2 text-center text-yellow-500 shadow-inner relative">
+                                                <div className="flex items-center gap-[2px] mb-1">
+                                                    {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-3 h-3 fill-yellow-500 text-yellow-500" />)}
+                                                </div>
+                                                <span className="text-2xl md:text-[26px] font-black leading-none drop-shadow-md text-yellow-400">7 DIAS</span>
+                                                <span className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest leading-tight mt-1 opacity-90 text-yellow-500">DE ENTREGA GARANTIDA</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
 
                     </div>
+
                 </div>
             </main>
+            <DiagnosticoFooter />
         </div>
     );
 }
