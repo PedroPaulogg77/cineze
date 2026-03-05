@@ -42,17 +42,10 @@ export default async function handler(
             }
         };
 
-        const apiKey = process.env.INFINITEPAY_API_KEY;
-        if (!apiKey) {
-            console.error("INFINITEPAY_API_KEY missing");
-            return response.status(500).json({ error: "Configuração do gateway pendente." });
-        }
-
         const res = await fetch('https://api.infinitepay.io/invoices/public/checkout/links', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
         });
