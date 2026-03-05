@@ -29,7 +29,7 @@ export default async function handler(
             items: [
                 {
                     quantity: 1,
-                    price: 6700,
+                    price: 100, // R$ 1,00 temporário para teste - alterar para 6700 depois
                     description: "Diagnóstico Empresarial Cineze"
                 }
             ],
