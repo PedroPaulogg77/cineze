@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 import { CheckCircle2, FileJson, TrendingUp, ArrowRight, Activity, PercentSquare, RefreshCcw, ShieldCheck, Star } from "lucide-react";
 import { DiagnosticoFooter } from "@/components/DiagnosticoFooter";
 import { Button } from "@/components/ui/button";
@@ -6,6 +10,41 @@ import logoCineze from "@/assets/logo-cineze.png";
 import cardsImage from "@/assets/CARDS.png";
 
 export default function DiagnosticoObrigadoB() {
+    const [searchParams] = useSearchParams();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleCheckout = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        
+        const params = {
+            nome: searchParams.get("nome") || "",
+            email: searchParams.get("email") || "",
+            phone: searchParams.get("phone") || ""
+        };
+
+        try {
+            setIsLoading(true);
+            const response = await fetch('/api/create-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(params),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) throw new Error(data.error || 'Erro ao gerar checkout');
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                throw new Error("Link não retornado");
+            }
+        } catch (error: any) {
+            toast.error(error.message || "Erro inesperado. Tente novamente.");
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-primary/30">
             {/* Top Banner */}
@@ -155,11 +194,14 @@ export default function DiagnosticoObrigadoB() {
                                 </div>
 
                                 {/* CTA Button */}
-                                <Button className="w-full md:w-auto px-10 md:px-20 h-16 text-base font-bold tracking-wide shadow-[0_0_30px_rgba(6,183,216,0.3)] group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105" asChild>
-                                    <a href="#">
-                                        COMEÇAR AGORA
-                                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline" />
-                                    </a>
+                                <Button 
+                                    onClick={handleCheckout} 
+                                    disabled={isLoading}
+                                    className="w-full md:w-auto px-10 md:px-20 h-16 text-base font-bold tracking-wide shadow-[0_0_30px_rgba(6,183,216,0.3)] group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105"
+                                >
+                                    {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
+                                    COMEÇAR AGORA
+                                    {!isLoading && <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline" />}
                                 </Button>
                             </div>
                         </div>
@@ -186,11 +228,14 @@ export default function DiagnosticoObrigadoB() {
 
                                 {/* Botão Desktop (Escondido no mobile, pois o usuário quer abaixo da imagem) */}
                                 <div className="hidden lg:flex pt-4 justify-start">
-                                    <Button className="px-10 h-16 text-base font-bold tracking-wide shadow-lg glow-cyan group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105" asChild>
-                                        <a href="#">
-                                            COMEÇAR DIAGNÓSTICO AGORA
-                                            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline" />
-                                        </a>
+                                    <Button 
+                                        onClick={handleCheckout} 
+                                        disabled={isLoading}
+                                        className="px-10 h-16 text-base font-bold tracking-wide shadow-lg glow-cyan group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105"
+                                    >
+                                        {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
+                                        COMEÇAR DIAGNÓSTICO AGORA
+                                        {!isLoading && <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline" />}
                                     </Button>
                                 </div>
                             </div>
@@ -205,11 +250,14 @@ export default function DiagnosticoObrigadoB() {
 
                                 {/* Botão Mobile (Abaixo da imagem, escondido no desktop) */}
                                 <div className="w-full flex justify-center mt-10 lg:hidden px-2">
-                                    <Button className="w-full h-16 text-sm font-bold tracking-wide shadow-lg glow-cyan group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105" asChild>
-                                        <a href="#">
-                                            COMEÇAR DIAGNÓSTICO AGORA
-                                            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline" />
-                                        </a>
+                                    <Button 
+                                        onClick={handleCheckout} 
+                                        disabled={isLoading}
+                                        className="w-full h-16 text-sm font-bold tracking-wide shadow-lg glow-cyan group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105"
+                                    >
+                                        {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
+                                        COMEÇAR DIAGNÓSTICO AGORA
+                                        {!isLoading && <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline" />}
                                     </Button>
                                 </div>
                             </div>
@@ -270,10 +318,13 @@ export default function DiagnosticoObrigadoB() {
                                 </div>
 
                                 {/* CTA Button */}
-                                <Button className="w-full h-16 md:h-20 text-[15px] md:text-lg font-bold tracking-wide shadow-[0_0_30px_rgba(6,183,216,0.25)] group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-[2rem] hover:scale-[1.03] mb-10 md:mb-12" asChild>
-                                    <a href="#">
-                                        COMEÇAR DIAGNÓSTICO AGORA
-                                    </a>
+                                <Button 
+                                    onClick={handleCheckout} 
+                                    disabled={isLoading}
+                                    className="w-full h-16 md:h-20 text-[15px] md:text-lg font-bold tracking-wide shadow-[0_0_30px_rgba(6,183,216,0.25)] group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-[2rem] hover:scale-[1.03] mb-10 md:mb-12"
+                                >
+                                    {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
+                                    COMEÇAR DIAGNÓSTICO AGORA
                                 </Button>
 
                                 {/* Guarantee Box */}

@@ -32,6 +32,13 @@ const questions = [
         sideContent: "\"Finalmente entendi por que minha agenda não enchia — mesmo com um serviço bom.\"\n— Cliente Cineze, Savassi BH"
     },
     {
+        id: "email",
+        title: "Qual o seu melhor e-mail?",
+        type: "text",
+        placeholder: "seuemail@exemplo.com",
+        sideContent: "Fique tranquilo, nós odiamos spam. Usaremos apenas para enviar informações do seu diagnóstico."
+    },
+    {
         id: "whatsapp",
         title: "Qual o seu WhatsApp?",
         subtitle: "Pedro vai te contatar por aqui em até 12h.",
@@ -210,12 +217,20 @@ export default function Diagnostico() {
     const submitForm = () => {
         const trafegoAnswer = answers["trafego"];
 
+        // Prepare query params
+        const params = new URLSearchParams({
+            nome: answers["nome"] || "",
+            email: answers["email"] || "",
+            phone: answers["whatsapp"] || ""
+        });
+        const queryString = `?${params.toString()}`;
+
         // Simulate loading/processing
         setTimeout(() => {
             if (trafegoAnswer === "Sim, já invisto atualmente") {
-                navigate("/diagnostico/obrigado-a");
+                navigate(`/diagnostico/obrigado-a${queryString}`);
             } else {
-                navigate("/diagnostico/obrigado-b");
+                navigate(`/diagnostico/obrigado-b${queryString}`);
             }
         }, 600);
     };
