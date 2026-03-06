@@ -47,7 +47,13 @@ export default async function handler(
 
     const { error: insertError } = await supabase
         .from('pedidos')
-        .insert({ order_nsu: orderNsu, email: email.toLowerCase().trim(), status: 'pendente' });
+        .insert({
+            order_nsu: orderNsu,
+            email: email.toLowerCase().trim(),
+            nome: (nome || "").trim(),
+            phone: (phone || "").trim(),
+            status: 'pendente',
+        });
 
     if (insertError) {
         console.error("Erro ao salvar pedido:", insertError);
