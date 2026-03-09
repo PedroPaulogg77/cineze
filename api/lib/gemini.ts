@@ -8,15 +8,21 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
 export async function gerarDiagnosticoGratuito(r: LeadGratuito): Promise<string> {
   const model = genAI.getGenerativeModel({
     model: 'gemini-2.5-flash',
-    generationConfig: { temperature: 0.4, maxOutputTokens: 2000 },
+    generationConfig: { temperature: 0.4, maxOutputTokens: 4000 },
     systemInstruction: SYSTEM_PROMPT,
   });
 
   const result = await model.generateContent(montarPrompt(r));
   const raw = result.response.text();
 
+  console.log('[gemini] finishReason:', result.response.candidates?.[0]?.finishReason);
+  console.log('[gemini] raw length:', raw.length);
+  console.log('[gemini] raw preview:', raw.substring(0, 200));
+
   // Remove blocos de markdown ```html ... ``` que o modelo às vezes insere
-  return raw.replace(/^```(?:html)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
+  const cleaned = raw.replace(/^```(?:html)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
+  console.log('[gemini] cleaned length:', cleaned.length);
+  return cleaned;
 }
 
 // ── System Prompt ─────────────────────────────────────────────────────────────
