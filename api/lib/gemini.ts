@@ -13,7 +13,10 @@ export async function gerarDiagnosticoGratuito(r: LeadGratuito): Promise<string>
   });
 
   const result = await model.generateContent(montarPrompt(r));
-  return result.response.text();
+  const raw = result.response.text();
+
+  // Remove blocos de markdown ```html ... ``` que o modelo às vezes insere
+  return raw.replace(/^```(?:html)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
 }
 
 // ── System Prompt ─────────────────────────────────────────────────────────────
