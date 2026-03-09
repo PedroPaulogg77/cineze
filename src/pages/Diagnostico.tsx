@@ -237,11 +237,13 @@ export default function Diagnostico() {
             phone: answers["whatsapp"] || "",
         });
 
-        // Dispara o diagnóstico em background — não bloqueia o redirect
+        // Dispara o diagnóstico em background — keepalive garante que o request
+        // não seja cancelado quando o browser navegar para a próxima página
         fetch('/api/diagnostico-gratuito', {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify(answers),
+            method:    'POST',
+            headers:   { 'Content-Type': 'application/json' },
+            body:      JSON.stringify(answers),
+            keepalive: true,
         }).catch(console.error);
 
         // Redireciona imediatamente
