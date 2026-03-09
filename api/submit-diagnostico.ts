@@ -312,7 +312,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const diagnostic = gerarDiagnostico(answers);
 
-  const sheetId = process.env.GOOGLE_SHEET_ID;
+  const sheetIdRaw = process.env.GOOGLE_SHEET_ID || '';
+  const sheetIdMatch = sheetIdRaw.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+  const sheetId = sheetIdMatch ? sheetIdMatch[1] : sheetIdRaw;
   const sheetUrl = sheetId ? `https://docs.google.com/spreadsheets/d/${sheetId}` : undefined;
 
   const [sheetsResult, emailResult] = await Promise.allSettled([
@@ -338,7 +340,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 async function appendToGoogleSheets(answers: Record<string, string>, diagnostic: DiagnosticResult) {
   const serviceAccountEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
-  const sheetId = process.env.GOOGLE_SHEET_ID;
+  const sheetIdRaw = process.env.GOOGLE_SHEET_ID || '';
+  const sheetIdMatch = sheetIdRaw.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+  const sheetId = sheetIdMatch ? sheetIdMatch[1] : sheetIdRaw;
 
   if (!serviceAccountEmail || !privateKey || !sheetId) {
     throw new Error('Google Sheets env vars ausentes');
