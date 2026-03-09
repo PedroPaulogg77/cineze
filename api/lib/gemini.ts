@@ -9,7 +9,7 @@ export async function gerarDiagnosticoGratuito(
   r: LeadGratuito
 ): Promise<{ html: string; score: number; temperatura: string; isPremium: boolean }> {
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-2.0-flash-lite',
     generationConfig: {
       temperature: 0.4,
       maxOutputTokens: 6000,
