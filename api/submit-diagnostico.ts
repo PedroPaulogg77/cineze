@@ -412,6 +412,11 @@ async function appendToGoogleSheets(answers: Record<string, string>, diagnostic:
   const sheetIdMatch = sheetIdRaw.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
   const sheetId = sheetIdMatch ? sheetIdMatch[1] : sheetIdRaw;
 
+  console.log('[sheets] serviceAccountEmail:', serviceAccountEmail ? 'ok' : 'AUSENTE');
+  console.log('[sheets] privateKey:', privateKey ? 'ok' : 'AUSENTE');
+  console.log('[sheets] sheetIdRaw:', sheetIdRaw);
+  console.log('[sheets] sheetId resolved:', sheetId);
+
   if (!serviceAccountEmail || !privateKey || !sheetId) {
     throw new Error('Google Sheets env vars ausentes');
   }
@@ -450,12 +455,14 @@ async function appendToGoogleSheets(answers: Record<string, string>, diagnostic:
     diagnostic.objecoesEsperadas.join(' | '),
   ];
 
-  await sheets.spreadsheets.values.append({
+  console.log('[sheets] Iniciando append para spreadsheetId:', sheetId);
+  const appendRes = await sheets.spreadsheets.values.append({
     spreadsheetId: sheetId,
     range: 'Leads!A:V',
     valueInputOption: 'USER_ENTERED',
     requestBody: { values: [row] },
   });
+  console.log('[sheets] Append status:', appendRes.status, '| updatedRange:', appendRes.data.updates?.updatedRange);
 }
 
 // ── Email para Pedro ───────────────────────────────────────────────────────
