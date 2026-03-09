@@ -226,30 +226,26 @@ export default function Diagnostico() {
         handleNext();
     };
 
-    const submitForm = async () => {
+    const submitForm = () => {
         setIsSubmitting(true);
-        try {
-            const res = await fetch('/api/diagnostico-gratuito', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(answers),
-            });
-            let variant = 'b';
-            if (res.ok) {
-                const data = await res.json();
-                variant = data.variant.toLowerCase();
-            } else {
-                variant = answers["trafego"] === "Sim, já invisto atualmente" ? 'a' : 'b';
-            }
-            const params = new URLSearchParams({ nome: answers["nome"] || "", email: answers["email"] || "", phone: answers["whatsapp"] || "" });
-            navigate(`/diagnostico/obrigado-${variant}?${params.toString()}`);
-        } catch {
-            const variant = answers["trafego"] === "Sim, já invisto atualmente" ? 'a' : 'b';
-            const params = new URLSearchParams({ nome: answers["nome"] || "", email: answers["email"] || "", phone: answers["whatsapp"] || "" });
-            navigate(`/diagnostico/obrigado-${variant}?${params.toString()}`);
-        } finally {
-            setIsSubmitting(false);
-        }
+
+        // Determina variant localmente — sem esperar o Gemini
+        const variant = answers["trafego"] === "Sim, já invisto atualmente" ? 'a' : 'b';
+        const params = new URLSearchParams({
+            nome:  answers["nome"]     || "",
+            email: answers["email"]    || "",
+            phone: answers["whatsapp"] || "",
+        });
+
+        // Dispara o diagnóstico em background — não bloqueia o redirect
+        fetch('/api/diagnostico-gratuito', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify(answers),
+        }).catch(console.error);
+
+        // Redireciona imediatamente
+        navigate(`/diagnostico/obrigado-${variant}?${params.toString()}`);
     };
 
     // Step 0: Landing Page Long Copy (Redesign)

@@ -8,7 +8,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
 export async function gerarDiagnosticoGratuito(r: LeadGratuito): Promise<string> {
   const model = genAI.getGenerativeModel({
     model: 'gemini-2.5-flash',
-    generationConfig: { temperature: 0.4, maxOutputTokens: 5000 },
+    generationConfig: { temperature: 0.4, maxOutputTokens: 2000 },
     systemInstruction: SYSTEM_PROMPT,
   });
 
