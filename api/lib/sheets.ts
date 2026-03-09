@@ -1,5 +1,5 @@
 import { google } from 'googleapis';
-import type { LeadGratuito } from './types';
+import type { LeadGratuito } from './types.js';
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 // Reutiliza as mesmas env vars do submit-diagnostico.ts

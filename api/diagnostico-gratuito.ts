@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Resend } from 'resend';
-import { gerarDiagnosticoGratuito, type LeadGratuito } from './lib/gemini';
-import { salvarLeadNoSheets } from './lib/sheets';
+import { gerarDiagnosticoGratuito, type LeadGratuito } from './lib/gemini.js';
+import { salvarLeadNoSheets } from './lib/sheets.js';
 
 // ── Mapeia os campos do formulário (nomes antigos) para LeadGratuito ─────────
 function mapearCampos(body: Record<string, string>): LeadGratuito {

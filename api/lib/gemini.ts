@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import type { LeadGratuito } from './types';
+import type { LeadGratuito } from './types.js';
 
 export type { LeadGratuito };
 
