@@ -1,96 +1,52 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import type { LeadGratuito, DiagnosticoConteudo } from './types.js';
+import { GoogleGenerativeAI } from '@google/generative-ai'
+import type { LeadGratuito } from './types.js'
 
-export type { LeadGratuito, DiagnosticoConteudo };
+export type { LeadGratuito }
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!)
 
-export async function gerarDiagnosticoGratuito(r: LeadGratuito): Promise<DiagnosticoConteudo> {
+export async function gerarDiagnosticoGratuito(
+  r: LeadGratuito
+): Promise<{ html: string; score: number; temperatura: string; isPremium: boolean }> {
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.5-flash',
-    generationConfig: { temperature: 0.4, maxOutputTokens: 1500 },
-    systemInstruction: SYSTEM_PROMPT,
-  });
+    model: 'gemini-2.0-flash',
+    generationConfig: {
+      temperature: 0.4,
+      maxOutputTokens: 6000,
+    },
+  })
 
-  const result = await model.generateContent(montarPrompt(r));
-  const raw = result.response.text();
+  const prompt = montarPrompt(r)
+  const result = await model.generateContent(prompt)
+  const texto = result.response.text()
 
-  return parsearResposta(raw);
-}
-
-// ── Parser ────────────────────────────────────────────────────────────────────
-
-function extrairBloco(raw: string, tag: string): string {
-  const regex = new RegExp(`\\[${tag}\\]\\s*([\\s\\S]*?)(?=\\n\\[|$)`, 'i');
-  return raw.match(regex)?.[1]?.trim() ?? '';
-}
-
-function parsearResposta(raw: string): DiagnosticoConteudo {
-  const scoreMatch = raw.match(/^SCORE:\s*(\d+)/im);
-  const score = scoreMatch ? parseInt(scoreMatch[1], 10) : 0;
-
-  const tempMatch = raw.match(/^TEMPERATURA:\s*(QUENTE|MORNO|FRIO)/im);
-  const temperatura = (tempMatch?.[1] ?? (score >= 8 ? 'QUENTE' : score >= 5 ? 'MORNO' : 'FRIO')) as 'QUENTE' | 'MORNO' | 'FRIO';
-
-  const isPremium = score >= 9;
-
-  const objecoes: string[] = [];
-  for (const tag of ['OBJECAO_1', 'OBJECAO_2', 'OBJECAO_3']) {
-    const txt = extrairBloco(raw, tag);
-    if (txt) objecoes.push(txt);
+  // Extrai score/temperatura do JSON para retornar ao handler
+  let score = 0
+  let temperatura = 'MORNO'
+  let isPremium = false
+  try {
+    const limpo = texto.replace(/```json/g, '').replace(/```/g, '').trim()
+    const dados = JSON.parse(limpo)
+    score = Number(dados.score) || 0
+    temperatura = String(dados.temperatura || 'MORNO')
+    isPremium = score >= 9
+  } catch {
+    // mantém defaults — emailErro será gerado em montarEmailHtml
   }
 
-  return {
-    score,
-    temperatura,
-    isPremium,
-    perfil:        extrairBloco(raw, 'PERFIL'),
-    produto:       extrairBloco(raw, 'PRODUTO'),
-    whatsapp1:     extrairBloco(raw, 'WHATSAPP_1'),
-    whatsapp2:     extrairBloco(raw, 'WHATSAPP_2'),
-    objecoes,
-    situacaoAtual: extrairBloco(raw, 'SITUACAO_ATUAL'),
-    gargalo:       extrairBloco(raw, 'GARGALO'),
-    custo:         extrairBloco(raw, 'CUSTO'),
-    oportunidade:  extrairBloco(raw, 'OPORTUNIDADE'),
-    recomendacao:  extrairBloco(raw, 'RECOMENDACAO'),
-  };
+  const html = montarEmailHtml(r, texto)
+  return { html, score, temperatura, isPremium }
 }
 
-// ── System Prompt ─────────────────────────────────────────────────────────────
-
-const SYSTEM_PROMPT = `Você é Pedro Paulo, sócio-fundador da Cineze, agência de
-growth marketing especializada em negócios locais no Brasil, baseada em BH.
-
-Você tem 8 anos de experiência com mais de 200 empresas atendidas nos segmentos
-de saúde, estética, educação, serviços locais e fitness.
-Conhece benchmarks reais de CPM, CPC e CAC por segmento no mercado brasileiro.
-Sabe o que funciona — e o que não funciona — para pequenos negócios em BH.
-
-SEU ESTILO:
-- Direto, consultivo e específico — nunca genérico
-- Identifica o problema raiz, não os sintomas
-- Cada análise usa obrigatoriamente os dados reais do cliente
-- Proibido escrever frases que servem para qualquer negócio
-- Fala como quem estudou o caso, não como vendedor
-
-PRODUTOS QUE VOCÊ OFERECE (preços exatos, sem arredondar):
-1. Quick Start — R$297 (único): landing page + Google Meu Negócio + 3 criativos em 7 dias
-2. Kit Lançamento — R$1.297/mês: gestão Meta Ads + 4 criativos + landing + relatório mensal + 1 reunião
-
-REGRA ABSOLUTA:
-- Score 9-10: NÃO recomendar produto. Sinalizar como lead premium para Pedro decidir.
-- Score 1-8: escolher UM produto (Quick Start OU Kit Lançamento) com base no perfil real.
-  Nunca oferecer os dois. Nunca mencionar planos acima do Kit Lançamento.`;
-
-// ── User Prompt ───────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// PROMPT: pede JSON estruturado, sem HTML, sem markdown
+// ─────────────────────────────────────────────────────────────────────────────
 
 function montarPrompt(r: LeadGratuito): string {
-  return `
-Um potencial cliente preencheu o formulário de diagnóstico gratuito da Cineze.
-Analise os dados e retorne APENAS o texto abaixo, sem HTML, sem markdown, sem explicações adicionais.
+  return `Você é Pedro Paulo, sócio-fundador da Cineze, agência de growth marketing em BH.
+Você analisou o formulário de um lead e precisa gerar um diagnóstico completo.
 
-DADOS DO CLIENTE:
+DADOS DO LEAD:
 - Nome: ${r.nome}
 - Segmento: ${r.segmento}
 - Cidade/Bairro: ${r.cidade}
@@ -100,50 +56,250 @@ DADOS DO CLIENTE:
 - Maior desafio: ${r.maior_desafio}
 - Meta de clientes/mês: ${r.meta_clientes}
 - Urgência: ${r.urgencia}
-- Contexto livre (palavras exatas do cliente): ${r.contexto_livre}
+- Contexto livre (palavras exatas): ${r.contexto_livre}
 
-Retorne EXATAMENTE neste formato, substituindo o conteúdo entre colchetes:
+PRODUTOS DA CINEZE:
+- Quick Start: R$297 único — landing page + Google Meu Negócio + 3 criativos em 7 dias. Para quem nunca investiu, tem objeção com mensalidade, precisa ver resultado primeiro.
+- Kit Lançamento: R$1.297/mês — gestão Meta Ads (budget até R$800/mês) + 4 criativos/mês + landing page + relatório mensal + 1 reunião. Para quem tem urgência real, já tentou algo no digital ou quer começar com estrutura.
 
-SCORE: [número de 0 a 10]
-TEMPERATURA: [QUENTE|MORNO|FRIO]
-IS_PREMIUM: [true|false]
+REGRA DE PRODUTO:
+- Se score for 9 ou 10: NÃO recomende produto. Indique que Pedro deve decidir pessoalmente.
+- Se score for 1 a 8: escolha Quick Start OU Kit Lançamento. Justifique com dados reais do formulário. NUNCA os dois.
 
-[PERFIL]
-3 frases objetivas sobre quem é este cliente: momento do negócio, maturidade digital, urgência percebida. Usar dados reais — nada genérico.
+INSTRUÇÕES CRÍTICAS:
+1. Retorne APENAS um JSON válido, sem markdown, sem blocos de código, sem explicações fora do JSON.
+2. Cada campo de texto deve ser preenchido com conteúdo real e específico para este lead.
+3. Use os dados do formulário em cada análise — nada genérico.
+4. Proibido frases que servem para qualquer negócio.
 
-[PRODUTO]
-Se score 9-10: "🔥 LEAD PREMIUM — Pedro decide a abordagem" + 2-3 frases explicando por que este lead é especial e o que avaliar antes de qualquer oferta.
-Se score 1-8: escolher Quick Start (R$297) OU Kit Lançamento (R$1.297/mês). Justificar em 2 frases por que este e não o outro. Citar o dado específico do formulário que embasou a escolha.
+Retorne exatamente este JSON preenchido:
 
-[WHATSAPP_1]
-Mensagem para enviar em até 1h após receber o lead. Tom pessoal e direto, sem vender. Máximo 3 linhas. Usar o nome do cliente. Sem emojis excessivos.
+{
+  "score": <número de 0 a 10>,
+  "temperatura": "<QUENTE|MORNO|FRIO>",
+  "score_justificativa": "<1 frase direta explicando o score com dados reais do lead>",
+  "perfil_3_linhas": "<3 frases sobre momento do negócio, maturidade digital e urgência. Usar dados reais.>",
+  "produto_recomendado": "<Quick Start|Kit Lançamento|LEAD PREMIUM>",
+  "produto_justificativa": "<Se score 1-8: 2 frases por que esse produto. Citar dado específico do formulário. Se score 9-10: 2-3 frases explicando por que é lead premium e o que Pedro deve avaliar na call.>",
+  "whatsapp_msg1": "<Mensagem curta para enviar em até 1h. Pessoal, sem vender. Máx 3 linhas. Usar o nome do cliente.>",
+  "whatsapp_msg2": "<Mensagem após ler o email. Mencionar 1-2 achados específicos do diagnóstico. Terminar convidando para ligação rápida. Máx 5 linhas.>",
+  "objecao_1": "<Objeção provável baseada nos dados reais deste lead>",
+  "objecao_1_resposta": "<Resposta recomendada em 1-2 frases>",
+  "objecao_2": "<Segunda objeção provável>",
+  "objecao_2_resposta": "<Resposta recomendada em 1-2 frases>",
+  "objecao_3": "<Terceira objeção provável>",
+  "objecao_3_resposta": "<Resposta recomendada em 1-2 frases>",
+  "diagnostico_situacao_atual": "<2-3 parágrafos separados por \\n\\n. Descrever situação atual com precisão. Usar nome, segmento, cidade, como chegam clientes, presença digital. Citar palavras exatas do contexto livre quando fizer sentido. O cliente deve ler e pensar: essa pessoa entendeu meu caso.>",
+  "diagnostico_gargalo": "<1 parágrafo direto sobre o principal problema identificado. Específico e levemente desconfortável.>",
+  "diagnostico_custo": "<2-3 consequências concretas de continuar assim. Exemplos reais para o segmento. Realista, não catastrófico.>",
+  "diagnostico_oportunidade": "<1 parágrafo sobre o que, resolvido em 30 dias, teria maior impacto para este cliente específico.>",
+  "diagnostico_recomendacao": "<Se score 9-10: 'Analisei seu caso com atenção e tenho uma proposta estruturada para você. Prefiro apresentar pessoalmente — consigo montar algo muito mais preciso do que qualquer formato padrão. Quando podemos falar?' Se score 1-8: apresentar o produto escolhido como próximo passo natural. Descrever o que será entregue de forma concreta. Terminar com pergunta aberta. Tom: com base no que vi, o caminho mais direto seria...>"
+}`
+}
 
-[WHATSAPP_2]
-Mensagem para enviar após ler todo o email. Mencionar 1-2 achados específicos deste cliente para criar curiosidade. Terminar perguntando se pode aprofundar em uma ligação rápida. Máximo 5 linhas. Tom: consultor que entrega valor.
+// ─────────────────────────────────────────────────────────────────────────────
+// MONTA O HTML DO EMAIL com os dados do JSON retornado pelo Gemini
+// ─────────────────────────────────────────────────────────────────────────────
 
-[OBJECAO_1]
-Objeção: [o que o cliente vai dizer] | Resposta: [o que Pedro fala — 1-2 frases]
+function montarEmailHtml(r: LeadGratuito, jsonTexto: string): string {
+  let dados: Record<string, string | number>
 
-[OBJECAO_2]
-Objeção: [o que o cliente vai dizer] | Resposta: [o que Pedro fala — 1-2 frases]
+  try {
+    // Remove possíveis blocos de markdown que o modelo às vezes insere
+    const limpo = jsonTexto
+      .replace(/```json/g, '')
+      .replace(/```/g, '')
+      .trim()
+    dados = JSON.parse(limpo)
+  } catch (e) {
+    // Se falhar o parse, retorna email de erro legível
+    return emailErro(r, jsonTexto)
+  }
 
-[OBJECAO_3]
-Objeção: [o que o cliente vai dizer] | Resposta: [o que Pedro fala — 1-2 frases]
+  const score = Number(dados.score) || 0
+  const temperatura = String(dados.temperatura || 'MORNO')
+  const isPremium = score >= 9
 
-[SITUACAO_ATUAL]
-2-3 parágrafos descrevendo a situação atual com precisão. Usar nome, segmento, cidade, como chegam clientes, presença digital. Citar palavras exatas do contexto livre quando fizer sentido. O cliente deve ler e pensar: "essa pessoa realmente entendeu meu caso."
+  const corTemperatura =
+    score >= 8 ? '#22C55E' : score >= 5 ? '#F59E0B' : '#EF4444'
 
-[GARGALO]
-1 parágrafo direto sobre o gargalo principal identificado. Ser específico e levemente desconfortável — é aqui que o cliente reconhece a própria dor e confia na análise.
+  const textoParas = (texto: string) =>
+    String(texto || '')
+      .split('\n\n')
+      .map(p => `<p style="margin:0 0 12px 0;line-height:1.7;">${p.trim()}</p>`)
+      .join('')
 
-[CUSTO]
-2-3 consequências concretas de continuar do jeito que está. Exemplos reais para o segmento e cidade. Realista e útil — não catastrófico.
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>Diagnóstico — ${r.nome}</title></head>
+<body style="margin:0;padding:0;background:#F1F5F9;font-family:Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#F1F5F9;">
+<tr><td align="center" style="padding:24px 16px;">
+<table width="660" cellpadding="0" cellspacing="0" style="max-width:660px;width:100%;">
 
-[OPORTUNIDADE]
-1 parágrafo sobre o que, resolvido nos próximos 30 dias, teria o maior impacto para este cliente específico. Mostrar que existe um caminho claro.
+  <!-- CABEÇALHO -->
+  <tr><td style="background:#0A0F1E;padding:28px 32px;border-radius:8px 8px 0 0;">
+    <p style="margin:0;color:#9CA3AF;font-size:11px;letter-spacing:2px;text-transform:uppercase;">CINEZE — DIAGNÓSTICO GRATUITO</p>
+    <p style="margin:8px 0 0;color:#FFFFFF;font-size:22px;font-weight:bold;">${r.nome}</p>
+    <p style="margin:4px 0 0;color:#9CA3AF;font-size:13px;">${r.segmento} · ${r.cidade}</p>
+  </td></tr>
 
-[RECOMENDACAO]
-Se score 9-10: escrever apenas "Analisei seu caso com atenção e tenho uma proposta estruturada para você. Prefiro apresentar pessoalmente na nossa conversa — consigo montar algo mais preciso do que qualquer formato padrão entregaria. Quando podemos falar?"
-Se score 1-8: apresentar o produto escolhido como próximo passo natural — não como oferta, mas como solução lógica. Descrever de forma concreta o que será entregue. Terminar com pergunta aberta. Tom: "com base no que vi, o caminho mais direto seria..."
-`;
+  <!-- SCORE -->
+  <tr><td style="background:#0A0F1E;padding:0 32px 28px;border-radius:0 0 8px 8px;">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="padding-right:16px;">
+          <span style="display:inline-block;background:${corTemperatura};color:#fff;font-size:11px;font-weight:bold;padding:4px 10px;border-radius:4px;letter-spacing:1px;">${temperatura}</span>
+          ${isPremium ? '<span style="display:inline-block;background:#FF6B00;color:#fff;font-size:11px;font-weight:bold;padding:4px 10px;border-radius:4px;letter-spacing:1px;margin-left:8px;">🔥 LEAD PREMIUM</span>' : ''}
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-top:8px;">
+          <span style="font-size:52px;font-weight:900;color:#FFFFFF;line-height:1;">${score}</span>
+          <span style="font-size:24px;color:#9CA3AF;font-weight:400;">/10</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-top:6px;">
+          <p style="margin:0;color:#D1D5DB;font-size:13px;font-style:italic;">${dados.score_justificativa || ''}</p>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+
+  <!-- ESPAÇO -->
+  <tr><td style="height:16px;"></td></tr>
+
+  <!-- ═══════════ PARTE 1 — BRIEFING INTERNO ═══════════ -->
+  <tr><td style="background:#F8F9FA;border-left:4px solid #6B7280;border-radius:6px;padding:24px 28px;">
+
+    <p style="margin:0 0 20px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6B7280;font-weight:bold;">BRIEFING INTERNO — NÃO ENVIAR AO CLIENTE</p>
+
+    <!-- PERFIL -->
+    <p style="margin:0 0 6px;font-size:12px;font-weight:bold;color:#374151;text-transform:uppercase;letter-spacing:1px;">PERFIL DO LEAD</p>
+    <p style="margin:0 0 24px;font-size:14px;color:#374151;line-height:1.7;">${dados.perfil_3_linhas || ''}</p>
+
+    <!-- PRODUTO RECOMENDADO -->
+    <p style="margin:0 0 10px;font-size:12px;font-weight:bold;color:#374151;text-transform:uppercase;letter-spacing:1px;">
+      ${isPremium ? '🔥 DECISÃO DO PEDRO' : '✅ PRODUTO RECOMENDADO'}
+    </p>
+    <div style="background:${isPremium ? '#FFF7ED' : '#EFF6FF'};border:1px solid ${isPremium ? '#FF6B00' : '#3B82F6'};border-radius:6px;padding:16px 20px;margin-bottom:24px;">
+      <p style="margin:0 0 6px;font-size:15px;font-weight:bold;color:${isPremium ? '#C2410C' : '#1D4ED8'};">
+        ${dados.produto_recomendado === 'Quick Start' ? '⚡ Quick Start — R$297 (único)' :
+          dados.produto_recomendado === 'Kit Lançamento' ? '📦 Kit Lançamento — R$1.297/mês' :
+          '🔥 LEAD PREMIUM — Pedro decide a abordagem'}
+      </p>
+      <p style="margin:0;font-size:13px;color:#374151;line-height:1.6;">${dados.produto_justificativa || ''}</p>
+    </div>
+
+    <!-- WHATSAPP MSG 1 -->
+    <p style="margin:0 0 8px;font-size:12px;font-weight:bold;color:#374151;text-transform:uppercase;letter-spacing:1px;">📱 WHATSAPP — MENSAGEM 1 (até 1h)</p>
+    <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:6px;padding:16px 20px;margin-bottom:20px;">
+      <p style="margin:0 0 8px;font-size:10px;color:#16A34A;font-weight:bold;letter-spacing:1px;">COPIAR E ENVIAR NO WHATSAPP</p>
+      <p style="margin:0;font-family:monospace;font-size:13px;color:#1A1A1A;line-height:1.7;white-space:pre-wrap;">${dados.whatsapp_msg1 || ''}</p>
+    </div>
+
+    <!-- WHATSAPP MSG 2 -->
+    <p style="margin:0 0 8px;font-size:12px;font-weight:bold;color:#374151;text-transform:uppercase;letter-spacing:1px;">📱 WHATSAPP — MENSAGEM 2 (após ler)</p>
+    <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:6px;padding:16px 20px;margin-bottom:24px;">
+      <p style="margin:0 0 8px;font-size:10px;color:#16A34A;font-weight:bold;letter-spacing:1px;">COPIAR E ENVIAR NO WHATSAPP</p>
+      <p style="margin:0;font-family:monospace;font-size:13px;color:#1A1A1A;line-height:1.7;white-space:pre-wrap;">${dados.whatsapp_msg2 || ''}</p>
+    </div>
+
+    <!-- OBJEÇÕES -->
+    <p style="margin:0 0 12px;font-size:12px;font-weight:bold;color:#374151;text-transform:uppercase;letter-spacing:1px;">⚠️ OBJEÇÕES PROVÁVEIS</p>
+    ${[1, 2, 3].map(n => {
+      const obj = dados[`objecao_${n}`]
+      const resp = dados[`objecao_${n}_resposta`]
+      if (!obj) return ''
+      return `<div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:6px;padding:14px 18px;margin-bottom:12px;">
+        <p style="margin:0 0 6px;font-size:13px;font-weight:bold;color:#92400E;">Objeção: ${obj}</p>
+        <p style="margin:0;font-size:13px;color:#374151;line-height:1.6;"><strong>Resposta:</strong> ${resp}</p>
+      </div>`
+    }).join('')}
+
+  </td></tr>
+
+  <!-- ESPAÇO -->
+  <tr><td style="height:16px;"></td></tr>
+
+  <!-- ═══════════ PARTE 2 — DIAGNÓSTICO AO CLIENTE ═══════════ -->
+  <tr><td style="background:#FFFFFF;border-left:4px solid #0066FF;border-radius:6px;padding:24px 28px;">
+
+    <p style="margin:0 0 20px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#0066FF;font-weight:bold;">📋 DIAGNÓSTICO PARA ENVIAR AO CLIENTE</p>
+    <p style="margin:0 0 24px;font-size:16px;font-weight:bold;color:#0A0F1E;">Diagnóstico Digital — ${r.nome} — ${r.segmento}</p>
+
+    <p style="margin:0 0 6px;font-size:12px;font-weight:bold;color:#374151;text-transform:uppercase;letter-spacing:1px;">Onde Seu Negócio Está Hoje</p>
+    <div style="margin-bottom:20px;font-size:14px;color:#374151;">${textoParas(String(dados.diagnostico_situacao_atual || ''))}</div>
+
+    <p style="margin:0 0 6px;font-size:12px;font-weight:bold;color:#374151;text-transform:uppercase;letter-spacing:1px;">O Que Está Travando o Crescimento</p>
+    <div style="margin-bottom:20px;font-size:14px;color:#374151;">${textoParas(String(dados.diagnostico_gargalo || ''))}</div>
+
+    <p style="margin:0 0 6px;font-size:12px;font-weight:bold;color:#374151;text-transform:uppercase;letter-spacing:1px;">O Que Isso Está Custando</p>
+    <div style="margin-bottom:20px;font-size:14px;color:#374151;">${textoParas(String(dados.diagnostico_custo || ''))}</div>
+
+    <p style="margin:0 0 6px;font-size:12px;font-weight:bold;color:#374151;text-transform:uppercase;letter-spacing:1px;">A Maior Oportunidade Agora</p>
+    <div style="margin-bottom:20px;font-size:14px;color:#374151;">${textoParas(String(dados.diagnostico_oportunidade || ''))}</div>
+
+    <p style="margin:0 0 6px;font-size:12px;font-weight:bold;color:#374151;text-transform:uppercase;letter-spacing:1px;">O Que Eu Recomendo</p>
+    <div style="background:#F8FAFF;border-radius:6px;padding:16px 20px;margin-bottom:0;font-size:14px;color:#374151;">${textoParas(String(dados.diagnostico_recomendacao || ''))}</div>
+
+  </td></tr>
+
+  <!-- ESPAÇO -->
+  <tr><td style="height:16px;"></td></tr>
+
+  <!-- TABELA RESPOSTAS ORIGINAIS -->
+  <tr><td style="background:#F8F9FA;border-radius:6px;padding:20px 28px;">
+    <p style="margin:0 0 14px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6B7280;font-weight:bold;">RESPOSTAS ORIGINAIS DO FORMULÁRIO</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="font-size:12px;">
+      ${[
+        ['Nome', r.nome],
+        ['Email', r.email],
+        ['Telefone', r.telefone],
+        ['Segmento', r.segmento],
+        ['Cidade/Bairro', r.cidade],
+        ['Como chegam clientes', r.como_chegam],
+        ['Presença digital', r.presenca_digital],
+        ['Investiu em tráfego', r.investiu_trafego],
+        ['Maior desafio', r.maior_desafio],
+        ['Meta de clientes/mês', r.meta_clientes],
+        ['Urgência', r.urgencia],
+        ['Contexto livre', r.contexto_livre],
+      ].map(([label, valor], i) => `
+        <tr style="background:${i % 2 === 0 ? '#FFFFFF' : '#F1F5F9'};">
+          <td style="padding:8px 12px;font-weight:bold;color:#374151;width:40%;vertical-align:top;">${label}</td>
+          <td style="padding:8px 12px;color:#4B5563;vertical-align:top;">${valor || '—'}</td>
+        </tr>
+      `).join('')}
+    </table>
+  </td></tr>
+
+  <!-- RODAPÉ -->
+  <tr><td style="padding:16px;text-align:center;">
+    <p style="margin:0;font-size:11px;color:#9CA3AF;">Cineze Agência · cineze.com.br · BH</p>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>`
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EMAIL DE ERRO — exibe o JSON bruto quando falha o parse
+// ─────────────────────────────────────────────────────────────────────────────
+
+function emailErro(r: LeadGratuito, raw: string): string {
+  return `<!DOCTYPE html><html><body style="font-family:Arial;padding:32px;">
+    <h2 style="color:#EF4444;">⚠️ Erro ao processar diagnóstico de ${r.nome}</h2>
+    <p>O Gemini retornou uma resposta que não pôde ser interpretada. Resposta bruta abaixo:</p>
+    <pre style="background:#F1F5F9;padding:16px;border-radius:6px;font-size:12px;overflow-x:auto;">${raw.replace(/</g, '&lt;')}</pre>
+    <hr>
+    <p><strong>Nome:</strong> ${r.nome}</p>
+    <p><strong>Telefone:</strong> ${r.telefone}</p>
+    <p><strong>Segmento:</strong> ${r.segmento}</p>
+    <p><strong>Contexto livre:</strong> ${r.contexto_livre}</p>
+  </body></html>`
 }
