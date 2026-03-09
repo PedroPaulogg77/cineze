@@ -3,6 +3,24 @@ import { Resend } from 'resend';
 import { gerarDiagnosticoGratuito, type LeadGratuito } from './lib/gemini';
 import { salvarLeadNoSheets } from './lib/sheets';
 
+// ── Mapeia os campos do formulário (nomes antigos) para LeadGratuito ─────────
+function mapearCampos(body: Record<string, string>): LeadGratuito {
+  return {
+    nome:             body.nome             || '',
+    email:            body.email            || '',
+    telefone:         body.telefone         || body.whatsapp      || '',
+    segmento:         body.segmento         || '',
+    cidade:           body.cidade           || '',
+    como_chegam:      body.como_chegam      || body.captacao      || '',
+    presenca_digital: body.presenca_digital || body.presenca      || '',
+    investiu_trafego: body.investiu_trafego || body.trafego       || '',
+    maior_desafio:    body.maior_desafio    || body.dor           || '',
+    meta_clientes:    body.meta_clientes    || body.meta          || '',
+    urgencia:         body.urgencia         || '',
+    contexto_livre:   body.contexto_livre   || body.contexto      || '',
+  };
+}
+
 // ── Handler ───────────────────────────────────────────────────────────────────
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -17,27 +35,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const respostas = (req.body || {}) as LeadGratuito;
+    const body = (req.body || {}) as Record<string, string>;
 
-    if (!respostas.nome || !respostas.email) {
+    if (!body.nome || !body.email) {
       return res.status(400).json({ error: 'nome e email são obrigatórios' });
     }
+
+    const respostas = mapearCampos(body);
 
     // 1. Gerar email completo com Gemini
     const emailHtml = await gerarDiagnosticoGratuito(respostas);
 
-    // 2. Extrair score e temperatura do HTML gerado
-    const scoreMatch = emailHtml.match(/Score:\s*(\d+)\/10/i);
-    const score      = scoreMatch ? parseInt(scoreMatch[1], 10) : 0;
+    // 2. Extrair score e temperatura
+    const scoreMatch  = emailHtml.match(/Score:\s*(\d+)\/10/i);
+    const score       = scoreMatch ? parseInt(scoreMatch[1], 10) : 0;
     const temperatura = score >= 8 ? 'QUENTE' : score >= 5 ? 'MORNO' : 'FRIO';
     const isPremium   = score >= 9;
+
+    // variant para o redirect do frontend (mantém compatibilidade)
+    const trafego = respostas.investiu_trafego.toLowerCase();
+    const variant = trafego.includes('já invisto') ? 'A' : 'B';
 
     // 3. Salvar no Google Sheets
     await salvarLeadNoSheets(respostas, score, temperatura);
 
     // 4. Enviar email para Pedro
-    const resend      = new Resend(process.env.RESEND_API_KEY!);
-    const pedroEmail  = process.env.PEDRO_EMAIL!;
+    const resend       = new Resend(process.env.RESEND_API_KEY!);
+    const pedroEmail   = process.env.PEDRO_EMAIL!;
     const subjectPrefix = isPremium ? '🔥 LEAD PREMIUM' : `[${temperatura}]`;
 
     await resend.emails.send({
@@ -47,7 +71,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       html:    emailHtml,
     });
 
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ ok: true, variant, score, temperatura });
   } catch (error) {
     console.error('[diagnostico-gratuito] Erro:', error);
     return res.status(500).json({ error: 'Erro interno' });

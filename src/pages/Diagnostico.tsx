@@ -229,7 +229,7 @@ export default function Diagnostico() {
     const submitForm = async () => {
         setIsSubmitting(true);
         try {
-            const res = await fetch('/api/submit-diagnostico', {
+            const res = await fetch('/api/diagnostico-gratuito', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(answers),
