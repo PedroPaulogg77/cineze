@@ -26,6 +26,9 @@ interface DiagnosticResult {
   dorPrincipal: string;
   abordagemRecomendada: string;
   pontosDeAtencao: string[];
+  scriptAbertura: string;
+  objecoesEsperadas: string[];
+  pacoteSugerido: string;
 }
 
 // ── Diagnostic Engine ───────────────────────────────────────────────────────
@@ -131,6 +134,41 @@ function gerarDiagnostico(answers: DiagnosticAnswers): DiagnosticResult {
     pontos.push('🎯 Meta ambiciosa (50+ clientes/mês) — lead com alto potencial de ticket.');
   }
 
+  // ── Script de Abertura ──────────────────────────────────────────────────
+  const scriptAbertura = `Oi ${nomeDisplay}, vi que você é ${segmentoDisplay} e seu maior desafio agora é ${(dor || 'atrair clientes').toLowerCase()}. Queria entender melhor sua situação em 10 minutos — você tem esse tempo agora?`;
+
+  // ── Objeções Esperadas ──────────────────────────────────────────────────
+  const objecoes: string[] = [];
+  if (trafego === 'Nunca investi') {
+    objecoes.push('❓ "Não sei se funciona para meu segmento" — Mostre um case parecido.');
+    objecoes.push('💸 "Tenho medo de perder dinheiro" — Explique o controle de orçamento e testes com valor pequeno.');
+  } else if (trafego === 'Já tentei mas parei' || trafego === 'Já tentei, mas parei') {
+    objecoes.push('😤 "Já tentei e não funcionou" — Pergunte o que foi feito; mostre a diferença de estratégia vs. impulsionamento.');
+    objecoes.push('🙁 "Minha última agência me decepcionou" — Reconheça a experiência ruim e diferencie pela transparência.');
+  } else if (trafego === 'Sim, já invisto atualmente') {
+    objecoes.push('🤝 "Já trabalho com alguém" — Pergunte os resultados atuais; ofereça auditoria gratuita.');
+    objecoes.push('🔍 "O que vocês fazem diferente?" — Apresente método, relatórios e acesso ao gestor.');
+  }
+  if (urgencia === 'Estou planejando' || urgencia === 'Mais pra frente, só estou pesquisando') {
+    objecoes.push('⏳ "Ainda não é o momento" — Pergunte quando seria e ofereça conteúdo de valor enquanto isso.');
+    objecoes.push('🤔 "Deixa eu pensar mais" — Combine um follow-up com data e hora exatas.');
+  }
+  if (meta === 'Mais de 50' || meta === 'Entre 20 e 50') {
+    objecoes.push('💰 "Meu orçamento é pequeno para essa meta" — Mostre que escala gradual é possível; comece pequeno e valide.');
+  }
+
+  // ── Pacote Sugerido ─────────────────────────────────────────────────────
+  let pacoteSugerido: string;
+  if (variant === 'A' && score >= 8) {
+    pacoteSugerido = '📈 Gestão de tráfego pago completa — lead está pronto para escalar. Apresente o plano mensal com meta de CPL e relatório semanal.';
+  } else if (variant === 'A' && score < 8) {
+    pacoteSugerido = '🔍 Auditoria de campanhas + gestão — já investe mas não está satisfeito. Comece com diagnóstico pago das campanhas atuais.';
+  } else if (variant === 'B' && score >= 6) {
+    pacoteSugerido = '🚀 Primeiro pacote de tráfego (entrada) — lead tem urgência mas nunca investiu. Apresente pacote enxuto com período de teste de 30 dias.';
+  } else {
+    pacoteSugerido = '🎓 Diagnóstico gratuito presencial ou envio de conteúdo educativo — lead ainda não está pronto para proposta. Nutra com casos reais antes de falar em investimento.';
+  }
+
   return {
     score,
     prioridade,
@@ -140,6 +178,9 @@ function gerarDiagnostico(answers: DiagnosticAnswers): DiagnosticResult {
     dorPrincipal,
     abordagemRecomendada,
     pontosDeAtencao: pontos,
+    scriptAbertura,
+    objecoesEsperadas: objecoes,
+    pacoteSugerido,
   };
 }
 
@@ -173,7 +214,7 @@ function buildEmailSubject(answers: DiagnosticAnswers, diagnostic: DiagnosticRes
 }
 
 function buildEmailHtml(answers: DiagnosticAnswers, diagnostic: DiagnosticResult, sheetUrl?: string): string {
-  const { score, prioridade, resumoLead, perfilDigital, dorPrincipal, abordagemRecomendada, pontosDeAtencao } = diagnostic;
+  const { score, prioridade, resumoLead, perfilDigital, dorPrincipal, abordagemRecomendada, pontosDeAtencao, scriptAbertura, objecoesEsperadas, pacoteSugerido } = diagnostic;
 
   const scoreColor = score >= 8 ? '#EF4444' : score >= 5 ? '#F59E0B' : '#06B7D8';
   const scoreBg = score >= 8 ? '#2D1212' : score >= 5 ? '#2D2212' : '#0D2228';
@@ -261,6 +302,33 @@ function buildEmailHtml(answers: DiagnosticAnswers, diagnostic: DiagnosticResult
         <tr><td style="background:#0A1628;border-left:1px solid #1A3050;border-right:1px solid #1A3050;padding:0 40px 24px;">
           <h2 style="color:#06B7D8;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">Pontos de Atenção</h2>
           <ul style="margin:0;padding-left:20px;">${pontosHtml}</ul>
+        </td></tr>
+
+        <!-- Script de Abertura -->
+        <tr><td style="background:#0A1628;border-left:1px solid #1A3050;border-right:1px solid #1A3050;padding:0 40px 24px;">
+          <h2 style="color:#10B981;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">📞 Script de Abertura</h2>
+          <div style="border-left:3px solid #10B981;background:#0A1F18;border-radius:0 8px 8px 0;padding:16px 20px;">
+            <p style="color:#E2E8F0;font-size:15px;line-height:1.7;margin:0;font-style:italic;">"${escapeHtml(scriptAbertura)}"</p>
+          </div>
+        </td></tr>
+
+        <!-- Pacote Sugerido -->
+        <tr><td style="background:#0A1628;border-left:1px solid #1A3050;border-right:1px solid #1A3050;padding:0 40px 24px;">
+          <h2 style="color:#06B7D8;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">💼 O Que Oferecer</h2>
+          <div style="border-left:3px solid #06B7D8;background:#0D1F35;border-radius:0 8px 8px 0;padding:16px 20px;">
+            <p style="color:#E2E8F0;font-size:14px;line-height:1.7;margin:0;">${escapeHtml(pacoteSugerido)}</p>
+          </div>
+        </td></tr>
+
+        <!-- Objeções Esperadas -->
+        <tr><td style="background:#0A1628;border-left:1px solid #1A3050;border-right:1px solid #1A3050;padding:0 40px 24px;">
+          <h2 style="color:#F59E0B;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">⚠️ Objeções Prováveis</h2>
+          <ul style="margin:0;padding-left:20px;">
+            ${objecoesEsperadas.length > 0
+              ? objecoesEsperadas.map(o => `<li style="margin-bottom:8px;color:#A1B3CB;font-size:14px;">${escapeHtml(o)}</li>`).join('')
+              : '<li style="color:#8B9DB5;font-size:14px;">Nenhuma objeção prevista identificada.</li>'
+            }
+          </ul>
         </td></tr>
 
         <!-- Respostas originais -->
@@ -377,11 +445,14 @@ async function appendToGoogleSheets(answers: Record<string, string>, diagnostic:
     diagnostic.dorPrincipal,
     diagnostic.abordagemRecomendada,
     diagnostic.pontosDeAtencao.join(' | '),
+    diagnostic.scriptAbertura,
+    diagnostic.pacoteSugerido,
+    diagnostic.objecoesEsperadas.join(' | '),
   ];
 
   await sheets.spreadsheets.values.append({
     spreadsheetId: sheetId,
-    range: 'Leads!A:S',
+    range: 'Leads!A:V',
     valueInputOption: 'USER_ENTERED',
     requestBody: { values: [row] },
   });
