@@ -2,10 +2,11 @@ import { google } from 'googleapis';
 import type { LeadGratuito } from './gemini';
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
+// Reutiliza as mesmas env vars do submit-diagnostico.ts
 function getAuthClient() {
-  const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON!);
-  return new google.auth.GoogleAuth({
-    credentials,
+  return new google.auth.JWT({
+    email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    key:   process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
   });
 }
@@ -16,7 +17,9 @@ export async function salvarLeadNoSheets(
   score: number,
   temperatura: string,
 ) {
-  const spreadsheetId = process.env.GOOGLE_SHEETS_ID!;
+  const sheetIdRaw   = process.env.GOOGLE_SHEET_ID || '';
+  const sheetIdMatch = sheetIdRaw.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+  const spreadsheetId = sheetIdMatch ? sheetIdMatch[1] : sheetIdRaw;
   const auth    = getAuthClient();
   const sheets  = google.sheets({ version: 'v4', auth });
   const agora   = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
