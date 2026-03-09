@@ -149,6 +149,7 @@ export default function Diagnostico() {
     const [showFloatingCTA, setShowFloatingCTA] = useState(true);
     const [carouselIndex, setCarouselIndex] = useState(0);
     const [stepCarouselIndex, setStepCarouselIndex] = useState(0);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
     // Check for "start" param to skip step 0
@@ -198,7 +199,7 @@ export default function Diagnostico() {
         if (step < questions.length) {
             setStep(step + 1);
         } else {
-            submitForm();
+            void submitForm();
         }
     };
 
@@ -214,25 +215,30 @@ export default function Diagnostico() {
         handleNext();
     };
 
-    const submitForm = () => {
-        const trafegoAnswer = answers["trafego"];
-
-        // Prepare query params
-        const params = new URLSearchParams({
-            nome: answers["nome"] || "",
-            email: answers["email"] || "",
-            phone: answers["whatsapp"] || ""
-        });
-        const queryString = `?${params.toString()}`;
-
-        // Simulate loading/processing
-        setTimeout(() => {
-            if (trafegoAnswer === "Sim, já invisto atualmente") {
-                navigate(`/diagnostico/obrigado-a${queryString}`);
+    const submitForm = async () => {
+        setIsSubmitting(true);
+        try {
+            const res = await fetch('/api/submit-diagnostico', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(answers),
+            });
+            let variant = 'b';
+            if (res.ok) {
+                const data = await res.json();
+                variant = data.variant.toLowerCase();
             } else {
-                navigate(`/diagnostico/obrigado-b${queryString}`);
+                variant = answers["trafego"] === "Sim, já invisto atualmente" ? 'a' : 'b';
             }
-        }, 600);
+            const params = new URLSearchParams({ nome: answers["nome"] || "", email: answers["email"] || "", phone: answers["whatsapp"] || "" });
+            navigate(`/diagnostico/obrigado-${variant}?${params.toString()}`);
+        } catch {
+            const variant = answers["trafego"] === "Sim, já invisto atualmente" ? 'a' : 'b';
+            const params = new URLSearchParams({ nome: answers["nome"] || "", email: answers["email"] || "", phone: answers["whatsapp"] || "" });
+            navigate(`/diagnostico/obrigado-${variant}?${params.toString()}`);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     // Step 0: Landing Page Long Copy (Redesign)
@@ -918,12 +924,12 @@ export default function Diagnostico() {
                                     )}
                                     <Button
                                         onClick={handleNext}
-                                        disabled={!answers[currentQ.id]}
+                                        disabled={!answers[currentQ.id] || isSubmitting}
                                         size="xl"
                                         className="w-full sm:w-auto text-base px-10 h-14 bg-[#0066FF] hover:bg-[#0066FF]/90 disabled:bg-[#1A3050] text-white rounded-xl"
                                     >
-                                        {currentQ.buttonText || "CONTINUAR"}
-                                        <ArrowRight className="ml-2 w-5 h-5" />
+                                        {isSubmitting ? "Enviando..." : (currentQ.buttonText || "CONTINUAR")}
+                                        {!isSubmitting && <ArrowRight className="ml-2 w-5 h-5" />}
                                     </Button>
                                 </div>
                             )}
