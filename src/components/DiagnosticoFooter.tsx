@@ -8,7 +8,7 @@ export function DiagnosticoFooter() {
             {/* Top row: Logo + Retornar ao topo */}
             <div className="container mx-auto px-6 md:px-8 py-6 flex items-center justify-between">
                 <Link to="/" className="hover:opacity-80 transition-opacity">
-                    <img src={logoCineze} alt="Cineze" className="h-5 md:h-6 w-auto object-contain" />
+                    <img src={logoCineze} alt="Cineze" width={133} height={24} loading="lazy" className="h-5 md:h-6 w-auto object-contain" />
                 </Link>
                 <button
                     onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

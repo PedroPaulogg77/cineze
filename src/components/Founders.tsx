@@ -94,6 +94,9 @@ export function Founders() {
                   <img
                     src={founder.image}
                     alt={founder.name}
+                    width={128}
+                    height={128}
+                    loading="lazy"
                     className="w-32 h-32 rounded-2xl object-cover"
                   />
                   <motion.div

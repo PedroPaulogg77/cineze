@@ -277,7 +277,7 @@ export default function Diagnostico() {
 
                         {/* HEADER DESKTOP APENAS. Faz parte do div e fluxo normal de renderizacao! */}
                         <header className="pt-8 pb-4 w-full flex justify-start items-center">
-                            <img src={logoCineze} alt="Cineze" className="h-8" />
+                            <img src={logoCineze} alt="Cineze" width={160} height={32} className="h-8" />
                         </header>
 
                         {/* Coluna da Esquerda (Textos Centralizados Verticalmente) */}
@@ -331,7 +331,7 @@ export default function Diagnostico() {
                                 className="absolute top-[22%] left-[5%] xl:left-[15%] bg-black/40 backdrop-blur-md border border-white/10 p-2 pr-6 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex items-center gap-3 z-20 pointer-events-auto"
                             >
                                 <div className="w-11 h-11 lg:w-12 lg:h-12 rounded-full border border-white/20 overflow-hidden shrink-0 bg-[#0A1628]">
-                                    <img src="/assets/pedro-paulo-avatar.webp" alt="Pedro Paulo" className="w-full h-full object-cover" />
+                                    <img src="/assets/pedro-paulo-avatar.webp" alt="Pedro Paulo" width={48} height={48} loading="lazy" className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex flex-col justify-center text-left">
                                     <span className="text-white text-[14px] lg:text-[15px] font-medium leading-tight">Pedro Paulo</span>
@@ -345,7 +345,7 @@ export default function Diagnostico() {
                                 className="absolute bottom-[25%] right-[5%] xl:right-[15%] bg-black/40 backdrop-blur-md border border-white/10 p-2 pr-6 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex items-center gap-3 z-20 pointer-events-auto"
                             >
                                 <div className="w-11 h-11 lg:w-12 lg:h-12 rounded-full border border-white/20 overflow-hidden shrink-0 bg-[#0A1628]">
-                                    <img src="/assets/davidson-avatar.webp" alt="Davidson - Tecnologia" className="w-full h-full object-cover" />
+                                    <img src="/assets/davidson-avatar.webp" alt="Davidson - Tecnologia" width={48} height={48} loading="lazy" className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex flex-col justify-center text-left">
                                     <span className="text-white text-[14px] lg:text-[15px] font-medium leading-tight">Davidson</span>
@@ -358,7 +358,7 @@ export default function Diagnostico() {
 
                 {/* Header Mobile Oculto no Desktop */}
                 <header className="md:hidden py-4 pt-6 pb-2 px-4 max-w-7xl mx-auto flex justify-center items-center relative z-20">
-                    <img src={logoCineze} alt="Cineze" className="h-5" />
+                    <img src={logoCineze} alt="Cineze" width={133} height={20} className="h-5" />
                 </header>
 
                 <main className="max-w-7xl mx-auto px-4 py-2 md:pt-16 md:pb-12 space-y-16 md:space-y-24">
@@ -370,6 +370,11 @@ export default function Diagnostico() {
                             <img
                                 src="/assets/banner-mobile.webp"
                                 alt="Pedro Paulo Cineze"
+                                width={828}
+                                height={1792}
+                                fetchPriority="high"
+                                loading="eager"
+                                decoding="async"
                                 className="w-full h-full object-cover object-[center_15%] opacity-90"
                             />
                             {/* Gradiente sutil do meio até a base salvando o Rosto da escuridão  */}
@@ -387,7 +392,7 @@ export default function Diagnostico() {
                                 className="absolute top-[18%] left-4 bg-black/40 backdrop-blur-md border border-white/10 p-1.5 pr-4 rounded-full shadow-lg flex items-center gap-2 pointer-events-auto"
                             >
                                 <div className="w-8 h-8 rounded-full border border-white/20 overflow-hidden shrink-0 bg-[#0A1628]">
-                                    <img src="/assets/pedro-paulo-avatar.webp" alt="Pedro Paulo" className="w-full h-full object-cover" />
+                                    <img src="/assets/pedro-paulo-avatar.webp" alt="Pedro Paulo" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex flex-col justify-center text-left">
                                     <span className="text-white text-[12px] font-medium leading-tight">Pedro Paulo</span>
@@ -401,7 +406,7 @@ export default function Diagnostico() {
                                 className="absolute top-[38%] right-4 bg-black/40 backdrop-blur-md border border-white/10 p-1.5 pr-4 rounded-full shadow-lg flex items-center gap-2 pointer-events-auto"
                             >
                                 <div className="w-8 h-8 rounded-full border border-white/20 overflow-hidden shrink-0 bg-[#0A1628]">
-                                    <img src="/assets/davidson-avatar.webp" alt="Davidson" className="w-full h-full object-cover" />
+                                    <img src="/assets/davidson-avatar.webp" alt="Davidson" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex flex-col justify-center text-left">
                                     <span className="text-white text-[12px] font-medium leading-tight">Davidson</span>
@@ -466,7 +471,7 @@ export default function Diagnostico() {
                                             className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-[#0A1628] bg-black overflow-hidden shadow-2xl relative"
                                             style={{ zIndex: 10 - i }}
                                         >
-                                            <img src={logo} alt={`Logo de Parceiro ${i + 1}`} className="w-full h-full object-cover" />
+                                            <img src={logo} alt={`Logo de Parceiro ${i + 1}`} width={48} height={48} loading="lazy" className="w-full h-full object-cover" />
                                         </motion.div>
                                     ))}
                                 </div>
@@ -646,7 +651,7 @@ export default function Diagnostico() {
 
                                         {/* Avatar Placeholder */}
                                         <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-[#06B7D8]/20 to-[#0066FF]/20 border border-[#06B7D8]/40 flex items-center justify-center text-white text-lg md:text-xl font-bold mb-4 shadow-inner relative z-10 overflow-hidden shrink-0">
-                                            <img src={testi.logo} alt={`Logo ${testi.name}`} className="w-full h-full object-cover" />
+                                            <img src={testi.logo} alt={`Logo ${testi.name}`} width={56} height={56} loading="lazy" className="w-full h-full object-cover" />
                                         </div>
 
                                         <h3 className="font-bold text-white text-[15px] md:text-[17px] relative z-10">{testi.name}</h3>
@@ -811,7 +816,7 @@ export default function Diagnostico() {
 
                 <div className="relative z-10 max-w-lg space-y-8">
                     <div className="flex items-center gap-2 mb-12">
-                        <img src={logoCineze} alt="Cineze" className="h-6" />
+                        <img src={logoCineze} alt="Cineze" width={160} height={24} loading="lazy" className="h-6" />
                     </div>
 
                     <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-white leading-tight">

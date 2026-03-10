@@ -12,7 +12,7 @@ export function Footer() {
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-6">
           <div className="flex flex-col md:flex-row items-center gap-4">
-            <img src={logoCineze} alt="Cineze" className="h-6 md:h-8" />
+            <img src={logoCineze} alt="Cineze" width={160} height={32} loading="lazy" className="h-6 md:h-8" />
             <div className="hidden md:block w-px h-8 bg-[#1A3050] mx-2"></div>
             <p className="text-white font-bold leading-tight text-center md:text-left">
               Nosso negócio <br className="hidden md:block" />
