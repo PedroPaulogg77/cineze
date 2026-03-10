@@ -2,6 +2,9 @@
     "functions": {
         "api/diagnostico-gratuito.ts": {
             "maxDuration": 60
+        },
+        "api/create-checkout.ts": {
+            "maxDuration": 30
         }
     },
     "rewrites": [
