@@ -21,14 +21,25 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    minify: "esbuild",
+    target: "es2020",
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ["console.log", "console.info"],
+      },
+    },
     emptyOutDir: true,
-    chunkSizeWarningLimit: 3000,
+    chunkSizeWarningLimit: 500,
     rollupOptions: {
       maxParallelFileOps: 2,
       output: {
         manualChunks: (id) => {
           if (id.includes("node_modules")) {
+            if (id.includes("@supabase")) return "supabase";
+            if (id.includes("framer-motion")) return "motion";
+            if (id.includes("lucide")) return "icons";
             return "vendor";
           }
         },
