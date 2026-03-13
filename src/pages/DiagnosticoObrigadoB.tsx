@@ -7,6 +7,7 @@ import { CheckCircle2, ArrowRight, Star } from "lucide-react";
 import { DiagnosticoFooter } from "@/components/DiagnosticoFooter";
 import { Button } from "@/components/ui/button";
 import { GridVignetteBackground } from "@/components/ui/grid-vignette-background";
+import YouTubeFacade from "@/components/YouTubeFacade";
 import logoCineze from "@/assets/logo-cineze.png";
 import cardsImage from "@/assets/CARDS.png";
 
@@ -46,9 +47,13 @@ export default function DiagnosticoObrigadoB() {
     const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
     const [isPreloading, setIsPreloading] = useState(true);
 
-    // Preload checkout URL as soon as the page mounts
+    // Preload checkout URL as soon as the page mounts (só se tiver email)
     useEffect(() => {
         const preloadCheckout = async () => {
+            if (!email) {
+                setIsPreloading(false);
+                return;
+            }
             try {
                 const response = await fetch('/api/create-checkout', {
                     method: 'POST',
@@ -136,13 +141,10 @@ export default function DiagnosticoObrigadoB() {
 
                     {/* Success Message */}
                     <div className="text-center mb-12 space-y-4">
-                        <motion.h2
-                            {...fadeUp(0.1)}
-                            className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight uppercase"
-                        >
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight uppercase">
                             SEU CADASTRO FOI<br />
                             <span className="text-green-400">REALIZADO COM SUCESSO</span>
-                        </motion.h2>
+                        </h2>
                         <motion.p
                             {...fadeUp(0.25)}
                             className="text-lg md:text-xl text-muted-foreground font-medium"
@@ -238,7 +240,7 @@ export default function DiagnosticoObrigadoB() {
                                     {...fadeUpView(0.05)}
                                     className="mb-6 md:mb-10 flex items-center justify-center"
                                 >
-                                    <img src={logoCineze} alt="Cineze" className="h-8 md:h-12 w-auto object-contain shrink-0" />
+                                    <img src={logoCineze} alt="Cineze" width={393} height={56} className="h-8 md:h-12 w-auto object-contain shrink-0" decoding="async" />
                                 </motion.div>
 
                                 <motion.h2
@@ -268,18 +270,13 @@ export default function DiagnosticoObrigadoB() {
                                 {/* Video Container */}
                                 <motion.div
                                     {...scaleInView(0)}
-                                    className="w-full max-w-[800px] aspect-video rounded-3xl overflow-hidden border border-white/5 shadow-[0_0_40px_rgba(0,0,0,0.5)] mb-8 md:mb-10 relative bg-black"
+                                    className="w-full max-w-[800px] rounded-3xl overflow-hidden border border-white/5 shadow-[0_0_40px_rgba(0,0,0,0.5)] mb-8 md:mb-10"
                                 >
-                                    <iframe
-                                        width="100%"
-                                        height="100%"
-                                        src="https://www.youtube.com/embed/KqCjnt6Zvsk?rel=0"
-                                        title="YouTube video player"
-                                        frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                        allowFullScreen
-                                        className="absolute inset-0 w-full h-full"
-                                    ></iframe>
+                                    <YouTubeFacade
+                                        videoId="KqCjnt6Zvsk"
+                                        title="Vídeo Cineze"
+                                        className="rounded-3xl"
+                                    />
                                 </motion.div>
 
                                 {/* CTA Button */}
@@ -342,6 +339,10 @@ export default function DiagnosticoObrigadoB() {
                                 <img
                                     src={cardsImage}
                                     alt="Dashboards da Plataforma Cineze"
+                                    width={320}
+                                    height={416}
+                                    loading="lazy"
+                                    decoding="async"
                                     className="w-full h-auto max-w-[95%] lg:max-w-[120%] lg:-ml-[10%] drop-shadow-2xl object-contain object-center scale-100 lg:scale-105 origin-center"
                                 />
 
