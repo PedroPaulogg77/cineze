@@ -19,7 +19,7 @@
             "headers": [
                 {
                     "key": "Content-Security-Policy",
-                    "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.youtube.com https://www.google.com https://static.doubleclick.net https://www.googletagmanager.com https://jnn-pa.googleapis.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://i.ytimg.com https://*.google.com https://*.doubleclick.net; frame-src https://www.youtube.com; connect-src 'self' https://*.supabase.co https://*.google.com https://*.googleapis.com https://*.doubleclick.net"
+                    "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.youtube.com https://www.google.com https://static.doubleclick.net https://www.googletagmanager.com https://jnn-pa.googleapis.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://www.facebook.com https://i.ytimg.com https://*.google.com https://*.doubleclick.net; frame-src https://www.youtube.com; connect-src 'self' https://*.supabase.co https://*.google.com https://*.googleapis.com https://*.doubleclick.net"
                 },
                 {
                     "key": "Strict-Transport-Security",
