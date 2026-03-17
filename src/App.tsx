@@ -13,11 +13,26 @@ import Privacidade from "./pages/Privacidade";
 import Termos from "./pages/Termos";
 import { Footer } from "@/components/Footer";
 
+import { useEffect } from "react";
+
+declare global {
+  interface Window {
+    fbq: any;
+  }
+}
+
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
   const isFormPage = location.pathname.startsWith("/diagnostico");
+
+  // Dispara o PageView do Meta Pixel sempre que a rota mudar
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "PageView");
+    }
+  }, [location.pathname]);
 
   return (
     <>
