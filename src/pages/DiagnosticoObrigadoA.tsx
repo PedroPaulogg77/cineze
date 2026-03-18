@@ -1,5 +1,8 @@
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { CheckCircle2, ArrowRight, Star } from "lucide-react";
+import { Loader2, CheckCircle2, ArrowRight, Star } from "lucide-react";
 import { DiagnosticoFooter } from "@/components/DiagnosticoFooter";
 import { Button } from "@/components/ui/button";
 import { GridVignetteBackground } from "@/components/ui/grid-vignette-background";
@@ -34,6 +37,90 @@ const scaleInView = (delay = 0) => ({
 });
 
 export default function DiagnosticoObrigadoA() {
+    const [searchParams] = useSearchParams();
+    const nome = searchParams.get("nome") || "";
+    const email = searchParams.get("email") || "";
+    const phone = searchParams.get("phone") || "";
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+    const [isPreloading, setIsPreloading] = useState(true);
+
+    // Preload checkout URL as soon as the page mounts (só se tiver email)
+    useEffect(() => {
+        const preloadCheckout = async () => {
+            if (!email) {
+                setIsPreloading(false);
+                return;
+            }
+            try {
+                const response = await fetch('/api/create-checkout-quicks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, email, phone }),
+                });
+                const data = await response.json();
+                if (data.url) setCheckoutUrl(data.url);
+            } catch {
+                // silently fail — fallback handles it on click
+            } finally {
+                setIsPreloading(false);
+            }
+        };
+        preloadCheckout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleCheckout = async (e: React.MouseEvent) => {
+        e.preventDefault();
+
+        // Instant redirect if preload succeeded
+        if (checkoutUrl) {
+            window.location.href = checkoutUrl;
+            return;
+        }
+
+        // Fallback: call API normally if preload failed
+        try {
+            setIsLoading(true);
+            const response = await fetch('/api/create-checkout-quicks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, email, phone }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) throw new Error(data.error || 'Erro ao gerar checkout');
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                throw new Error("Link não retornado");
+            }
+        } catch (error: any) {
+            toast.error(error.message || "Erro inesperado. Tente novamente.");
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const ctaContent = (
+        <>
+            {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin shrink-0" /> : null}
+            QUERO RESULTADO EM 7 DIAS
+            {!isLoading && <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline shrink-0" />}
+        </>
+    );
+
+    const ctaContentBottom = (
+        <>
+            {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin shrink-0" /> : null}
+            QUERO MEU QUICK START POR R$297
+            {!isLoading && <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline shrink-0" />}
+        </>
+    );
+
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-primary/30">
             {/* Top Banner */}
@@ -207,11 +294,18 @@ export default function DiagnosticoObrigadoA() {
                                         animate={{ scale: [1, 1.02, 1] }}
                                         transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
                                     >
-                                        <Button className="w-full md:w-auto px-10 md:px-20 h-auto min-h-[4rem] md:min-h-[5rem] py-4 text-sm sm:text-[15px] md:text-lg font-bold tracking-wide text-center whitespace-normal leading-snug shadow-[0_0_30px_rgba(6,183,216,0.3)] group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105" asChild>
-                                            <a href="#">
-                                                QUERO RESULTADO EM 7 DIAS
-                                                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline shrink-0" />
-                                            </a>
+                                        <Button 
+                                            onClick={handleCheckout} 
+                                            disabled={isLoading}
+                                            className="w-full md:w-auto px-10 md:px-20 h-auto min-h-[4rem] md:min-h-[5rem] py-4 text-sm sm:text-[15px] md:text-lg font-bold tracking-wide text-center whitespace-normal leading-snug shadow-[0_0_30px_rgba(6,183,216,0.3)] group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105"
+                                        >
+                                            {isPreloading && !isLoading && (
+                                                <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center gap-1 text-xs text-muted-foreground/60 whitespace-nowrap">
+                                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                                    <span>preparando link...</span>
+                                                </div>
+                                            )}
+                                            {ctaContent}
                                         </Button>
                                     </motion.div>
                                 </motion.div>
@@ -370,13 +464,11 @@ export default function DiagnosticoObrigadoA() {
                                     transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
                                 >
                                     <Button
+                                        onClick={handleCheckout}
+                                        disabled={isLoading}
                                         className="w-full h-auto min-h-[4rem] md:min-h-[5rem] py-4 px-6 text-sm sm:text-[15px] md:text-lg font-bold tracking-wide text-center whitespace-normal leading-snug shadow-[0_0_30px_rgba(6,183,216,0.25)] group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-[2rem] hover:scale-[1.03]"
-                                        asChild
                                     >
-                                        <a href="#">
-                                            QUERO MEU QUICK START POR R$297
-                                            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline shrink-0" />
-                                        </a>
+                                        {ctaContentBottom}
                                     </Button>
                                 </motion.div>
 

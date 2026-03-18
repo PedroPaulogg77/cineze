@@ -9,7 +9,8 @@
       "Bash(npx tsc:*)",
       "Bash(grep:*)",
       "Bash(npm ls:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(find:*)"
     ]
   }
 }

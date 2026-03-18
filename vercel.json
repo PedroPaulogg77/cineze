@@ -5,6 +5,9 @@
         },
         "api/create-checkout.ts": {
             "maxDuration": 30
+        },
+        "api/create-checkout-quicks.ts": {
+            "maxDuration": 30
         }
     },
     "headers": [
