@@ -161,6 +161,8 @@ export default function Diagnostico() {
     const [carouselIndex, setCarouselIndex] = useState(0);
     const [stepCarouselIndex, setStepCarouselIndex] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    // Detecta viewport para renderizar apenas o banner correto (evita download duplo)
+    const [isMobileView, setIsMobileView] = useState(() => window.innerWidth < 768);
     const navigate = useNavigate();
 
     // Check for "start" param to skip step 0
@@ -169,6 +171,14 @@ export default function Diagnostico() {
             setStep(1);
         }
     }, [searchParams]);
+
+    // Atualiza isMobileView ao rotacionar o dispositivo
+    useEffect(() => {
+        const mq = window.matchMedia("(max-width: 767px)");
+        const handler = (e: MediaQueryListEvent) => setIsMobileView(e.matches);
+        mq.addEventListener("change", handler);
+        return () => mq.removeEventListener("change", handler);
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -261,8 +271,8 @@ export default function Diagnostico() {
                 </div>
 
                 {/* --- SEÇÃO 1: HERO DESKTOP REFINADO --- */}
-                {/* Isolado completamente FORA da tag main, ancorando o topo no limite do navegador. */}
-                <section className="hidden md:flex flex-col relative w-full h-[calc(100vh-36px)] min-h-[700px] overflow-hidden bg-[#030812]">
+                {/* Renderizado apenas em desktop para evitar download do banner desnecessário */}
+                {!isMobileView && <section className="hidden md:flex flex-col relative w-full h-[calc(100vh-36px)] min-h-[700px] overflow-hidden bg-[#030812]">
                     {/* Background Expandido na tela inteira - Sem recuo  */}
                     <div className="absolute inset-0 w-full h-full z-0">
                         <img
@@ -270,7 +280,6 @@ export default function Diagnostico() {
                             alt="Background"
                             fetchPriority="high"
                             loading="eager"
-                            decoding="async"
                             className="w-full h-full object-cover object-[70%_top]"
                         />
                     </div>
@@ -357,16 +366,17 @@ export default function Diagnostico() {
                             </motion.div>
                         </motion.div>
                     </div>
-                </section>
+                </section>}
 
                 {/* Header Mobile Oculto no Desktop */}
-                <header className="md:hidden py-4 pt-6 pb-2 px-4 max-w-7xl mx-auto flex justify-center items-center relative z-20">
+                {isMobileView && <header className="md:hidden py-4 pt-6 pb-2 px-4 max-w-7xl mx-auto flex justify-center items-center relative z-20">
                     <img src={logoCineze} alt="Cineze" width={140} height={20} className="h-5" />
-                </header>
+                </header>}
 
                 <main className="max-w-7xl mx-auto px-4 py-2 md:pt-16 md:pb-12 space-y-16 md:space-y-24">
                     {/* SEÇÃO 1 — HERO ESTILO V4 COMPANY (MOBILE) */}
-                    <section className="flex flex-col relative md:hidden -mx-4 -mt-32 pt-32 h-[100dvh] overflow-hidden bg-[#0A1628]">
+                    {/* Renderizado apenas em mobile para evitar download do banner desnecessário */}
+                    {isMobileView && <section className="flex flex-col relative md:hidden -mx-4 -mt-32 pt-32 h-[100dvh] overflow-hidden bg-[#0A1628]">
 
                         {/* Imagem Cover puxada pro Topo */}
                         <div className="absolute inset-x-0 top-0 w-full h-full z-0">
@@ -377,7 +387,6 @@ export default function Diagnostico() {
                                 height={1792}
                                 fetchPriority="high"
                                 loading="eager"
-                                decoding="async"
                                 className="w-full h-full object-cover object-[center_15%] opacity-90"
                             />
                             {/* Gradiente sutil do meio até a base salvando o Rosto da escuridão  */}
@@ -437,7 +446,7 @@ export default function Diagnostico() {
                                 Descubra exatamente onde está o problema na captação do seu negócio e o que fazer para mudar isso hoje.
                             </motion.p>
                         </div>
-                    </section>
+                    </section>}
 
                     {/* SEÇÃO 1 B (EXTRA) — BOTÃO CTA MOBILE NA SEGUNDA DOBRA (FORA DO HERO 100VH) */}
                     <div className="md:hidden !mt-0 -mx-4 px-6 relative z-10 pb-0 pt-2 flex justify-center bg-[#0A1628]">

@@ -39,17 +39,19 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1314140077415723');
     // Carrega fbevents.js após a página estar interativa (máx 3s)
-    function _loadFBPixel() {
-      var t=document.createElement('script');t.async=!0;
-      t.src='https://connect.facebook.net/en_US/fbevents.js';
-      var s=document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(t,s);
-    }
-    if('requestIdleCallback' in window){
-      requestIdleCallback(_loadFBPixel,{timeout:3000});
-    } else {
-      setTimeout(_loadFBPixel,3000);
-    }
+    (function(){
+      function load(){
+        var t=document.createElement('script');t.async=!0;
+        t.src='https://connect.facebook.net/en_US/fbevents.js';
+        var s=document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(t,s);
+      }
+      if('requestIdleCallback' in window){
+        requestIdleCallback(load,{timeout:3000});
+      } else {
+        setTimeout(load,3000);
+      }
+    })();
     </script>
     <!-- End Meta Pixel Code -->
   </head>
