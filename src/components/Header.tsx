@@ -50,7 +50,7 @@ export function Header() {
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 400 }}
         >
-          <img src={logoCineze} alt="Cineze" width={133} height={24} className="h-4 md:h-6" />
+          <img src={logoCineze} alt="Cineze" width={168} height={24} className="h-4 md:h-6" />
         </motion.a>
 
         {/* Desktop Navigation */}

@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => ({
             if (id.includes("@supabase")) return "supabase";
             if (id.includes("framer-motion")) return "motion";
             if (id.includes("lucide")) return "icons";
+            if (id.includes("recharts") || id.includes("d3-") || id.includes("victory")) return "charts";
             return "vendor";
           }
         },

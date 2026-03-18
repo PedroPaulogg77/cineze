@@ -12,8 +12,12 @@
     <!-- Google Fonts: gerenciado pelo vite-plugin-webfont-dl (baixa e serve local no build) -->
     <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Preload da imagem LCP (banner hero mobile) -->
+    <!-- Preload da fonte principal (subconjunto latin — gerado pelo vite-plugin-webfont-dl) -->
+    <link rel="preload" as="font" type="font/woff2" href="/assets/B50WF7FGv37QNVWgE0ga--4Pbb6dDYs-h7i3A3FI.woff2" crossorigin>
+
+    <!-- Preload das imagens LCP (banner hero) -->
     <link rel="preload" as="image" href="/assets/banner-mobile.webp" fetchpriority="high" media="(max-width: 767px)">
+    <link rel="preload" as="image" href="/assets/banner-desktop.webp" fetchpriority="high" media="(min-width: 768px)">
 
     <meta property="og:title" content="Consultoria de Tecnologia e Marketing em BH | Cineze" />
     <meta property="og:description" content="Transforme T.I. em Lucro Líquido. Outsourcing de T.I. e Assessoria de Marketing Digital em Belo Horizonte para PMEs." />
@@ -24,18 +28,28 @@
     <meta name="twitter:site" content="@Cineze" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel Code — carregamento adiado para melhorar FCP/LCP/TBT -->
     <script>
+    // Stub fbq: fila todos os eventos antes do script carregar
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    n.queue=[]}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1314140077415723');
-    fbq('track', 'PageView');
+    // Carrega fbevents.js após a página estar interativa (máx 3s)
+    function _loadFBPixel() {
+      var t=document.createElement('script');t.async=!0;
+      t.src='https://connect.facebook.net/en_US/fbevents.js';
+      var s=document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(t,s);
+    }
+    if('requestIdleCallback' in window){
+      requestIdleCallback(_loadFBPixel,{timeout:3000});
+    } else {
+      setTimeout(_loadFBPixel,3000);
+    }
     </script>
     <!-- End Meta Pixel Code -->
   </head>

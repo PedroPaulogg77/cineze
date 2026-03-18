@@ -9,10 +9,10 @@ import {
 import { Button } from "@/components/ui/button";
 import logoCineze from "@/assets/logo-cineze.png";
 import { DiagnosticoFooter } from "@/components/DiagnosticoFooter";
-import parceiro1 from "@/assets/Logos/PARCEIRO 1.jpg";
-import parceiro2 from "@/assets/Logos/PARCEIRO 2.png";
-import parceiro3 from "@/assets/Logos/PARCEIRO 3.png";
-import parceiro4 from "@/assets/Logos/PARCEIRO 4.png";
+import parceiro1 from "@/assets/Logos/PARCEIRO 1.webp";
+import parceiro2 from "@/assets/Logos/PARCEIRO 2.webp";
+import parceiro3 from "@/assets/Logos/PARCEIRO 3.webp";
+import parceiro4 from "@/assets/Logos/PARCEIRO 4.webp";
 
 // Questions configurations
 const questions = [
@@ -268,6 +268,9 @@ export default function Diagnostico() {
                         <img
                             src="/assets/banner-desktop.webp"
                             alt="Background"
+                            fetchPriority="high"
+                            loading="eager"
+                            decoding="async"
                             className="w-full h-full object-cover object-[70%_top]"
                         />
                     </div>
@@ -277,7 +280,7 @@ export default function Diagnostico() {
 
                         {/* HEADER DESKTOP APENAS. Faz parte do div e fluxo normal de renderizacao! */}
                         <header className="pt-8 pb-4 w-full flex justify-start items-center">
-                            <img src={logoCineze} alt="Cineze" width={160} height={32} className="h-8" />
+                            <img src={logoCineze} alt="Cineze" width={225} height={32} className="h-8" />
                         </header>
 
                         {/* Coluna da Esquerda (Textos Centralizados Verticalmente) */}
@@ -358,7 +361,7 @@ export default function Diagnostico() {
 
                 {/* Header Mobile Oculto no Desktop */}
                 <header className="md:hidden py-4 pt-6 pb-2 px-4 max-w-7xl mx-auto flex justify-center items-center relative z-20">
-                    <img src={logoCineze} alt="Cineze" width={133} height={20} className="h-5" />
+                    <img src={logoCineze} alt="Cineze" width={140} height={20} className="h-5" />
                 </header>
 
                 <main className="max-w-7xl mx-auto px-4 py-2 md:pt-16 md:pb-12 space-y-16 md:space-y-24">
@@ -555,7 +558,7 @@ export default function Diagnostico() {
                                             >
                                                 <div className="bg-[#0D1F35] border border-[#1A3050] border-l-[3px] border-l-[#0066FF] p-6 md:p-8 rounded-xl h-full w-full relative group shadow-[0_10px_40px_rgba(0,0,0,0.5)] flex flex-col justify-center">
                                                     {/* Background Number */}
-                                                    <span className="absolute -top-4 right-4 text-[80px] md:text-[100px] font-black text-[#0066FF]/10 z-0 select-none">
+                                                    <span aria-hidden="true" className="absolute -top-4 right-4 text-[80px] md:text-[100px] font-black text-[#0066FF]/10 z-0 select-none">
                                                         0{idx + 1}
                                                     </span>
 
@@ -816,7 +819,7 @@ export default function Diagnostico() {
 
                 <div className="relative z-10 max-w-lg space-y-8">
                     <div className="flex items-center gap-2 mb-12">
-                        <img src={logoCineze} alt="Cineze" width={160} height={24} loading="lazy" className="h-6" />
+                        <img src={logoCineze} alt="Cineze" width={168} height={24} loading="lazy" className="h-6" />
                     </div>
 
                     <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-white leading-tight">
