@@ -340,11 +340,14 @@ export default function DiagnosticoObrigadoA() {
 
                                 {/* Botão Desktop */}
                                 <motion.div {...fadeUpView(0.3)} className="hidden lg:flex pt-4 justify-start">
-                                    <Button className="px-10 h-16 text-base font-bold tracking-wide shadow-lg glow-cyan group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105" asChild>
-                                        <a href="#">
-                                            COMEÇAR MEU QUICK START
-                                            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline shrink-0" />
-                                        </a>
+                                    <Button 
+                                        onClick={handleCheckout}
+                                        disabled={isLoading}
+                                        className="px-10 h-16 text-base font-bold tracking-wide shadow-lg glow-cyan group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105"
+                                    >
+                                        {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin shrink-0" /> : null}
+                                        COMEÇAR MEU QUICK START
+                                        {!isLoading && <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline shrink-0" />}
                                     </Button>
                                 </motion.div>
                             </div>
@@ -361,11 +364,14 @@ export default function DiagnosticoObrigadoA() {
                                     {...fadeUpView(0.2)}
                                     className="w-full flex justify-center mt-48 lg:hidden px-2 relative z-40"
                                 >
-                                    <Button className="w-full h-auto min-h-[4rem] py-4 text-sm font-bold tracking-wide shadow-lg glow-cyan group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105" asChild>
-                                        <a href="#">
-                                            COMEÇAR MEU QUICK START
-                                            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline shrink-0" />
-                                        </a>
+                                    <Button 
+                                        onClick={handleCheckout}
+                                        disabled={isLoading}
+                                        className="w-full h-auto min-h-[4rem] py-4 text-sm font-bold tracking-wide shadow-lg glow-cyan group bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-all rounded-full hover:scale-105"
+                                    >
+                                        {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin shrink-0" /> : null}
+                                        COMEÇAR MEU QUICK START
+                                        {!isLoading && <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline shrink-0" />}
                                     </Button>
                                 </motion.div>
                             </motion.div>
