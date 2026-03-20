@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
@@ -38,10 +37,10 @@ const scaleInView = (delay = 0) => ({
 });
 
 export default function DiagnosticoObrigadoB() {
-    const [searchParams] = useSearchParams();
-    const nome = searchParams.get("nome") || "";
-    const email = searchParams.get("email") || "";
-    const phone = searchParams.get("phone") || "";
+    const leadData = JSON.parse(sessionStorage.getItem('cineze_lead') || '{}');
+    const nome = leadData.nome || "";
+    const email = leadData.email || "";
+    const phone = leadData.phone || "";
 
     const [isLoading, setIsLoading] = useState(false);
     const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);

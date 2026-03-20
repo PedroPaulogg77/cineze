@@ -241,11 +241,11 @@ export default function Diagnostico() {
 
         // Determina variant localmente — sem esperar o Gemini
         const variant = answers["trafego"] === "Sim, já invisto atualmente" ? 'a' : 'b';
-        const params = new URLSearchParams({
+        sessionStorage.setItem('cineze_lead', JSON.stringify({
             nome:  answers["nome"]     || "",
             email: answers["email"]    || "",
             phone: answers["whatsapp"] || "",
-        });
+        }));
 
         // Lê cookies do Meta Pixel para enviar ao servidor (CAPI)
         const getCookie = (name: string) =>
@@ -267,7 +267,7 @@ export default function Diagnostico() {
         }).catch(console.error);
 
         // Redireciona imediatamente
-        navigate(`/diagnostico/obrigado-${variant}?${params.toString()}`);
+        navigate(`/diagnostico/obrigado-${variant}`);
     };
 
     // Step 0: Landing Page Long Copy (Redesign)
