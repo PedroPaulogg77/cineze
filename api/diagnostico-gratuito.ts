@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Resend } from 'resend';
 import { gerarDiagnosticoGratuito, type LeadGratuito } from './lib/gemini.js';
 import { salvarLeadNoSheets } from './lib/sheets.js';
+import { enviarLeadCAPI } from './lib/meta-capi.js';
 
 // ── Mapeia os campos do formulário (nomes antigos) para LeadGratuito ─────────
 function mapearCampos(body: Record<string, string>): LeadGratuito {
@@ -52,6 +53,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // 2. Salvar no Google Sheets
     await salvarLeadNoSheets(respostas, score, temperatura);
+
+    // 2.5 Enviar evento Lead via Meta Conversions API (CAPI)
+    enviarLeadCAPI({
+      email:     respostas.email,
+      phone:     respostas.telefone,
+      nome:      respostas.nome,
+      fbp:       body._fbp,
+      fbc:       body._fbc,
+      sourceUrl: body.source_url,
+      userAgent: body.user_agent,
+      clientIp:  (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()
+                 || req.socket?.remoteAddress || '',
+    }).catch(err => console.error('[CAPI] Falha (não bloqueante):', err));
 
     // 3. Enviar email para Pedro
     const resend        = new Resend(process.env.RESEND_API_KEY!);

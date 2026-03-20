@@ -247,12 +247,22 @@ export default function Diagnostico() {
             phone: answers["whatsapp"] || "",
         });
 
+        // Lê cookies do Meta Pixel para enviar ao servidor (CAPI)
+        const getCookie = (name: string) =>
+            document.cookie.split('; ').find(c => c.startsWith(name + '='))?.split('=')[1] || '';
+
         // Dispara o diagnóstico em background — keepalive garante que o request
         // não seja cancelado quando o browser navegar para a próxima página
         fetch('/api/diagnostico-gratuito', {
             method:    'POST',
             headers:   { 'Content-Type': 'application/json' },
-            body:      JSON.stringify(answers),
+            body:      JSON.stringify({
+                ...answers,
+                _fbp: getCookie('_fbp'),
+                _fbc: getCookie('_fbc'),
+                source_url: window.location.href,
+                user_agent: navigator.userAgent,
+            }),
             keepalive: true,
         }).catch(console.error);
 
