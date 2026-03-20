@@ -46,6 +46,13 @@ export default function DiagnosticoObrigadoA() {
     const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
     const [isPreloading, setIsPreloading] = useState(true);
 
+    // ── Meta Pixel: dispara evento de Lead na thank-you page ──────────
+    useEffect(() => {
+        if (typeof window !== "undefined" && window.fbq) {
+            window.fbq("track", "Lead");
+        }
+    }, []);
+
     // Preload checkout URL as soon as the page mounts (só se tiver email)
     useEffect(() => {
         const preloadCheckout = async () => {
