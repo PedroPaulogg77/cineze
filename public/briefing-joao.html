@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing Estratégico — Cineze × Paula Ventura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1C2D3A;
+    --navy-deep: #0F1A24;
+    --blue: #2196F3;
+    --blue-hover: #1976D2;
+    --blue-light: #E4F0FA;
+    --blue-glow: rgba(33, 150, 243, 0.15);
+    --white: #FFFFFF;
+    --gray-50: #F8FAFB;
+    --gray-100: #EEF2F5;
+    --gray-200: #D5DCE2;
+    --gray-300: #B0BEC5;
+    --gray-500: #607D8B;
+    --gray-700: #37474F;
+    --success: #00C853;
+    --warning: #FF9800;
+    --error: #F44336;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--gray-50);
+    color: var(--navy);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(33,150,243,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 48px 32px 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(33,150,243,0.12);
+    border: 1px solid rgba(33,150,243,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 24px;
+  }
+  .header-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .header h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+  .header h1 span {
+    color: var(--blue);
+  }
+  .header p {
+    font-size: 15px;
+    color: var(--gray-300);
+    max-width: 560px;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-container {
+    background: var(--navy-deep);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .progress-bar {
+    height: 3px;
+    background: var(--blue);
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-info {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 12px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-300);
+    letter-spacing: 0.5px;
+  }
+  .progress-info .step-label {
+    color: var(--blue);
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    display: none;
+    animation: fadeInSection 0.4s ease;
+  }
+  .section.active {
+    display: block;
+  }
+  @keyframes fadeInSection {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    margin-bottom: 32px;
+  }
+  .section-number {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--gray-500);
+    font-weight: 400;
+  }
+
+  /* ── FORM ELEMENTS ── */
+  .form-group {
+    margin-bottom: 28px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+    letter-spacing: 0.2px;
+  }
+  .form-group label .required {
+    color: var(--blue);
+    margin-left: 2px;
+  }
+  .form-group .helper {
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-bottom: 8px;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="url"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: var(--navy);
+    background: var(--white);
+    transition: var(--transition);
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px var(--blue-glow);
+  }
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23607D8B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+
+  /* ── RADIO / CHECKBOX CARDS ── */
+  .option-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 560px) {
+    .option-grid { grid-template-columns: 1fr; }
+  }
+  .option-card {
+    position: relative;
+    cursor: pointer;
+  }
+  .option-card input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .option-card .card-face {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    transition: var(--transition);
+    min-height: 56px;
+  }
+  .option-card .card-face .dot {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--gray-200);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: var(--transition);
+    position: relative;
+  }
+  .option-card input:checked ~ .card-face {
+    border-color: var(--blue);
+    background: var(--blue-light);
+  }
+  .option-card input:checked ~ .card-face .dot {
+    border-color: var(--blue);
+    background: var(--blue);
+    box-shadow: inset 0 0 0 3px var(--white);
+  }
+  .option-card .card-face .label-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--navy);
+  }
+  .option-card:hover .card-face {
+    border-color: var(--blue);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ── TWO COLUMNS ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 560px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--gray-100);
+    margin: 32px 0;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-100);
+  }
+  .btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px 32px;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.3px;
+  }
+  .btn-primary {
+    background: var(--blue);
+    color: var(--white);
+  }
+  .btn-primary:hover {
+    background: var(--blue-hover);
+    box-shadow: 0 4px 16px rgba(33,150,243,0.3);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--gray-500);
+    padding: 14px 24px;
+  }
+  .btn-secondary:hover {
+    color: var(--navy);
+    background: var(--gray-100);
+  }
+  .btn-submit {
+    background: var(--blue);
+    color: var(--white);
+    padding: 16px 40px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    width: 100%;
+    margin-top: 24px;
+  }
+  .btn-submit:hover {
+    background: var(--blue-hover);
+    box-shadow: 0 6px 24px rgba(33,150,243,0.35);
+    transform: translateY(-1px);
+  }
+
+  /* ── INFO CARD ── */
+  .info-card {
+    background: var(--blue-light);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+  }
+  .info-card p {
+    font-size: 13px;
+    color: var(--navy);
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  .info-card strong {
+    font-weight: 600;
+  }
+
+  /* ── SUCCESS SCREEN ── */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 80px 32px;
+    animation: fadeInSection 0.5s ease;
+  }
+  .success-screen.active {
+    display: block;
+  }
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    background: var(--blue-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .success-icon svg {
+    width: 32px;
+    height: 32px;
+    color: var(--blue);
+  }
+  .success-screen h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .success-screen p {
+    font-size: 15px;
+    color: var(--gray-500);
+    max-width: 440px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 32px;
+    font-size: 11px;
+    color: var(--gray-300);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .footer a {
+    color: var(--blue);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-badge">Briefing Estratégico</div>
+    <h1>Vamos construir o plano da <span>sua loja.</span></h1>
+    <p>Esse formulário é o primeiro passo do trabalho. Suas respostas vão direcionar toda a estratégia de marketing e posicionamento. Responda com calma — quanto mais detalhado, melhor o resultado.</p>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar-container">
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="progress-info">
+    <span id="stepLabel" class="step-label">Etapa 1 de 5</span>
+    <span id="progressPercent">0%</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ═══ SECTION 1: NEGÓCIO ═══ -->
+  <div class="section active" data-section="1">
+    <div class="section-header">
+      <div class="section-number">Etapa 01</div>
+      <div class="section-title">Sobre o negócio</div>
+      <div class="section-subtitle">Informações gerais da loja e da operação</div>
+    </div>
+
+    <div class="form-group">
+      <label>Nome completo <span class="required">*</span></label>
+      <input type="text" name="nome" placeholder="Seu nome" required>
+    </div>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label>WhatsApp <span class="required">*</span></label>
+        <input type="tel" name="whatsapp" placeholder="(31) 99999-9999" required>
+      </div>
+      <div class="form-group">
+        <label>Instagram da loja <span class="required">*</span></label>
+        <input type="text" name="instagram" placeholder="@seuinstagram">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Nome da loja <span class="required">*</span></label>
+      <input type="text" name="nome_loja" placeholder="Nome comercial">
+    </div>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label>Endereço completo da loja</label>
+        <input type="text" name="endereco" placeholder="Rua, número, bairro">
+      </div>
+      <div class="form-group">
+        <label>Há quanto tempo a loja existe?</label>
+        <input type="text" name="tempo_loja" placeholder="Ex: 5 anos">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>A loja tem site ou landing page?</label>
+      <div class="option-grid">
+        <label class="option-card">
+          <input type="radio" name="tem_site" value="Sim, e funciona bem">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Sim, e funciona bem</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="tem_site" value="Sim, mas está desatualizado">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Sim, mas desatualizado</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="tem_site" value="Não tenho">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Não tenho</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="tem_site" value="Não sei">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Não sei</span></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Quem cuida do dia a dia da loja hoje?</label>
+      <div class="helper">Quem atende, responde WhatsApp, organiza estoque etc.</div>
+      <textarea name="quem_opera" placeholder="Descreva quem faz o quê na operação..."></textarea>
+    </div>
+
+    <div class="btn-row">
+      <div></div>
+      <button class="btn btn-primary" onclick="nextSection()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 2: PRODUTO E ESTOQUE ═══ -->
+  <div class="section" data-section="2">
+    <div class="section-header">
+      <div class="section-number">Etapa 02</div>
+      <div class="section-title">Produto e estoque</div>
+      <div class="section-subtitle">Entender o que você tem disponível pra alugar</div>
+    </div>
+
+    <div class="info-card">
+      <p><strong>Por que isso importa?</strong> O estoque define a capacidade real do negócio. Se sabemos o que tem e o que sai mais, conseguimos direcionar os anúncios e o conteúdo pro que realmente converte.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label>Quantidade estimada de vestidos</label>
+        <input type="number" name="qtd_vestidos" placeholder="Ex: 300">
+      </div>
+      <div class="form-group">
+        <label>Quantidade estimada de ternos</label>
+        <input type="number" name="qtd_ternos" placeholder="Ex: 100">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Tem outros tipos de peça além de vestidos e ternos?</label>
+      <textarea name="outras_pecas" placeholder="Ex: acessórios, sapatos, gravatas, vestidos de debutante..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Qual o valor médio do aluguel por peça?</label>
+      <div class="two-col">
+        <div>
+          <div class="helper">Vestido</div>
+          <input type="text" name="ticket_vestido" placeholder="Ex: R$ 250">
+        </div>
+        <div>
+          <div class="helper">Terno</div>
+          <input type="text" name="ticket_terno" placeholder="Ex: R$ 200">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Faixa de preço — do mais barato ao mais caro</label>
+      <div class="two-col">
+        <input type="text" name="preco_min" placeholder="Mais barato: R$">
+        <input type="text" name="preco_max" placeholder="Mais caro: R$">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Quais peças saem mais? (tipo, cor, ocasião)</label>
+      <textarea name="mais_saem" placeholder="Ex: Vestidos longos em cores escuras pra formatura saem mais no fim do ano..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Quais peças quase nunca alugam?</label>
+      <textarea name="menos_saem" placeholder="Algo que tá parado no estoque e não tem saída..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Vocês vendem peças além de alugar?</label>
+      <div class="option-grid">
+        <label class="option-card">
+          <input type="radio" name="vende_pecas" value="Sim, vendemos também">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Sim, vendemos também</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="vende_pecas" value="Não, só aluguel">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Não, só aluguel</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="vende_pecas" value="Já pensamos, mas nunca fizemos">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Já pensamos nisso</span></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevSection()">← Voltar</button>
+      <button class="btn btn-primary" onclick="nextSection()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 3: CLIENTES E MERCADO ═══ -->
+  <div class="section" data-section="3">
+    <div class="section-header">
+      <div class="section-number">Etapa 03</div>
+      <div class="section-title">Clientes e mercado</div>
+      <div class="section-subtitle">Quem aluga, como chega e o que a concorrência faz</div>
+    </div>
+
+    <div class="form-group">
+      <label>Como os clientes chegam até vocês hoje? <span class="required">*</span></label>
+      <div class="helper">Pode marcar mais de uma opção</div>
+      <div class="option-grid">
+        <label class="option-card">
+          <input type="checkbox" name="canal_captacao" value="Indicação/boca a boca">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Indicação / boca a boca</span></div>
+        </label>
+        <label class="option-card">
+          <input type="checkbox" name="canal_captacao" value="Instagram orgânico">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Instagram orgânico</span></div>
+        </label>
+        <label class="option-card">
+          <input type="checkbox" name="canal_captacao" value="Google / buscas">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Google / buscas</span></div>
+        </label>
+        <label class="option-card">
+          <input type="checkbox" name="canal_captacao" value="Passam na frente da loja">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Passam na frente da loja</span></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Pra que tipo de evento as pessoas mais alugam?</label>
+      <textarea name="tipo_evento" placeholder="Ex: casamento, formatura, aniversário de 15 anos, eventos corporativos..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Qual o perfil do seu cliente típico?</label>
+      <div class="helper">Idade, gênero, classe social, região onde mora</div>
+      <textarea name="perfil_cliente" placeholder="Ex: Mulheres de 20-40 anos, classe B/C, moram na região oeste de BH..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Quantos aluguéis vocês fazem por mês atualmente?</label>
+      <input type="text" name="alugueis_mes" placeholder="Número aproximado">
+    </div>
+
+    <div class="form-group">
+      <label>Tem sazonalidade forte? Quais meses são bons e quais são fracos?</label>
+      <textarea name="sazonalidade" placeholder="Ex: Outubro a dezembro é bom por causa de formaturas. Janeiro e fevereiro são fracos..."></textarea>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="form-group">
+      <label>Você conhece seus concorrentes diretos na região?</label>
+      <textarea name="concorrentes" placeholder="Nomes de lojas, perfis de Instagram, se sabem os preços deles..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>O que você acha que eles fazem melhor que vocês?</label>
+      <textarea name="concorrente_melhor" placeholder="Seja sincero — isso ajuda a entender onde atacar"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>E o que vocês fazem melhor que eles?</label>
+      <textarea name="diferencial" placeholder="Qualidade das peças, atendimento, variedade, preço, localização..."></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevSection()">← Voltar</button>
+      <button class="btn btn-primary" onclick="nextSection()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 4: MARKETING ATUAL ═══ -->
+  <div class="section" data-section="4">
+    <div class="section-header">
+      <div class="section-number">Etapa 04</div>
+      <div class="section-title">Marketing atual</div>
+      <div class="section-subtitle">O que já foi feito e o que não funcionou</div>
+    </div>
+
+    <div class="form-group">
+      <label>Vocês já investiram em tráfego pago (anúncios)?</label>
+      <div class="option-grid">
+        <label class="option-card">
+          <input type="radio" name="trafego_pago" value="Sim, investimos atualmente">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Sim, investimos hoje</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="trafego_pago" value="Já tentamos e paramos">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Já tentamos e paramos</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="trafego_pago" value="Nunca investimos">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Nunca investimos</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="trafego_pago" value="Não sei o que é">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Não sei o que é isso</span></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Quem cuida do Instagram hoje?</label>
+      <textarea name="quem_instagram" placeholder="Quem posta, quem tira foto, com que frequência..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Vocês têm Google Meu Negócio ativo?</label>
+      <div class="helper">Aquele perfil que aparece quando pesquisam no Google Maps</div>
+      <div class="option-grid">
+        <label class="option-card">
+          <input type="radio" name="gmb" value="Sim, temos e está atualizado">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Sim, atualizado</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="gmb" value="Sim, mas está desatualizado">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Sim, mas desatualizado</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="gmb" value="Não temos">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Não temos</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="gmb" value="Não sei">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Não sei</span></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>O atendimento por WhatsApp funciona bem hoje?</label>
+      <textarea name="atendimento_whatsapp" placeholder="Quem responde? Demora quanto? Perde cliente por demora? Usa WhatsApp Business?"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Já tentaram alguma ação de marketing que deu certo?</label>
+      <textarea name="acao_certa" placeholder="Promoção, parceria, sorteio, algo que trouxe movimento..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>E alguma que não deu certo?</label>
+      <textarea name="acao_errada" placeholder="Algo que gastaram tempo ou dinheiro e não funcionou..."></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevSection()">← Voltar</button>
+      <button class="btn btn-primary" onclick="nextSection()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 5: OBJETIVOS ═══ -->
+  <div class="section" data-section="5">
+    <div class="section-header">
+      <div class="section-number">Etapa 05</div>
+      <div class="section-title">Objetivos e expectativas</div>
+      <div class="section-subtitle">O que vocês esperam alcançar com esse trabalho</div>
+    </div>
+
+    <div class="form-group">
+      <label>Qual faturamento mensal vocês precisam atingir? <span class="required">*</span></label>
+      <div class="helper">Meta mínima pra pagar contas e reinvestir</div>
+      <input type="text" name="meta_faturamento" placeholder="Ex: R$ 16.000/mês">
+    </div>
+
+    <div class="form-group">
+      <label>Qual o maior problema da loja hoje? <span class="required">*</span></label>
+      <div class="option-grid">
+        <label class="option-card">
+          <input type="radio" name="maior_problema" value="Falta de clientes novos">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Falta de clientes novos</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="maior_problema" value="Clientes chegam mas não fecham">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Chegam mas não fecham</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="maior_problema" value="Ninguém sabe que a loja existe">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Ninguém sabe que existimos</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="maior_problema" value="Não consigo manter o atendimento">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Atendimento não dá conta</span></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Se a gente pudesse resolver UMA coisa imediatamente, o que seria?</label>
+      <textarea name="uma_coisa" placeholder="Seja direto — o que mais dói hoje?"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Vocês têm verba mensal disponível pra investir em anúncios?</label>
+      <div class="option-grid">
+        <label class="option-card">
+          <input type="radio" name="verba_ads" value="Sim, R$500-800/mês">
+          <div class="card-face"><div class="dot"></div><span class="label-text">R$ 500 a 800/mês</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="verba_ads" value="Sim, R$200-500/mês">
+          <div class="card-face"><div class="dot"></div><span class="label-text">R$ 200 a 500/mês</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="verba_ads" value="Não tenho verba agora">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Não tenho verba agora</span></div>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="verba_ads" value="Depende do resultado">
+          <div class="card-face"><div class="dot"></div><span class="label-text">Depende do resultado</span></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Vocês já pensaram em programas de fidelidade ou recompra?</label>
+      <div class="helper">Ex: cartão fidelidade, desconto no segundo aluguel, indicação premiada</div>
+      <textarea name="fidelidade" placeholder="Conte se já tentaram ou se têm ideias..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Algo mais que você queira nos contar?</label>
+      <div class="helper">Qualquer informação extra que ajude a gente a entender melhor o momento da loja</div>
+      <textarea name="observacoes" placeholder="Fique à vontade..."></textarea>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="info-card">
+      <p><strong>Tudo pronto?</strong> Ao enviar, suas respostas serão encaminhadas diretamente para a equipe da Cineze. Vamos analisar tudo e voltar com um plano de ação personalizado pra sua loja.</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevSection()">← Voltar</button>
+      <div></div>
+    </div>
+
+    <button class="btn btn-submit" onclick="submitForm()">Enviar briefing →</button>
+  </div>
+
+  <!-- ═══ SUCCESS ═══ -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <h2>Briefing enviado!</h2>
+    <p>Suas respostas foram encaminhadas para a equipe da Cineze. Vamos analisar tudo com atenção e em breve você recebe o plano de ação. Obrigado pela confiança.</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  Cineze Agência · <a href="https://cineze.com.br" target="_blank">cineze.com.br</a>
+</div>
+
+<script>
+  let currentSection = 1;
+  const totalSections = 5;
+
+  function updateProgress() {
+    const pct = Math.round(((currentSection - 1) / totalSections) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressPercent').textContent = pct + '%';
+    document.getElementById('stepLabel').textContent = 'Etapa ' + currentSection + ' de ' + totalSections;
+  }
+
+  function showSection(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    const target = document.querySelector('[data-section="' + n + '"]');
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    updateProgress();
+  }
+
+  function nextSection() {
+    if (currentSection < totalSections) {
+      currentSection++;
+      showSection(currentSection);
+    }
+  }
+
+  function prevSection() {
+    if (currentSection > 1) {
+      currentSection--;
+      showSection(currentSection);
+    }
+  }
+
+  function collectData() {
+    const data = {};
+    // Text, tel, email, number, url inputs
+    document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="url"], textarea').forEach(el => {
+      if (el.name && el.value.trim()) {
+        data[el.name] = el.value.trim();
+      }
+    });
+    // Select
+    document.querySelectorAll('select').forEach(el => {
+      if (el.name && el.value) data[el.name] = el.value;
+    });
+    // Radio
+    document.querySelectorAll('input[type="radio"]:checked').forEach(el => {
+      if (el.name) data[el.name] = el.value;
+    });
+    // Checkbox (multi)
+    const checkboxGroups = {};
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(el => {
+      if (!checkboxGroups[el.name]) checkboxGroups[el.name] = [];
+      checkboxGroups[el.name].push(el.value);
+    });
+    for (const key in checkboxGroups) {
+      data[key] = checkboxGroups[key].join(', ');
+    }
+    return data;
+  }
+
+  function formatEmailBody(data) {
+    const labels = {
+      nome: 'Nome',
+      whatsapp: 'WhatsApp',
+      instagram: 'Instagram',
+      nome_loja: 'Nome da loja',
+      endereco: 'Endereço',
+      tempo_loja: 'Tempo de existência',
+      tem_site: 'Tem site/landing page',
+      quem_opera: 'Quem opera a loja',
+      qtd_vestidos: 'Qtd. vestidos',
+      qtd_ternos: 'Qtd. ternos',
+      outras_pecas: 'Outras peças',
+      ticket_vestido: 'Ticket médio vestido',
+      ticket_terno: 'Ticket médio terno',
+      preco_min: 'Preço mínimo',
+      preco_max: 'Preço máximo',
+      mais_saem: 'Peças que mais saem',
+      menos_saem: 'Peças que menos saem',
+      vende_pecas: 'Vende peças?',
+      canal_captacao: 'Canais de captação',
+      tipo_evento: 'Tipos de evento',
+      perfil_cliente: 'Perfil do cliente',
+      alugueis_mes: 'Aluguéis/mês atual',
+      sazonalidade: 'Sazonalidade',
+      concorrentes: 'Concorrentes',
+      concorrente_melhor: 'O que concorrência faz melhor',
+      diferencial: 'Diferencial da loja',
+      trafego_pago: 'Tráfego pago',
+      quem_instagram: 'Quem cuida do Instagram',
+      gmb: 'Google Meu Negócio',
+      atendimento_whatsapp: 'Atendimento WhatsApp',
+      acao_certa: 'Ação de marketing que deu certo',
+      acao_errada: 'Ação que não deu certo',
+      meta_faturamento: 'Meta de faturamento',
+      maior_problema: 'Maior problema',
+      uma_coisa: 'Prioridade imediata',
+      verba_ads: 'Verba pra anúncios',
+      fidelidade: 'Programas de fidelidade',
+      observacoes: 'Observações extras'
+    };
+
+    let body = '══════════════════════════════\n';
+    body += 'BRIEFING ESTRATÉGICO — CINEZE\n';
+    body += '══════════════════════════════\n\n';
+
+    for (const key in data) {
+      const label = labels[key] || key;
+      body += '▸ ' + label + ':\n' + data[key] + '\n\n';
+    }
+
+    body += '══════════════════════════════\n';
+    body += 'Enviado via formulário de briefing Cineze\n';
+
+    return body;
+  }
+
+  async function submitForm() {
+    const data = collectData();
+
+    if (!data.nome || !data.whatsapp) {
+      alert('Por favor, preencha pelo menos seu nome e WhatsApp na Etapa 1.');
+      currentSection = 1;
+      showSection(1);
+      return;
+    }
+
+    const subject = 'Briefing Estratégico — ' + (data.nome_loja || data.nome);
+    const bodyFormatado = formatEmailBody(data);
+    
+    // Visual feedback
+    const btnSubmit = document.querySelector('.btn-submit');
+    const originalText = btnSubmit.textContent;
+    btnSubmit.textContent = 'Enviando...';
+    btnSubmit.disabled = true;
+
+    try {
+      const response = await fetch('/api/briefing-joao', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject: subject,
+          body: bodyFormatado
+        })
+      });
+
+      if (!response.ok) {
+         throw new Error('Falha no envio da resposta do servidor');
+      }
+
+      // Show success screen
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('successScreen').classList.add('active');
+      document.getElementById('progressBar').style.width = '100%';
+      document.getElementById('progressPercent').textContent = '100%';
+      document.getElementById('stepLabel').textContent = 'Concluído';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error(err);
+      alert('Ocorreu um erro ao enviar o formulário. Por favor, tente novamente mais tarde.');
+    } finally {
+      btnSubmit.textContent = originalText;
+      btnSubmit.disabled = false;
+    }
+  }
+
+  // Init
+  updateProgress();
+</script>
+
+</body>
+</html>
