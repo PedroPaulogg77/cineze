@@ -47,9 +47,9 @@
         s.parentNode.insertBefore(t,s);
       }
       if('requestIdleCallback' in window){
-        requestIdleCallback(load,{timeout:3000});
+        requestIdleCallback(load,{timeout:5000});
       } else {
-        setTimeout(load,3000);
+        setTimeout(load,5000);
       }
     })();
     </script>

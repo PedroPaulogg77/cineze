@@ -11,10 +11,9 @@ import Links from "./pages/Links";
 import NotFound from "./pages/NotFound";
 import Diagnostico from "./pages/Diagnostico";
 import DiagnosticoObrigadoA from "./pages/DiagnosticoObrigadoA";
+import DiagnosticoPro from "./pages/DiagnosticoPro";
 import Privacidade from "./pages/Privacidade";
 import Termos from "./pages/Termos";
-
-const DiagnosticoPro = lazy(() => import("./pages/DiagnosticoPro"));
 import { Footer } from "@/components/Footer";
 
 declare global {
@@ -50,7 +49,7 @@ const AppContent = () => {
         <Route path="/links" element={<Links />} />
         <Route path="/diagnostico" element={<Diagnostico />} />
         <Route path="/diagnostico/obrigado-a" element={<DiagnosticoObrigadoA />} />
-        <Route path="/diagnostico-pro" element={<Suspense fallback={<PageLoader />}><DiagnosticoPro /></Suspense>} />
+        <Route path="/diagnostico-pro" element={<DiagnosticoPro />} />
         <Route path="/privacidade" element={<Privacidade />} />
         <Route path="/termos" element={<Termos />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

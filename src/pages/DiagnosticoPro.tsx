@@ -8,6 +8,7 @@ import { GridVignetteBackground } from "@/components/ui/grid-vignette-background
 import YouTubeFacade from "@/components/YouTubeFacade";
 import logoCineze from "@/assets/logo-cineze-opt.webp";
 import cardsImage from "@/assets/CARDS.png";
+import { ContainerScrollLite } from "@/components/ui/container-scroll-lite";
 
 // --- MOCKUPS OTIMIZADOS ---
 import mockup1Desktop from "@/assets/mockups/mockup-1-desktop-opt.webp";
@@ -135,94 +136,73 @@ export default function DiagnosticoPro() {
                     <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-600/10 blur-[120px] rounded-full pointer-events-none" />
                 </div>
 
-                {/*
-                  Hero layout substituto do ContainerScroll.
-                  Mantém a estética 3D do card via CSS hero-card-in (keyframe em index.css),
-                  eliminando o useScroll do framer-motion que criava listeners síncronos no main thread.
-                */}
-                <div className="relative z-10 w-full h-[55rem] md:h-[70rem] flex flex-col items-center justify-start pt-8 md:pt-20 px-6 md:px-4">
-                    <div className="w-full relative flex flex-col items-center" style={{ perspective: "1000px" }}>
+                {/* ContainerScrollLite: replica o efeito 3D do ContainerScroll original
+                    usando scroll listener nativo passivo — sem useScroll do framer-motion */}
+                <div className="relative z-10 w-full">
+                    <ContainerScrollLite
+                        titleComponent={
+                            <>
+                                <motion.img
+                                    {...fadeUpView(0)}
+                                    src={logoCineze}
+                                    alt="Cineze"
+                                    width={252}
+                                    height={36}
+                                    className="h-7 md:h-9 w-auto object-contain mb-10 opacity-90"
+                                />
 
-                        {/* Título */}
-                        <div className="w-full max-w-5xl text-center flex flex-col items-center z-20">
-                            <motion.img
-                                {...fadeUpView(0)}
-                                src={logoCineze}
-                                alt="Cineze"
-                                width={252}
-                                height={36}
-                                className="h-7 md:h-9 w-auto object-contain mb-10 opacity-90"
+                                <motion.div
+                                    {...fadeUpView(0.1)}
+                                    className="flex items-center justify-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-8 backdrop-blur-sm mx-auto"
+                                >
+                                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                                    <span className="text-[13px] font-bold tracking-widest uppercase text-cyan-100">Inteligência de Dados</span>
+                                </motion.div>
+
+                                {/* H1 = LCP: sem fade-in nem delay para ficar visível (opacity:1) imediatamente */}
+                                <h1 className="text-[28px] sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight mb-4 md:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 animate-in slide-in-from-bottom-6 duration-700 fill-mode-both">
+                                    O motor de inteligência por trás do <br className="hidden lg:block"/>
+                                    <span className="text-secondary drop-shadow-[0_0_30px_rgba(6,183,216,0.4)]">crescimento do seu negócio</span>
+                                </h1>
+
+                                <motion.p
+                                    {...fadeUpView(0.3)}
+                                    className="text-[15px] sm:text-[17px] md:text-xl text-[#A1B3CD] font-normal leading-relaxed max-w-3xl mb-8 md:mb-12"
+                                >
+                                    Em 40 minutos, nossa IA escaneia os 10 pilares da sua empresa e te entrega um plano de ação claro — descobrir o que trava seu faturamento nunca foi tão exato.
+                                </motion.p>
+
+                                <motion.div {...fadeUpView(0.4)} className="flex flex-col items-center w-full max-w-md mx-auto mb-16 md:mb-0 px-6 lg:px-0">
+                                    <CtaButton text="INICIAR DIAGNÓSTICO AGORA" className="w-full text-[14px] md:text-lg" />
+                                    <span className="text-[13px] text-muted-foreground mt-4 flex items-center gap-2 font-medium">
+                                        <ShieldCheck className="w-4 h-4 text-cyan-500" /> Acesso imediato · Garantia de 7 dias
+                                    </span>
+                                </motion.div>
+                            </>
+                        }
+                    >
+                        {/* [MOCKUP 1] HERO DASHBOARD */}
+                        <div className="w-full h-full relative group overflow-hidden bg-[#07111F]">
+                            <img
+                                src={mockup1Mobile}
+                                alt="Dashboard Mobile"
+                                fetchPriority="high"
+                                decoding="async"
+                                width={766}
+                                height={1657}
+                                className="md:hidden block w-full h-full absolute inset-0 object-cover object-[center_top] scale-[1.02]"
                             />
-
-                            <motion.div
-                                {...fadeUpView(0.1)}
-                                className="flex items-center justify-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-8 backdrop-blur-sm mx-auto"
-                            >
-                                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                                <span className="text-[13px] font-bold tracking-widest uppercase text-cyan-100">Inteligência de Dados</span>
-                            </motion.div>
-
-                            {/*
-                              H1 = elemento LCP. Removido fade-in e delay para que fique
-                              visível imediatamente após o React renderizar (opacity=1).
-                              O slide-in preserva a animação visual sem bloquear o LCP.
-                            */}
-                            <h1
-                                className="text-[28px] sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight mb-4 md:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 animate-in slide-in-from-bottom-6 duration-700 fill-mode-both"
-                            >
-                                O motor de inteligência por trás do <br className="hidden lg:block"/>
-                                <span className="text-secondary drop-shadow-[0_0_30px_rgba(6,183,216,0.4)]">crescimento do seu negócio</span>
-                            </h1>
-
-                            <motion.p
-                                {...fadeUpView(0.3)}
-                                className="text-[15px] sm:text-[17px] md:text-xl text-[#A1B3CD] font-normal leading-relaxed max-w-3xl mb-8 md:mb-12"
-                            >
-                                Em 40 minutos, nossa IA escaneia os 10 pilares da sua empresa e te entrega um plano de ação claro — descobrir o que trava seu faturamento nunca foi tão exato.
-                            </motion.p>
-
-                            <motion.div {...fadeUpView(0.4)} className="flex flex-col items-center w-full max-w-md mx-auto mb-16 md:mb-0 px-6 lg:px-0">
-                                <CtaButton text="INICIAR DIAGNÓSTICO AGORA" className="w-full text-[14px] md:text-lg" />
-                                <span className="text-[13px] text-muted-foreground mt-4 flex items-center gap-2 font-medium">
-                                    <ShieldCheck className="w-4 h-4 text-cyan-500" /> Acesso imediato · Garantia de 7 dias
-                                </span>
-                            </motion.div>
+                            <img
+                                src={mockup1Desktop}
+                                alt="Dashboard Desktop"
+                                fetchPriority="high"
+                                decoding="async"
+                                width={1100}
+                                height={521}
+                                className="hidden md:block w-full h-full absolute inset-0 object-cover object-left-top scale-[1.02]"
+                            />
                         </div>
-
-                        {/* Card 3D — animação de entrada via CSS (elimina useScroll do framer-motion) */}
-                        <div
-                            className="hero-card-in max-w-[17rem] md:max-w-5xl -mt-10 md:-mt-12 mx-auto h-[35rem] md:h-[40rem] w-full border-[6px] md:border-[8px] border-[#334155]/30 md:border-[#0A1A2F] p-1 md:p-3 bg-[#050D18] rounded-[2.5rem] relative overflow-hidden z-20 shadow-2xl"
-                            style={{ boxShadow: "0 0 50px rgba(6,183,216,0.1), 0 20px 40px rgba(0,0,0,0.5)" }}
-                        >
-                            {/* Decorative iPhone Notch (Mobile Only) */}
-                            <div className="absolute top-1 left-1/2 -translate-x-1/2 w-24 h-5 bg-[#334155]/30 rounded-full z-30 pointer-events-none md:hidden" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/10 to-transparent pointer-events-none z-10" />
-                            <div className="h-full w-full overflow-hidden rounded-[2rem] md:rounded-[2.2rem] border border-white/5 relative z-0 flex items-center justify-center bg-[#07111F]">
-                                {/* [MOCKUP 1] HERO DASHBOARD */}
-                                <div className="w-full h-full relative group perspective-1000 overflow-hidden bg-[#07111F]">
-                                    <img
-                                        src={mockup1Mobile}
-                                        alt="Dashboard Mobile"
-                                        fetchPriority="high"
-                                        decoding="sync"
-                                        width={876}
-                                        height={1893}
-                                        className="md:hidden block w-full h-full absolute inset-0 object-cover object-[center_top] scale-[1.02]"
-                                    />
-                                    <img
-                                        src={mockup1Desktop}
-                                        alt="Dashboard Desktop"
-                                        fetchPriority="high"
-                                        decoding="sync"
-                                        width={1100}
-                                        height={521}
-                                        className="hidden md:block w-full h-full absolute inset-0 object-cover object-left-top scale-[1.02]"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                    </ContainerScrollLite>
                 </div>
             </section>
 
