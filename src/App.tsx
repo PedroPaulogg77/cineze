@@ -6,14 +6,14 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
-const Index = lazy(() => import("./pages/Index"));
-const Links = lazy(() => import("./pages/Links"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const Diagnostico = lazy(() => import("./pages/Diagnostico"));
-const DiagnosticoObrigadoA = lazy(() => import("./pages/DiagnosticoObrigadoA"));
-const DiagnosticoPro = lazy(() => import("./pages/DiagnosticoPro"));
-const Privacidade = lazy(() => import("./pages/Privacidade"));
-const Termos = lazy(() => import("./pages/Termos"));
+import Index from "./pages/Index";
+import Links from "./pages/Links";
+import NotFound from "./pages/NotFound";
+import Diagnostico from "./pages/Diagnostico";
+import DiagnosticoObrigadoA from "./pages/DiagnosticoObrigadoA";
+import DiagnosticoPro from "./pages/DiagnosticoPro";
+import Privacidade from "./pages/Privacidade";
+import Termos from "./pages/Termos";
 import { Footer } from "@/components/Footer";
 
 declare global {
@@ -44,19 +44,17 @@ const AppContent = () => {
 
   return (
     <>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/links" element={<Links />} />
-          <Route path="/diagnostico" element={<Diagnostico />} />
-          <Route path="/diagnostico/obrigado-a" element={<DiagnosticoObrigadoA />} />
-          <Route path="/diagnostico-pro" element={<DiagnosticoPro />} />
-          <Route path="/privacidade" element={<Privacidade />} />
-          <Route path="/termos" element={<Termos />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/links" element={<Links />} />
+        <Route path="/diagnostico" element={<Diagnostico />} />
+        <Route path="/diagnostico/obrigado-a" element={<DiagnosticoObrigadoA />} />
+        <Route path="/diagnostico-pro" element={<DiagnosticoPro />} />
+        <Route path="/privacidade" element={<Privacidade />} />
+        <Route path="/termos" element={<Termos />} />
+        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       {!isFormPage && <Footer />}
     </>
   );

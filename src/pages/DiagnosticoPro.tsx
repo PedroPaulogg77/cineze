@@ -147,13 +147,12 @@ export default function DiagnosticoPro() {
                                     <span className="text-[13px] font-bold tracking-widest uppercase text-cyan-100">Inteligência de Dados</span>
                                 </motion.div>
                                 
-                                <motion.h1 
-                                    {...fadeUpView(0.2)}
-                                    className="text-[28px] sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight mb-4 md:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70"
+                                <h1 
+                                    className="text-[28px] sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight mb-4 md:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 animate-in fade-in slide-in-from-bottom-6 duration-1000 fill-mode-both delay-150"
                                 >
                                     O motor de inteligência por trás do <br className="hidden lg:block"/>
                                     <span className="text-secondary drop-shadow-[0_0_30px_rgba(6,183,216,0.4)]">crescimento do seu negócio</span>
-                                </motion.h1>
+                                </h1>
 
                                 <motion.p 
                                     {...fadeUpView(0.3)}
@@ -177,14 +176,14 @@ export default function DiagnosticoPro() {
                                 src={mockup1Mobile} 
                                 alt="Dashboard Mobile" 
                                 fetchPriority="high"
-                                decoding="sync"
+                                decoding="async"
                                 className="md:hidden block w-full h-full absolute inset-0 object-cover object-[center_top] scale-[1.02]" 
                              />
                              <img 
                                 src={mockup1Desktop} 
                                 alt="Dashboard Desktop" 
                                 fetchPriority="high"
-                                decoding="sync"
+                                decoding="async"
                                 className="hidden md:block w-full h-full absolute inset-0 object-cover object-left-top scale-[1.02]" 
                              />
                         </div>
