@@ -8,7 +8,7 @@ import Links from "./pages/Links";
 import NotFound from "./pages/NotFound";
 import Diagnostico from "./pages/Diagnostico";
 import DiagnosticoObrigadoA from "./pages/DiagnosticoObrigadoA";
-import DiagnosticoObrigadoB from "./pages/DiagnosticoObrigadoB";
+import DiagnosticoPro from "./pages/DiagnosticoPro";
 import Privacidade from "./pages/Privacidade";
 import Termos from "./pages/Termos";
 import { Footer } from "@/components/Footer";
@@ -41,7 +41,7 @@ const AppContent = () => {
         <Route path="/links" element={<Links />} />
         <Route path="/diagnostico" element={<Diagnostico />} />
         <Route path="/diagnostico/obrigado-a" element={<DiagnosticoObrigadoA />} />
-        <Route path="/diagnostico/obrigado-b" element={<DiagnosticoObrigadoB />} />
+        <Route path="/diagnostico-pro" element={<DiagnosticoPro />} />
         <Route path="/privacidade" element={<Privacidade />} />
         <Route path="/termos" element={<Termos />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

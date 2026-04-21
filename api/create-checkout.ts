@@ -29,11 +29,8 @@ export default async function handler(
 
     const { nome, email, phone } = request.body || {};
 
-    if (!email) {
-        return response.status(400).json({ error: 'Email obrigatório' });
-    }
-
     // 1. Salvar pedido no Supabase antes de ir para InfinitePay
+    // Mesmo sem email neste momento (cold traffic), registramos a intenção com orderNsu
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -49,7 +46,7 @@ export default async function handler(
         .from('pedidos')
         .insert({
             order_nsu: orderNsu,
-            email: email.toLowerCase().trim(),
+            email: email ? email.toLowerCase().trim() : "aguardando_checkout@cineze.com.br",
             nome: (nome || "").trim(),
             phone: (phone || "").trim(),
             status: 'pendente',
@@ -62,7 +59,7 @@ export default async function handler(
 
     // 2. Criar link de checkout na InfinitePay
     try {
-        const payload = {
+        const payload: any = {
             handle: "cineze",
             items: [
                 {
@@ -73,13 +70,17 @@ export default async function handler(
             ],
             order_nsu: orderNsu,
             redirect_url: "https://diagnostico.cineze.com.br/login",
-            webhook_url: "https://diagnostico.cineze.com.br/api/webhook/infinitepay",
-            customer: {
+            webhook_url: "https://diagnostico.cineze.com.br/api/webhook/infinitepay"
+        };
+        
+        // Só anexa o objeto de cliente se o email existir
+        if (email && email.trim() !== "") {
+            payload.customer = {
                 name: nome || "",
                 email: email.toLowerCase().trim(),
                 phone_number: phone || ""
-            }
-        };
+            };
+        }
 
         const res = await fetch('https://api.infinitepay.io/invoices/public/checkout/links', {
             method: 'POST',
