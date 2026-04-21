@@ -32,15 +32,19 @@ export default defineConfig(({ mode }) => ({
     },
     emptyOutDir: true,
     chunkSizeWarningLimit: 500,
+    // Inline imagens pequenas como data-URI para reduzir roundtrips
+    assetsInlineLimit: 4096,
     rollupOptions: {
       maxParallelFileOps: 2,
       output: {
         manualChunks: (id) => {
           if (id.includes("node_modules")) {
             if (id.includes("@supabase")) return "supabase";
-            if (id.includes("framer-motion")) return "motion";
+            // framer-motion em chunk próprio — carregado só na rota /diagnostico-pro
+            if (id.includes("framer-motion") || id.includes("motion-dom") || id.includes("motion-utils")) return "motion";
             if (id.includes("lucide")) return "icons";
             if (id.includes("recharts") || id.includes("d3-")) return "charts";
+            if (id.includes("react-router")) return "router";
             return "vendor";
           }
         },

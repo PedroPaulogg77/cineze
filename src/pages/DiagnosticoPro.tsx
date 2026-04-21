@@ -6,17 +6,16 @@ import { DiagnosticoFooter } from "@/components/DiagnosticoFooter";
 import { Button } from "@/components/ui/button";
 import { GridVignetteBackground } from "@/components/ui/grid-vignette-background";
 import YouTubeFacade from "@/components/YouTubeFacade";
-import logoCineze from "@/assets/logo-cineze.png";
+import logoCineze from "@/assets/logo-cineze-opt.webp";
 import cardsImage from "@/assets/CARDS.png";
-import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 
 // --- MOCKUPS OTIMIZADOS ---
-import mockup1Desktop from "@/assets/mockups/mockup-1-desktop.webp";
-import mockup1Mobile from "@/assets/mockups/mockup-1-mobile.webp";
-import mockup2 from "@/assets/mockups/mockup-2.webp";
+import mockup1Desktop from "@/assets/mockups/mockup-1-desktop-opt.webp";
+import mockup1Mobile from "@/assets/mockups/mockup-1-mobile-opt.webp";
+import mockup2 from "@/assets/mockups/mockup-2-opt.webp";
 import mockup3 from "@/assets/mockups/mockup-3.webp";
-import mockup4 from "@/assets/mockups/mockup-4.webp";
-import mockup5 from "@/assets/mockups/mockup-5.webp";
+import mockup4 from "@/assets/mockups/mockup-4-opt.webp";
+import mockup5 from "@/assets/mockups/mockup-5-opt.webp";
 
 // --- ANIMATIONS ---
 const fadeUpView = (delay = 0) => ({
@@ -39,7 +38,7 @@ export default function DiagnosticoPro() {
     const [isLoading, setIsLoading] = useState(false);
     const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
 
-    // Pré-carregamento do checkout para cold traffic
+    // Pré-carregamento do checkout adiado para não concorrer com recursos críticos de LCP
     useEffect(() => {
         const preloadCheckout = async () => {
             try {
@@ -54,7 +53,15 @@ export default function DiagnosticoPro() {
                 // silencioso
             }
         };
-        preloadCheckout();
+
+        // Só dispara quando o browser estiver ocioso, após a página estar interativa
+        if ('requestIdleCallback' in window) {
+            const id = (window as any).requestIdleCallback(preloadCheckout, { timeout: 6000 });
+            return () => (window as any).cancelIdleCallback(id);
+        } else {
+            const timer = setTimeout(preloadCheckout, 4000);
+            return () => clearTimeout(timer);
+        }
     }, []);
 
     const handleCheckout = async (e: React.MouseEvent) => {
@@ -120,74 +127,102 @@ export default function DiagnosticoPro() {
 
     return (
         <div className="min-h-screen bg-[#050D18] text-white selection:bg-cyan-500/30 font-sans font-medium overflow-x-hidden flex flex-col">
-            
+
             {/* 1. HERO SECTION */}
             <section className="relative w-full overflow-hidden border-b border-white/5">
                 <div className="absolute inset-0 z-0">
                     <GridVignetteBackground size={40} intensity={25} horizontalVignetteSize={200} verticalVignetteSize={200} />
                     <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-600/10 blur-[120px] rounded-full pointer-events-none" />
                 </div>
-                
-                <div className="relative z-10 w-full">
-                    <ContainerScroll
-                        titleComponent={
-                            <>
-                                <motion.img 
-                                    {...fadeUpView(0)}
-                                    src={logoCineze} 
-                                    alt="Cineze" 
-                                    className="h-7 md:h-9 w-auto object-contain mb-10 opacity-90" 
-                                />
 
-                                <motion.div 
-                                    {...fadeUpView(0.1)}
-                                    className="flex items-center justify-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-8 backdrop-blur-sm mx-auto"
-                                >
-                                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                                    <span className="text-[13px] font-bold tracking-widest uppercase text-cyan-100">Inteligência de Dados</span>
-                                </motion.div>
-                                
-                                <h1 
-                                    className="text-[28px] sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight mb-4 md:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 animate-in fade-in slide-in-from-bottom-6 duration-1000 fill-mode-both delay-150"
-                                >
-                                    O motor de inteligência por trás do <br className="hidden lg:block"/>
-                                    <span className="text-secondary drop-shadow-[0_0_30px_rgba(6,183,216,0.4)]">crescimento do seu negócio</span>
-                                </h1>
+                {/*
+                  Hero layout substituto do ContainerScroll.
+                  Mantém a estética 3D do card via CSS hero-card-in (keyframe em index.css),
+                  eliminando o useScroll do framer-motion que criava listeners síncronos no main thread.
+                */}
+                <div className="relative z-10 w-full h-[55rem] md:h-[70rem] flex flex-col items-center justify-start pt-8 md:pt-20 px-6 md:px-4">
+                    <div className="w-full relative flex flex-col items-center" style={{ perspective: "1000px" }}>
 
-                                <motion.p 
-                                    {...fadeUpView(0.3)}
-                                    className="text-[15px] sm:text-[17px] md:text-xl text-[#A1B3CD] font-normal leading-relaxed max-w-3xl mb-8 md:mb-12"
-                                >
-                                    Em 40 minutos, nossa IA escaneia os 10 pilares da sua empresa e te entrega um plano de ação claro — descobrir o que trava seu faturamento nunca foi tão exato.
-                                </motion.p>
+                        {/* Título */}
+                        <div className="w-full max-w-5xl text-center flex flex-col items-center z-20">
+                            <motion.img
+                                {...fadeUpView(0)}
+                                src={logoCineze}
+                                alt="Cineze"
+                                width={252}
+                                height={36}
+                                className="h-7 md:h-9 w-auto object-contain mb-10 opacity-90"
+                            />
 
-                                <motion.div {...fadeUpView(0.4)} className="flex flex-col items-center w-full max-w-md mx-auto mb-16 md:mb-0 px-6 lg:px-0">
-                                    <CtaButton text="INICIAR DIAGNÓSTICO AGORA" className="w-full text-[14px] md:text-lg" />
-                                    <span className="text-[13px] text-muted-foreground mt-4 flex items-center gap-2 font-medium">
-                                        <ShieldCheck className="w-4 h-4 text-cyan-500" /> Acesso imediato · Garantia de 7 dias
-                                    </span>
-                                </motion.div>
-                            </>
-                        }
-                    >
-                        {/* [MOCKUP 1] HERO DASHBOARD */}
-                        <div className="w-full h-full relative group perspective-1000 overflow-hidden bg-[#07111F]">
-                             <img 
-                                src={mockup1Mobile} 
-                                alt="Dashboard Mobile" 
-                                fetchPriority="high"
-                                decoding="async"
-                                className="md:hidden block w-full h-full absolute inset-0 object-cover object-[center_top] scale-[1.02]" 
-                             />
-                             <img 
-                                src={mockup1Desktop} 
-                                alt="Dashboard Desktop" 
-                                fetchPriority="high"
-                                decoding="async"
-                                className="hidden md:block w-full h-full absolute inset-0 object-cover object-left-top scale-[1.02]" 
-                             />
+                            <motion.div
+                                {...fadeUpView(0.1)}
+                                className="flex items-center justify-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-8 backdrop-blur-sm mx-auto"
+                            >
+                                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                                <span className="text-[13px] font-bold tracking-widest uppercase text-cyan-100">Inteligência de Dados</span>
+                            </motion.div>
+
+                            {/*
+                              H1 = elemento LCP. Removido fade-in e delay para que fique
+                              visível imediatamente após o React renderizar (opacity=1).
+                              O slide-in preserva a animação visual sem bloquear o LCP.
+                            */}
+                            <h1
+                                className="text-[28px] sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight mb-4 md:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 animate-in slide-in-from-bottom-6 duration-700 fill-mode-both"
+                            >
+                                O motor de inteligência por trás do <br className="hidden lg:block"/>
+                                <span className="text-secondary drop-shadow-[0_0_30px_rgba(6,183,216,0.4)]">crescimento do seu negócio</span>
+                            </h1>
+
+                            <motion.p
+                                {...fadeUpView(0.3)}
+                                className="text-[15px] sm:text-[17px] md:text-xl text-[#A1B3CD] font-normal leading-relaxed max-w-3xl mb-8 md:mb-12"
+                            >
+                                Em 40 minutos, nossa IA escaneia os 10 pilares da sua empresa e te entrega um plano de ação claro — descobrir o que trava seu faturamento nunca foi tão exato.
+                            </motion.p>
+
+                            <motion.div {...fadeUpView(0.4)} className="flex flex-col items-center w-full max-w-md mx-auto mb-16 md:mb-0 px-6 lg:px-0">
+                                <CtaButton text="INICIAR DIAGNÓSTICO AGORA" className="w-full text-[14px] md:text-lg" />
+                                <span className="text-[13px] text-muted-foreground mt-4 flex items-center gap-2 font-medium">
+                                    <ShieldCheck className="w-4 h-4 text-cyan-500" /> Acesso imediato · Garantia de 7 dias
+                                </span>
+                            </motion.div>
                         </div>
-                    </ContainerScroll>
+
+                        {/* Card 3D — animação de entrada via CSS (elimina useScroll do framer-motion) */}
+                        <div
+                            className="hero-card-in max-w-[17rem] md:max-w-5xl -mt-10 md:-mt-12 mx-auto h-[35rem] md:h-[40rem] w-full border-[6px] md:border-[8px] border-[#334155]/30 md:border-[#0A1A2F] p-1 md:p-3 bg-[#050D18] rounded-[2.5rem] relative overflow-hidden z-20 shadow-2xl"
+                            style={{ boxShadow: "0 0 50px rgba(6,183,216,0.1), 0 20px 40px rgba(0,0,0,0.5)" }}
+                        >
+                            {/* Decorative iPhone Notch (Mobile Only) */}
+                            <div className="absolute top-1 left-1/2 -translate-x-1/2 w-24 h-5 bg-[#334155]/30 rounded-full z-30 pointer-events-none md:hidden" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/10 to-transparent pointer-events-none z-10" />
+                            <div className="h-full w-full overflow-hidden rounded-[2rem] md:rounded-[2.2rem] border border-white/5 relative z-0 flex items-center justify-center bg-[#07111F]">
+                                {/* [MOCKUP 1] HERO DASHBOARD */}
+                                <div className="w-full h-full relative group perspective-1000 overflow-hidden bg-[#07111F]">
+                                    <img
+                                        src={mockup1Mobile}
+                                        alt="Dashboard Mobile"
+                                        fetchPriority="high"
+                                        decoding="sync"
+                                        width={876}
+                                        height={1893}
+                                        className="md:hidden block w-full h-full absolute inset-0 object-cover object-[center_top] scale-[1.02]"
+                                    />
+                                    <img
+                                        src={mockup1Desktop}
+                                        alt="Dashboard Desktop"
+                                        fetchPriority="high"
+                                        decoding="sync"
+                                        width={1100}
+                                        height={521}
+                                        className="hidden md:block w-full h-full absolute inset-0 object-cover object-left-top scale-[1.02]"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </section>
 
@@ -217,9 +252,9 @@ export default function DiagnosticoPro() {
 
                 {/* BENTO GRID CSS */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 auto-rows-fr">
-                    
+
                     {/* Item 1 - Span 2 Columns */}
-                    <motion.div 
+                    <motion.div
                         {...fadeUpView(0.1)}
                         className="col-span-1 md:col-span-2 flex flex-col bg-gradient-to-br from-[#0A1628] to-[#07111F] rounded-3xl border border-white/5 p-6 md:p-10 shadow-2xl relative overflow-hidden"
                     >
@@ -234,18 +269,20 @@ export default function DiagnosticoPro() {
                         </div>
                         {/* [MOCKUP 2] Desperdício de Tráfego */}
                         <div className="mt-8 w-full rounded-xl lg:rounded-2xl overflow-hidden border border-white/10 shadow-2xl group-hover:border-white/20 transition-colors">
-                            <img 
-                                src={mockup2} 
-                                alt="Funil de Perda de Leads" 
+                            <img
+                                src={mockup2}
+                                alt="Funil de Perda de Leads"
                                 loading="lazy"
                                 decoding="async"
-                                className="w-full h-auto object-cover object-top hover:scale-[1.03] transition-transform duration-700 ease-out" 
+                                width={1100}
+                                height={485}
+                                className="w-full h-auto object-cover object-top hover:scale-[1.03] transition-transform duration-700 ease-out"
                             />
                         </div>
                     </motion.div>
 
                     {/* Item 2 - Span 1 Column, taller */}
-                    <motion.div 
+                    <motion.div
                         {...fadeUpView(0.2)}
                         className="col-span-1 flex flex-col bg-gradient-to-br from-[#0A1628] to-[#07111F] rounded-3xl border border-white/5 p-6 md:p-8 shadow-2xl relative overflow-hidden"
                     >
@@ -257,18 +294,20 @@ export default function DiagnosticoPro() {
                         </div>
                         {/* [MOCKUP 3] Decisões no Escuro */}
                         <div className="mt-6 md:mt-8 flex justify-center items-center h-full w-full">
-                            <img 
-                                src={mockup3} 
-                                alt="Elemento 3D Clean" 
+                            <img
+                                src={mockup3}
+                                alt="Elemento 3D Clean"
                                 loading="lazy"
                                 decoding="async"
-                                className="w-[85%] sm:w-3/4 md:w-full h-auto object-contain hover:rotate-1 hover:scale-[1.05] drop-shadow-2xl transition-all duration-700" 
+                                width={396}
+                                height={663}
+                                className="w-[85%] sm:w-3/4 md:w-full h-auto object-contain hover:rotate-1 hover:scale-[1.05] drop-shadow-2xl transition-all duration-700"
                             />
                         </div>
                     </motion.div>
 
                     {/* Item 3 - Span 3 Columns as a banner across the bottom */}
-                    <motion.div 
+                    <motion.div
                         {...fadeUpView(0.3)}
                         className="col-span-1 md:col-span-3 flex flex-col md:flex-row items-center bg-secondary/5 rounded-3xl border border-secondary/20 p-6 md:p-12 shadow-[0_0_40px_rgba(6,183,216,0.05)] relative overflow-hidden gap-6 md:gap-8"
                     >
@@ -291,7 +330,7 @@ export default function DiagnosticoPro() {
             {/* 4. MECANISMO (COMO FUNCIONA / FEATURES) */}
             <section className="w-full border-y border-white/5 bg-[#081320] py-16 md:py-32 px-6 md:px-8 shadow-inner relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-64 bg-cyan-900/10 rounded-full blur-[160px] pointer-events-none" />
-                
+
                 <div className="max-w-6xl mx-auto relative z-10">
                     <motion.div {...fadeUpView(0)} className="text-center mb-12 md:mb-24">
                         <span className="text-secondary font-bold text-[10px] md:text-xs tracking-widest uppercase mb-3 block">Inteligência Estratégica, não achismos</span>
@@ -316,12 +355,14 @@ export default function DiagnosticoPro() {
                         </div>
                         <motion.div {...scaleInView(0.1)} className="w-full lg:w-1/2 w-[90%] md:w-full">
                              {/* [MOCKUP 4] Radar Chart */}
-                             <img 
-                                src={mockup4} 
-                                alt="Radar de Benchmarking" 
+                             <img
+                                src={mockup4}
+                                alt="Radar de Benchmarking"
                                 loading="lazy"
                                 decoding="async"
-                                className="w-full h-auto rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 hover:shadow-[0_20px_80px_rgba(6,183,216,0.25)] hover:border-white/30 transition-all duration-500 bg-[#07111F]" 
+                                width={1100}
+                                height={482}
+                                className="w-full h-auto rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 hover:shadow-[0_20px_80px_rgba(6,183,216,0.25)] hover:border-white/30 transition-all duration-500 bg-[#07111F]"
                             />
                         </motion.div>
                     </div>
@@ -330,12 +371,14 @@ export default function DiagnosticoPro() {
                     <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-20">
                         <motion.div {...scaleInView(0.1)} className="w-full lg:w-1/2 order-2 lg:order-1 w-[90%] md:w-full">
                              {/* [MOCKUP 5] Plano de Ação */}
-                             <img 
-                                src={mockup5} 
-                                alt="Plano de Ação Inteligente" 
+                             <img
+                                src={mockup5}
+                                alt="Plano de Ação Inteligente"
                                 loading="lazy"
                                 decoding="async"
-                                className="w-full h-auto rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 hover:shadow-[0_20px_80px_rgba(6,183,216,0.25)] hover:border-white/30 transition-all duration-500 bg-[#07111F]" 
+                                width={1100}
+                                height={497}
+                                className="w-full h-auto rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 hover:shadow-[0_20px_80px_rgba(6,183,216,0.25)] hover:border-white/30 transition-all duration-500 bg-[#07111F]"
                             />
                         </motion.div>
                         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left order-1 lg:order-2 mb-6 lg:mb-0">
@@ -373,7 +416,7 @@ export default function DiagnosticoPro() {
                         <YouTubeFacade videoId="KqCjnt6Zvsk" title="Vídeo Demonstração Cineze" className="absolute inset-0 w-full h-full" />
                     </div>
                 </motion.div>
-                
+
                 <CtaButton text="EXECUTAR MEU DIAGNÓSTICO" />
             </section>
 
@@ -408,7 +451,7 @@ export default function DiagnosticoPro() {
                                 ))}
                             </ul>
                         </div>
-                        
+
                         {/* Imagem CARDS.png existente sendo preservada mas alocada visualmente diferente */}
                         <motion.div
                             {...scaleInView(0.1)}
@@ -419,7 +462,7 @@ export default function DiagnosticoPro() {
                                 src={cardsImage}
                                 alt="UI Cards da Plataforma"
                                 width={500}
-                                height={600}
+                                height={650}
                                 loading="lazy"
                                 className="w-full h-auto drop-shadow-2xl object-contain scale-[1.05] relative z-10"
                             />
@@ -442,7 +485,7 @@ export default function DiagnosticoPro() {
                     className="w-full max-w-[480px] bg-gradient-to-b from-[#132840] to-[#0A1628] border border-cyan-500/20 rounded-[2rem] md:rounded-[2.5rem] p-6 sm:p-8 md:p-10 flex flex-col items-center text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden"
                 >
                     <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent left-0" />
-                    
+
                     <span className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-5 py-2 rounded-full text-[11px] md:text-[13px] font-bold uppercase tracking-widest mb-6 md:mb-8">
                         Licença de Análise Única
                     </span>
@@ -475,7 +518,7 @@ export default function DiagnosticoPro() {
             {/* 8. GARANTIA SAAS & CTA FINAL */}
             <section className="w-full py-12 md:py-24 px-6 md:px-8 bg-[#050B14] border-t border-white/5">
                 <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
-                    
+
                     {/* Minimalist Tech Guarantee */}
                     <motion.div {...fadeUpView(0)} className="bg-[#0A1628] border border-white/10 rounded-[2rem] p-6 md:p-8 w-full flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-16 md:mb-24 shadow-xl">
                         <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center shrink-0">

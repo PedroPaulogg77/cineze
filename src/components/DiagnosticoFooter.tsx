@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import logoCineze from "@/assets/logo-cineze.png";
+import logoCineze from "@/assets/logo-cineze-opt.webp";
 
 export function DiagnosticoFooter() {
     return (
