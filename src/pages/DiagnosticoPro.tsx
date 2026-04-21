@@ -176,11 +176,15 @@ export default function DiagnosticoPro() {
                              <img 
                                 src={mockup1Mobile} 
                                 alt="Dashboard Mobile" 
+                                fetchPriority="high"
+                                decoding="sync"
                                 className="md:hidden block w-full h-full absolute inset-0 object-cover object-[center_top] scale-[1.02]" 
                              />
                              <img 
                                 src={mockup1Desktop} 
                                 alt="Dashboard Desktop" 
+                                fetchPriority="high"
+                                decoding="sync"
                                 className="hidden md:block w-full h-full absolute inset-0 object-cover object-left-top scale-[1.02]" 
                              />
                         </div>
@@ -234,6 +238,8 @@ export default function DiagnosticoPro() {
                             <img 
                                 src={mockup2} 
                                 alt="Funil de Perda de Leads" 
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-auto object-cover object-top hover:scale-[1.03] transition-transform duration-700 ease-out" 
                             />
                         </div>
@@ -255,6 +261,8 @@ export default function DiagnosticoPro() {
                             <img 
                                 src={mockup3} 
                                 alt="Elemento 3D Clean" 
+                                loading="lazy"
+                                decoding="async"
                                 className="w-[85%] sm:w-3/4 md:w-full h-auto object-contain hover:rotate-1 hover:scale-[1.05] drop-shadow-2xl transition-all duration-700" 
                             />
                         </div>
@@ -312,6 +320,8 @@ export default function DiagnosticoPro() {
                              <img 
                                 src={mockup4} 
                                 alt="Radar de Benchmarking" 
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-auto rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 hover:shadow-[0_20px_80px_rgba(6,183,216,0.25)] hover:border-white/30 transition-all duration-500 bg-[#07111F]" 
                             />
                         </motion.div>
@@ -324,6 +334,8 @@ export default function DiagnosticoPro() {
                              <img 
                                 src={mockup5} 
                                 alt="Plano de Ação Inteligente" 
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-auto rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 hover:shadow-[0_20px_80px_rgba(6,183,216,0.25)] hover:border-white/30 transition-all duration-500 bg-[#07111F]" 
                             />
                         </motion.div>
