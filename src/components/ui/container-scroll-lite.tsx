@@ -25,32 +25,33 @@ export function ContainerScrollLite({
         const isMobile = window.innerWidth <= 768;
         const scaleFrom = isMobile ? 0.8 : 1.05;
 
-        const update = () => {
-            const rect = container.getBoundingClientRect();
-            const viewH = window.innerHeight;
-            // progress: 0 quando topo do container atinge base da viewport,
-            //           1 quando base do container sai pelo topo da viewport
-            const progress = Math.max(0, Math.min(1,
-                (viewH - rect.top) / (container.offsetHeight + viewH)
-            ));
+        // Cached layout values — read once, never inside scroll handler
+        let containerOffsetTop = 0;
+        let containerHeight = 0;
+        let viewH = window.innerHeight;
 
-            const rotateX = 20 * (1 - progress);
-            const scale = scaleFrom + (1 - scaleFrom) * progress;
-            const translateY = -100 * progress;
-
-            card.style.transform = `rotateX(${rotateX}deg) scale(${scale})`;
-            if (titleEl) {
-                titleEl.style.transform = `translateY(${translateY}px)`;
-            }
+        const cacheLayout = () => {
+            containerOffsetTop = container.getBoundingClientRect().top + window.scrollY;
+            containerHeight = container.offsetHeight;
+            viewH = window.innerHeight;
         };
 
-        update(); // estado inicial
+        // window.scrollY never triggers layout recalculation — safe inside scroll handler
+        const update = () => {
+            const elTop = containerOffsetTop - window.scrollY;
+            const progress = Math.max(0, Math.min(1,
+                (viewH - elTop) / (containerHeight + viewH)
+            ));
+            card.style.transform = `rotateX(${20 * (1 - progress)}deg) scale(${scaleFrom + (1 - scaleFrom) * progress})`;
+            if (titleEl) titleEl.style.transform = `translateY(${-100 * progress}px)`;
+        };
+
+        // Defer initial layout read until after first paint to avoid blocking TBT
+        requestAnimationFrame(() => { cacheLayout(); update(); });
+
         window.addEventListener("scroll", update, { passive: true });
 
-        const handleResize = () => {
-            const m = window.innerWidth <= 768;
-            if (m !== isMobile) window.location.reload(); // simples: reload em resize de breakpoint
-        };
+        const handleResize = () => { cacheLayout(); update(); };
         window.addEventListener("resize", handleResize, { passive: true });
 
         return () => {
