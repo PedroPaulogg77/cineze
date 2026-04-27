@@ -69,7 +69,7 @@ export default async function handler(
                 }
             ],
             order_nsu: orderNsu,
-            redirect_url: "https://diagnostico.cineze.com.br/login",
+            redirect_url: "https://diagnostico.cineze.com.br/acesso",
             webhook_url: "https://diagnostico.cineze.com.br/api/pagamento/webhook"
         };
         
