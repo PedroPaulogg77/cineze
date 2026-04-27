@@ -78,7 +78,7 @@ export default async function handler(
             ],
             order_nsu: orderNsu,
             redirect_url: whatsappRedirectUrl,
-            webhook_url: "https://diagnostico.cineze.com.br/api/webhook/infinitepay",
+            webhook_url: "https://diagnostico.cineze.com.br/api/pagamento/webhook",
             customer: {
                 name: nome || "",
                 email: email.toLowerCase().trim(),

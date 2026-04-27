@@ -70,7 +70,7 @@ export default async function handler(
             ],
             order_nsu: orderNsu,
             redirect_url: "https://diagnostico.cineze.com.br/login",
-            webhook_url: "https://diagnostico.cineze.com.br/api/webhook/infinitepay"
+            webhook_url: "https://diagnostico.cineze.com.br/api/pagamento/webhook"
         };
         
         // Só anexa o objeto de cliente se o email existir
