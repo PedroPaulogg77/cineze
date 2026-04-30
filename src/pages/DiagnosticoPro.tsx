@@ -16,6 +16,10 @@ import mockup2 from "@/assets/mockups/mockup-2-opt.webp";
 import mockup3 from "@/assets/mockups/mockup-3.webp";
 import mockup4 from "@/assets/mockups/mockup-4-opt.webp";
 import mockup5 from "@/assets/mockups/mockup-5-opt.webp";
+import parceiro1 from "@/assets/Logos/PARCEIRO 1.webp";
+import parceiro2 from "@/assets/Logos/PARCEIRO 2.webp";
+import parceiro3 from "@/assets/Logos/PARCEIRO 3.webp";
+import parceiro4 from "@/assets/Logos/PARCEIRO 4.webp";
 
 export default function DiagnosticoPro() {
     const [isLoading, setIsLoading] = useState(false);
@@ -178,13 +182,22 @@ export default function DiagnosticoPro() {
 
             {/* 2. LOGOS SOCIAL PROOF */}
             <section className="w-full border-b border-white/5 bg-white/[0.01] py-8 md:py-10 px-6 sm:px-8 flex flex-col items-center overflow-hidden relative">
-                <p className="text-[11px] md:text-[13px] uppercase tracking-widest font-bold text-[#8B9DB5] mb-6 md:mb-8 text-center max-w-[280px] md:max-w-full">
-                    Confiança estabelecida no mercado de Belo Horizonte
-                </p>
-                <div className="w-full max-w-5xl flex flex-wrap gap-6 md:gap-20 items-center justify-center opacity-40 grayscale hover:grayscale-0 hover:opacity-80 transition-all duration-700">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                        <div key={i} className="text-lg md:text-xl font-black italic select-none">Logo {i}</div>
-                    ))}
+                <div data-reveal="" className="flex flex-row items-center justify-center gap-3 md:gap-4">
+                    <div className="flex -space-x-3 md:-space-x-4">
+                        {[parceiro1, parceiro2, parceiro3, parceiro4].map((logo, i) => (
+                            <div
+                                key={i}
+                                className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-[#0A1628] bg-black overflow-hidden shadow-2xl relative"
+                                style={{ zIndex: 10 - i }}
+                            >
+                                <img src={logo} alt={`Logo de Parceiro ${i + 1}`} width={48} height={48} loading="lazy" className="w-full h-full object-cover" />
+                            </div>
+                        ))}
+                    </div>
+                    <div className="text-left">
+                        <p className="text-white font-black text-[15px] md:text-[19px] leading-tight tracking-tight"><span className="text-[#06B7D8]">+100</span> Clientes</p>
+                        <p className="text-white/70 text-[12px] md:text-[14px] font-medium leading-tight mt-0.5">atendidos e satisfeitos</p>
+                    </div>
                 </div>
             </section>
 
