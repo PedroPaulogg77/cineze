@@ -25,6 +25,19 @@ export default function DiagnosticoPro() {
     const [isLoading, setIsLoading] = useState(false);
     const pageRef = useRef<HTMLDivElement>(null);
 
+    // Preload LCP image o mais cedo possível
+    useEffect(() => {
+        const isMobile = window.innerWidth <= 768;
+        const href = isMobile ? mockup1Mobile : mockup1Desktop;
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.type = "image/webp";
+        link.href = href;
+        document.head.appendChild(link);
+        return () => { document.head.removeChild(link); };
+    }, []);
+
     // CSS + IntersectionObserver reveal — sem framer-motion, sem forced reflow
     useEffect(() => {
         const root = pageRef.current;

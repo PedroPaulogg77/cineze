@@ -6,15 +6,16 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
-import Index from "./pages/Index";
-import Links from "./pages/Links";
-import NotFound from "./pages/NotFound";
-import Diagnostico from "./pages/Diagnostico";
-import DiagnosticoObrigadoA from "./pages/DiagnosticoObrigadoA";
 import DiagnosticoPro from "./pages/DiagnosticoPro";
-import Privacidade from "./pages/Privacidade";
-import Termos from "./pages/Termos";
-import { Footer } from "@/components/Footer";
+
+const Index = lazy(() => import("./pages/Index"));
+const Links = lazy(() => import("./pages/Links"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Diagnostico = lazy(() => import("./pages/Diagnostico"));
+const DiagnosticoObrigadoA = lazy(() => import("./pages/DiagnosticoObrigadoA"));
+const Privacidade = lazy(() => import("./pages/Privacidade"));
+const Termos = lazy(() => import("./pages/Termos"));
+const Footer = lazy(() => import("@/components/Footer").then(m => ({ default: m.Footer })));
 
 declare global {
   interface Window {
@@ -43,7 +44,7 @@ const AppContent = () => {
   }, [location.pathname]);
 
   return (
-    <>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/links" element={<Links />} />
@@ -56,7 +57,7 @@ const AppContent = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
       {!isFormPage && <Footer />}
-    </>
+    </Suspense>
   );
 };
 
