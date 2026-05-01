@@ -28,30 +28,17 @@
     <meta name="twitter:site" content="@Cineze" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <!-- Meta Pixel Code — carregamento adiado para melhorar FCP/LCP/TBT -->
+    <!-- Meta Pixel Code -->
     <script>
-    // Stub fbq: fila todos os eventos antes do script carregar
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[]}(window, document,'script',
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1314140077415723');
-    // Carrega fbevents.js após a página estar interativa (máx 3s)
-    (function(){
-      function load(){
-        var t=document.createElement('script');t.async=!0;
-        t.src='https://connect.facebook.net/en_US/fbevents.js';
-        var s=document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(t,s);
-      }
-      if('requestIdleCallback' in window){
-        requestIdleCallback(load,{timeout:5000});
-      } else {
-        setTimeout(load,5000);
-      }
-    })();
     </script>
     <!-- End Meta Pixel Code -->
   </head>

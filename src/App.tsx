@@ -36,10 +36,24 @@ const AppContent = () => {
   const location = useLocation();
   const isFormPage = location.pathname.startsWith("/diagnostico");
 
-  // Dispara o PageView do Meta Pixel sempre que a rota mudar
+  // Dispara o PageView do Meta Pixel sempre que a rota mudar (Browser + CAPI deduplication)
   useEffect(() => {
     if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "PageView");
+      const eventId = crypto.randomUUID ? crypto.randomUUID() : 'id_' + Math.random().toString(36).substr(2, 9);
+      
+      // Dispara no Browser
+      window.fbq("track", "PageView", {}, { eventID: eventId });
+      
+      // Envia para o CAPI (backend Next.js) para deduplicação
+      fetch('https://diagnostico.cineze.com.br/api/meta-capi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event_name: 'PageView',
+          event_id: eventId,
+          source_url: window.location.href,
+        })
+      }).catch(err => console.error("Erro CAPI PageView:", err));
     }
   }, [location.pathname]);
 
