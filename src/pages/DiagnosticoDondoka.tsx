@@ -1,13 +1,13 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-    ArrowRight, ArrowLeft, CheckCircle2, Building2, Tag, Workflow,
-    Users, Swords, Camera, ShieldAlert, BarChart3, Save, Loader2
+    ArrowRight, ArrowLeft, CheckCircle2, Building2, Tag, PartyPopper,
+    Handshake, Store, MessagesSquare, ShieldAlert, Rocket, Save, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoCineze from "@/assets/logo-cineze.png";
 
-const STORAGE_KEY = "dondoka_diag_v1";
+const STORAGE_KEY = "dondoka_diag_v2";
 
 type Field = {
     id: string;
@@ -22,70 +22,77 @@ type Section = { id: string; title: string; icon: any; intro?: string; fields: F
 
 const sections: Section[] = [
     {
+        id: "eventos", title: "Os primeiros eventos", icon: PartyPopper,
+        intro: "Os eventos que já aconteceram são o nosso ponto de partida.",
+        fields: [
+            { id: "ev_quais", label: "Que festas foram os eventos que já rolaram aí?", type: "textarea", placeholder: "Ex: um batizado, uma festa de roupa... conta rapidinho como foi cada um" },
+            { id: "ev_valor", label: "Quanto foi cobrado em cada um, e o que estava incluso?", type: "textarea", placeholder: "Pode ser por alto — nos ajuda a pensar o preço daqui pra frente" },
+            { id: "ev_fotos", label: "Vocês têm (ou conseguem pedir) as fotos e vídeos desses eventos?", type: "text", placeholder: "Ex: o do casamento tem fotógrafo, o batizado dá pra pedir..." },
+            { id: "ev_agenda", label: "Tem data fechada pros próximos meses? Quais?", type: "text", placeholder: "Ex: 29 de novembro; agosto ainda vazio" },
+        ],
+    },
+    {
         id: "espaco", title: "O espaço", icon: Building2,
         fields: [
             { id: "espaco_capacidade", label: "Quantas pessoas o espaço comporta?", type: "text", placeholder: "Ex: 100 sentados / 130 em pé" },
-            { id: "espaco_tem", label: "O que o espaço já oferece?", type: "textarea", placeholder: "Cozinha, área externa, estacionamento, suíte dos noivos, ar-condicionado, gerador..." },
-            { id: "espaco_falta", label: "O que ainda falta montar ou melhorar?", type: "textarea", placeholder: "O que vocês ainda querem instalar, comprar ou ajustar" },
+            { id: "espaco_tem", label: "O que o espaço já oferece?", type: "textarea", placeholder: "Cozinha, área externa, estacionamento, ar-condicionado, som, área kids..." },
+            { id: "espaco_falta", label: "O que ainda falta chegar ou montar — e pra quando?", type: "textarea", placeholder: "Ex: as cadeiras chegam no fim de julho..." },
+            { id: "espaco_usos", label: "Além de festa, que outros usos o espaço aceitaria?", type: "text", placeholder: "Culto, palestra, formatura, ensaio, chá de bebê, evento de empresa..." },
         ],
     },
     {
-        id: "oferta", title: "Oferta e preço", icon: Tag,
+        id: "preco", title: "Preço e pacote", icon: Tag,
         fields: [
-            { id: "oferta_tipos", label: "Que tipos de evento vocês aceitam?", type: "text", placeholder: "Casamento, aniversário, corporativo, 15 anos..." },
-            { id: "oferta_preco", label: "Qual a faixa de preço da locação?", type: "text", placeholder: "Ex: de R$ X a R$ Y por evento" },
-            { id: "oferta_incluso", label: "O que está incluso e o que é cobrado à parte?", type: "textarea", placeholder: "Limpeza, segurança, som, mobiliário, buffet..." },
-            { id: "oferta_fornecedor", label: "Fornecedor é livre ou lista fechada? Tem caução?", type: "textarea", placeholder: "Buffet, decoração, DJ — o cliente traz o dele ou usa o de vocês?" },
+            { id: "preco_valor", label: "Quanto vocês pretendem cobrar pela locação?", type: "text", placeholder: "Valor ou faixa que têm em mente" },
+            { id: "preco_varia", label: "O preço muda por dia da semana ou tamanho da festa?", type: "text", placeholder: "Ex: sábado mais caro, sexta mais barato..." },
+            { id: "preco_incluso", label: "O que entra no preço e o que seria cobrado à parte?", type: "textarea", placeholder: "Limpeza, som, mesas e cadeiras, segurança..." },
+            { id: "preco_fornecedores", label: "O cliente traz os próprios fornecedores (buffet, decoração, DJ) ou vocês querem oferecer isso junto?", type: "textarea", placeholder: "Ex: a decoração a gente oferece pela parceria da Camila, o buffet o cliente traz..." },
         ],
     },
     {
-        id: "operacao", title: "Como fecha hoje", icon: Workflow,
+        id: "parceiros", title: "Parceiros e indicações", icon: Handshake,
+        intro: "Quem está em volta de vocês vale ouro pra divulgação.",
         fields: [
-            { id: "op_chega", label: "Por onde os clientes chegam até vocês hoje?", type: "options", options: ["Indicação de quem já conhece", "Instagram", "Google", "Passaram na frente", "Não sabemos ao certo"] },
-            { id: "op_responde", label: "Quem responde as consultas, e em quanto tempo?", type: "text", placeholder: "Ex: eu respondo pelo WhatsApp, no mesmo dia" },
-            { id: "op_visita", label: "De cada visita ao espaço, quantas viram evento fechado?", type: "text", placeholder: "Mais ou menos" },
-            { id: "op_sazonal", label: "Quais meses enchem e quais esvaziam?", type: "text", placeholder: "Ex: enche de out a dez, esvazia jan/fev" },
-            { id: "op_datas", label: "Quantas datas por mês dá pra ocupar?", type: "text", placeholder: "Capacidade de agenda" },
+            { id: "parc_quem", label: "Que parceiros vocês já têm?", type: "textarea", placeholder: "Decoradora, buffet, DJ, fotógrafo, aluguel de mesas, cerimonialista..." },
+            { id: "parc_indicou", label: "Quem indicou os primeiros eventos pra vocês?", type: "text", placeholder: "Amigo, parente, conhecido do bairro..." },
+            { id: "parc_rede", label: "Conhecem pessoas que organizam eventos direto?", type: "textarea", placeholder: "Cerimonialista, igreja, escola, empresa, salão de beleza..." },
         ],
     },
     {
-        id: "cliente", title: "O cliente", icon: Users,
+        id: "rua", title: "A rua e o movimento", icon: Store,
+        intro: "A fachada de vocês chama atenção — queremos usar isso a favor.",
         fields: [
-            { id: "cli_perfil", label: "Quem é o cliente típico de vocês?", type: "textarea", placeholder: "Perfil e faixa de renda de quem costuma alugar" },
-            { id: "cli_origem", label: "Os eventos que já rolaram, de onde vieram?", type: "text", placeholder: "Indicação, passaram na frente, Instagram..." },
-            { id: "cli_objecao", label: "Qual a objeção que mais escutam de quem não fecha?", type: "text", placeholder: "Ex: 'tá caro', 'a data não bate'..." },
+            { id: "rua_param", label: "Já aconteceu de alguém parar pra perguntar por causa da fachada?", type: "text", placeholder: "Se sim, com que frequência mais ou menos" },
+            { id: "rua_placa", label: "A fachada tem placa ou letreiro com WhatsApp/Instagram? Fica iluminada à noite?", type: "text", placeholder: "O que quem passa na rua consegue ver e anotar" },
+            { id: "rua_entorno", label: "O que tem perto que junta gente?", type: "text", placeholder: "Igreja, escola, avenida movimentada, comércio forte..." },
+            { id: "rua_acoes", label: "Topariam ações na rua — banner, panfleto, cupom, um evento aberto pra apresentar o espaço?", type: "textarea", placeholder: "O que acham que combina com vocês" },
         ],
     },
     {
-        id: "concorrencia", title: "Concorrência", icon: Swords, intro: "Essa parte é a mais importante pra gente posicionar vocês.",
+        id: "atendimento", title: "Do primeiro contato ao pós-festa", icon: MessagesSquare,
         fields: [
-            { id: "conc_quem", label: "Quem vocês veem como concorrente direto?", type: "text", placeholder: "Nomes de outros espaços da região" },
-            { id: "conc_porque", label: "Por que alguém escolheria a Dondoka em vez do concorrente?", type: "textarea", placeholder: "O que vocês têm de melhor / diferente" },
-            { id: "conc_preco", label: "Como vocês justificam o preço?", type: "textarea", placeholder: "O que faz valer o valor cobrado" },
+            { id: "at_contato", label: "Quando alguém chama, quem responde e por qual número?", type: "text", placeholder: "É número próprio da Dondoka ou o pessoal de vocês?" },
+            { id: "at_visita", label: "Como funciona a visita ao espaço hoje?", type: "text", placeholder: "Quem mostra, que dia, como marca" },
+            { id: "at_evento", label: "No dia do evento, quem da Dondoka acompanha? O que a casa faz?", type: "textarea", placeholder: "Recepção, limpeza, apoio durante a festa..." },
+            { id: "at_pos", label: "Depois da festa: vocês pedem feedback? Os primeiros clientes deixariam um depoimento?", type: "textarea", placeholder: "Avaliação, foto, vídeo curto falando da experiência..." },
         ],
     },
     {
-        id: "ativos", title: "O que já têm", icon: Camera,
+        id: "regras", title: "Regras da casa", icon: ShieldAlert,
         fields: [
-            { id: "ativos_midia", label: "Têm fotos/vídeos dos eventos que já rolaram? De que qualidade?", type: "textarea", placeholder: "Fotos de celular, de fotógrafo, nenhuma ainda..." },
-            { id: "ativos_insta", label: "Quem cuida do Instagram hoje e com que frequência posta?", type: "text", placeholder: "Ex: a Camila posta de vez em quando" },
-            { id: "ativos_outros", label: "Têm site? Depoimento de cliente?", type: "text", placeholder: "Site, avaliações, prints de elogio..." },
+            { id: "regras_som", label: "Tem horário máximo e regra de som/vizinhança?", type: "text", placeholder: "Ex: música até meia-noite..." },
+            { id: "regras_nao", label: "Que tipo de evento vocês NÃO querem receber?", type: "text", placeholder: "Se tiver algum" },
         ],
     },
     {
-        id: "restricoes", title: "Restrições e sábado", icon: ShieldAlert,
+        id: "visao", title: "Visão e investimento", icon: Rocket,
+        intro: "Pra fechar: onde vocês querem chegar e com o que dá pra contar.",
         fields: [
-            { id: "restr_regras", label: "Tem horário-limite, regra de barulho ou tipo de evento que NÃO aceitam?", type: "textarea", placeholder: "Regras da casa, vizinhança, etc." },
-            { id: "restr_sabado", label: "O evento deste sábado é de vocês ou de um cliente? Dá pra filmar?", type: "textarea", placeholder: "Se for de cliente, precisamos do ok dele pra usar as imagens" },
-        ],
-    },
-    {
-        id: "baseline", title: "Números de hoje", icon: BarChart3, intro: "Sem esses números de partida a gente não consegue provar o resultado depois.",
-        fields: [
-            { id: "base_consultas", label: "Quantas consultas/orçamentos vocês recebem por mês hoje? De onde vêm?", type: "text", placeholder: "Ex: umas 5 por mês, tudo indicação" },
-            { id: "base_eventos", label: "Quantos eventos vocês fecharam desde a inauguração?", type: "text", placeholder: "Total até agora" },
-            { id: "base_datas", label: "Quantas datas livres vocês têm por mês?", type: "text", placeholder: "Agenda disponível" },
-            { id: "base_obs", label: "Quer acrescentar mais alguma coisa? (opcional)", type: "textarea", placeholder: "Qualquer coisa que ache importante a gente saber" },
+            { id: "visao_evento", label: "Que tipo de evento vocês MAIS querem atrair?", type: "text", placeholder: "Casamento, 15 anos, aniversário, corporativo..." },
+            { id: "visao_meta", label: "Quantos eventos por mês fariam vocês felizes até o fim do ano?", type: "text", placeholder: "Um número realista" },
+            { id: "visao_verba", label: "Quanto dá pra investir por mês em anúncio?", type: "text", placeholder: "Verba que vai direto pra plataforma — pode começar pequeno", hint: "É separado do trabalho da Cineze" },
+            { id: "visao_tempo", label: "Quanto tempo por semana vocês têm pra participar de gravações?", type: "text", placeholder: "Ex: uma tarde por semana, só fim de semana..." },
+            { id: "visao_obs", label: "Algo mais que a gente deva saber? (opcional)", type: "textarea", placeholder: "Qualquer coisa que ache importante" },
         ],
     },
 ];
@@ -269,6 +276,7 @@ export default function DiagnosticoDondoka() {
                             {section.fields.map((f) => (
                                 <div key={f.id}>
                                     <label className="block text-white font-medium mb-2 leading-snug">{f.label}</label>
+                                    {f.hint && <p className="text-xs text-[#8B9DB5] -mt-1 mb-2">{f.hint}</p>}
                                     {f.type === "textarea" && (
                                         <textarea
                                             value={answers[f.id] || ""}
