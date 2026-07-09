@@ -12,6 +12,7 @@ const Index = lazy(() => import("./pages/Index"));
 const Links = lazy(() => import("./pages/Links"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Diagnostico = lazy(() => import("./pages/Diagnostico"));
+const DiagnosticoDondoka = lazy(() => import("./pages/DiagnosticoDondoka"));
 const DiagnosticoObrigadoA = lazy(() => import("./pages/DiagnosticoObrigadoA"));
 const Privacidade = lazy(() => import("./pages/Privacidade"));
 const Termos = lazy(() => import("./pages/Termos"));
@@ -63,6 +64,7 @@ const AppContent = () => {
         <Route path="/" element={<Index />} />
         <Route path="/links" element={<Links />} />
         <Route path="/diagnostico" element={<Diagnostico />} />
+        <Route path="/diagnostico-dondoka" element={<DiagnosticoDondoka />} />
         <Route path="/diagnostico/obrigado-a" element={<DiagnosticoObrigadoA />} />
         <Route path="/diagnostico-pro" element={<DiagnosticoPro />} />
         <Route path="/privacidade" element={<Privacidade />} />

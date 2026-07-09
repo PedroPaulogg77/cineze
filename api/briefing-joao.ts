@@ -21,8 +21,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Faltam campos (subject ou body).' });
     }
 
-    // API Key provided by user for this functionality
-    const resendApiKey = 're_i68QJ4wF_DQEdGRPv7prxm1CmfVEps5b3'; 
+    const resendApiKey = process.env.RESEND_API_KEY;
+    if (!resendApiKey) {
+      console.error('[briefing-joao] RESEND_API_KEY não configurada');
+      return res.status(500).json({ error: 'Serviço de e-mail não configurado' });
+    }
     const resend = new Resend(resendApiKey);
 
     const toEmail = process.env.PEDRO_EMAIL || 'pedro@cineze.com.br';
