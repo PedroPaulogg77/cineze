@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Server, 
-  Monitor, 
-  CloudCog, 
-  ShieldCheck, 
-  Wrench, 
-  Headphones,
+import {
   Target,
   Bot,
   Users,
@@ -15,95 +9,49 @@ import {
   Palette
 } from "lucide-react";
 
-type TabKey = "marketing" | "automacao" | "ti";
+type TabKey = "marketing" | "automacao";
 
 const tabs: { key: TabKey; label: string }[] = [
   { key: "marketing", label: "Assessoria de Marketing" },
   { key: "automacao", label: "Automação & CRM" },
-  { key: "ti", label: "Infraestrutura" },
 ];
 
 interface Service {
-  icon: typeof Server;
+  icon: typeof Target;
   title: string;
   what: string;
   diferencial: string;
   beneficio: string;
 }
 
-const tiServices: Service[] = [
-  {
-    icon: Server,
-    title: "Gestão de T.I. Terceirizada (Outsourcing)",
-    what: "Sua T.I. nas mãos de especialistas. Atuamos como o seu próprio departamento de T.I., com planejamento estratégico, suporte e gestão completa de infraestrutura.",
-    diferencial: "Foco em redução de custos operacionais e alinhamento da tecnologia com os objetivos de negócio.",
-    beneficio: "Libere seu tempo e recursos internos para focar no core business, enquanto garantimos a estabilidade da sua operação.",
-  },
-  {
-    icon: Monitor,
-    title: "Monitoramento Proativo 24/7",
-    what: "Acompanhamento ininterrupto de servidores, rede, estações e sistemas críticos.",
-    diferencial: "Prevenção de falhas. Resolvemos problemas remotamente antes que eles se manifestem e impactem o negócio.",
-    beneficio: "Zero tempo de inatividade inesperado. Sua empresa funciona sem interrupções, 24 horas por dia.",
-  },
-  {
-    icon: CloudCog,
-    title: "Backup em Nuvem e Disaster Recovery",
-    what: "Estratégias sólidas para proteção e restauração de dados. Inclui cópias seguras, automatizadas e versionadas em nuvem, além de planos de rollback e recuperação de desastres.",
-    diferencial: "Não é apenas um backup; é uma garantia de continuidade de negócio em qualquer cenário (falhas, ataques ou perdas críticas).",
-    beneficio: "Segurança total dos dados e restauração rápida de sistemas.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Segurança da Informação",
-    what: "Implementação de políticas de segurança, antivírus corporativo, auditorias de acesso e proteção avançada contra ameaças cibernéticas.",
-    diferencial: "Proteção em múltiplas camadas, focada em conformidade e prevenção de vazamento de dados.",
-    beneficio: "Paz de espírito e proteção robusta contra ataques, mantendo a integridade da sua operação.",
-  },
-  {
-    icon: Wrench,
-    title: "Projetos de TI e Consultoria",
-    what: "Análise, diagnóstico e planejamento tecnológico para otimizar a infraestrutura. Inclui implantação de Microsoft 365, Active Directory, redes estruturadas e migrações.",
-    diferencial: "Consultoria que traduz tecnologia em aumento de produtividade e redução de custos.",
-    beneficio: "Infraestrutura moderna, eficiente e alinhada com o crescimento da sua PME.",
-  },
-  {
-    icon: Headphones,
-    title: "Helpdesk Profissional",
-    what: "Central de chamados com atendimento remoto e presencial.",
-    diferencial: "Serviço com SLA (Service Level Agreement) definido, prioridades claras e relatórios mensais de performance.",
-    beneficio: "Resolução rápida e profissional para manter seus colaboradores produtivos.",
-  },
-];
-
 const marketingServices: Service[] = [
   {
     icon: MousePointerClick,
     title: "Tráfego Pago (Gestão de Anúncios)",
-    what: "Gestão de anúncios online em plataformas como Google Ads e Meta Ads.",
-    diferencial: "Foco exclusivo em leads e conversões — não em métricas de vaidade. Cada campanha é otimizada pelo resultado real.",
-    beneficio: "Captação previsível de novos clientes todo mês, com custo por lead rastreado e relatório quinzenal.",
+    what: "Gestão de anúncios no Google Ads e no Meta Ads, do planejamento ao acompanhamento.",
+    diferencial: "Foco em lead e venda, não em métrica de vaidade. Cada campanha é ajustada pelo resultado real, não pelo que fica bonito no print.",
+    beneficio: "Captação mais previsível, com custo por lead rastreado e relatório claro a cada quinzena.",
   },
   {
     icon: Globe,
     title: "Criação de Páginas (Sites e Landing Pages)",
-    what: "Desenvolvimento de Landing Pages profissionais otimizadas para converter visitantes em leads.",
-    diferencial: "Páginas criadas por especialistas em copywriting e design com foco em conversão — não em estética vazia.",
-    beneficio: "Aumente a taxa de conversão dos seus visitantes em contatos qualificados.",
+    what: "Sites e landing pages feitos pra transformar visitante em contato, não só pra ficar bonito.",
+    diferencial: "Página pensada por quem entende de copy e design juntos. Estética a serviço da conversão.",
+    beneficio: "Mais visitante virando contato de verdade.",
   },
   {
     icon: Palette,
     title: "Criativos (Anúncios e Posts)",
-    what: "Criação de anúncios e posts visualmente impactantes para campanhas de marketing.",
-    diferencial: "Criativos desenvolvidos com apoio de IA para máxima performance e alinhados com a estratégia de tráfego pago.",
-    beneficio: "Conteúdo que atrai a atenção certa e gera o clique para a conversão.",
+    what: "Criação dos anúncios e posts que rodam nas campanhas e no perfil.",
+    diferencial: "Feito com apoio de IA pra ganhar escala, mas com a mão de um designer de 10 anos por trás. Não é template.",
+    beneficio: "Conteúdo que prende a atenção certa e leva pro próximo passo.",
   },
   {
     icon: Target,
     title: "Assessoria de Marketing (Gestão Completa)",
-    what: "Gestão completa do seu marketing digital por especialistas em Growth.",
-    diferencial: "Não é apenas execução. É uma assessoria estratégica focada em resultados e otimização contínua.",
-    beneficio: "Um departamento de marketing de alta performance sem os custos de contratação interna.",
+    what: "A gente cuida do marketing do seu negócio do começo ao fim: estratégia, execução e ajuste, mês a mês.",
+    diferencial: "Você trata com quem pensa a estratégia e também põe a mão na massa. Sem repassar pro estagiário, sem pacote genérico.",
+    beneficio: "Um time de marketing inteiro sem o custo de montar um departamento interno.",
   },
 ];
 
@@ -111,38 +59,34 @@ const automacaoServices: Service[] = [
   {
     icon: Bot,
     title: "Automação de WhatsApp com IA",
-    what: "Configuramos respostas automáticas, qualificação de leads e agendamentos direto no WhatsApp — sem intervenção manual.",
-    diferencial: "Lead gerado não pode esperar. O sistema responde em segundos, 24 horas por dia, mantendo o interesse do prospect aquecido.",
-    beneficio: "Mais agendamentos e menos leads perdidos por demora no atendimento.",
+    what: "Resposta automática, qualificação de lead e agendamento direto no WhatsApp, sem depender de você parar o que está fazendo.",
+    diferencial: "Lead não espera. O sistema responde em segundos, 24 horas por dia, e mantém o interesse quente.",
+    beneficio: "Mais agendamento e menos lead perdido por demora no atendimento.",
   },
   {
     icon: Users,
     title: "Implementação e Gestão de CRM",
-    what: "Centralizamos todo o relacionamento com o cliente numa plataforma única — do primeiro contato ao pós-venda.",
-    diferencial: "Visibilidade total do funil de vendas. Você sabe exatamente onde está cada lead e qual o próximo passo.",
-    beneficio: "Aumento da taxa de conversão e retenção de clientes com comunicação personalizada e automatizada.",
+    what: "Todo o relacionamento com o cliente num lugar só, do primeiro contato ao pós-venda.",
+    diferencial: "Você enxerga o funil inteiro: onde está cada lead e qual o próximo passo.",
+    beneficio: "Mais conversão e mais cliente que volta, com follow-up que não depende de memória.",
   },
   {
     icon: Target,
     title: "Integrações entre Plataformas",
-    what: "Conectamos Meta Ads, Google Ads, WhatsApp, CRM e landing pages numa operação integrada e sem retrabalho manual.",
-    diferencial: "Cada lead gerado pelo tráfego pago entra automaticamente no CRM e recebe follow-up imediato pelo WhatsApp.",
-    beneficio: "Operação de marketing que funciona como um sistema — não como tarefas manuais desconectadas.",
+    what: "Meta Ads, Google Ads, WhatsApp, CRM e site conversando entre si, sem retrabalho manual.",
+    diferencial: "O lead que veio do anúncio já entra no CRM e recebe follow-up na hora.",
+    beneficio: "Marketing que funciona como sistema, não como um monte de tarefa solta.",
   },
 ];
 
 const servicesMap: Record<TabKey, { description: string; services: Service[] }> = {
   marketing: {
-    description: "Transformamos sua captação de clientes num sistema previsível. Tráfego pago, conteúdo estratégico, landing pages e criativos — tudo integrado e com relatório claro todo mês.",
+    description: "Estratégia, tráfego pago, conteúdo, site e criativo pensados juntos — não peças soltas. Com relatório claro do que está funcionando e do que não está.",
     services: marketingServices,
   },
   automacao: {
-    description: "Lead gerado não pode esperar. Configuramos o sistema que responde, qualifica e agenda automaticamente — enquanto você atende quem já está na sua frente.",
+    description: "De nada adianta gerar contato e demorar pra responder. A gente monta o sistema que fala com o lead na hora, qualifica e agenda — enquanto você atende quem já está na sua frente.",
     services: automacaoServices,
-  },
-  ti: {
-    description: "Para empresas que precisam de suporte técnico além do marketing. Infraestrutura segura como base para crescer.",
-    services: tiServices,
   },
 };
 
@@ -155,7 +99,7 @@ export function Solutions() {
   return (
     <section id="solucoes" className="py-24 md:py-32 relative">
       <div className="absolute inset-0 grid-pattern opacity-20" />
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -165,8 +109,8 @@ export function Solutions() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            Tudo que você precisa para{" "}
-            <span className="gradient-text">encher sua agenda.</span>
+            Seu marketing inteiro{" "}
+            <span className="gradient-text">numa operação só.</span>
           </h2>
         </motion.div>
 
@@ -231,9 +175,9 @@ export function Solutions() {
               initial={{ opacity: 0, y: 30, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: index * 0.08, duration: 0.4, ease: "easeOut" }}
-              whileHover={{ 
-                y: -5, 
-                transition: { duration: 0.2 } 
+              whileHover={{
+                y: -5,
+                transition: { duration: 0.2 }
               }}
               className={`p-6 rounded-2xl cursor-pointer transition-all duration-300 ${
                 activeService === index
@@ -243,7 +187,7 @@ export function Solutions() {
               onClick={() => setActiveService(activeService === index ? null : index)}
             >
               <div className="flex items-center gap-4 mb-4">
-                <motion.div 
+                <motion.div
                   className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${
                     activeService === index
                       ? "bg-secondary text-secondary-foreground"

@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Phone, Mail } from "lucide-react";
 import { Button } from "./ui/button";
-import { Link } from "react-router-dom";
 
 const WHATSAPP_LINK = "https://wa.me/5531985335573";
 
@@ -52,7 +51,7 @@ export function FinalCTA() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 px-2 sm:px-0"
           >
-            Faça um diagnóstico gratuito da sua presença digital. Em 20 minutos você descobre o que está perdendo e o que fazer para mudar isso.
+            Manda uma mensagem e conta do seu negócio. Se fizer sentido pros dois lados, a gente marca uma conversa e vê como pode ajudar.
           </motion.p>
 
           <motion.div
@@ -64,13 +63,15 @@ export function FinalCTA() {
           >
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
               <Button variant="hero" size="xl" asChild className="w-full sm:w-auto text-sm sm:text-base whitespace-normal h-auto py-4">
-                <Link
-                  to="/diagnostico?start=true"
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group flex items-center justify-center gap-2 text-center"
                 >
-                  AGENDAR DIAGNÓSTICO GRATUITO
+                  FALAR COM A CINEZE NO WHATSAPP
                   <ArrowRight className="w-5 h-5 shrink-0 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </Button>
             </motion.div>
           </motion.div>

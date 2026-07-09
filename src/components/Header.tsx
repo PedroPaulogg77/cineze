@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
-import { Link } from "react-router-dom";
 import logoCineze from "@/assets/logo-cineze.png";
 
 const WHATSAPP_LINK = "https://wa.me/5531985335573";
@@ -75,9 +74,9 @@ export function Header() {
             transition={{ delay: 0.5, duration: 0.4 }}
           >
             <Button variant="hero" size="default" asChild className="group">
-              <Link to="/diagnostico?start=true">
-                Diagnóstico Gratuito
-              </Link>
+              <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
+                Falar com a Cineze
+              </a>
             </Button>
           </motion.div>
         </nav>
@@ -123,9 +122,9 @@ export function Header() {
                 transition={{ delay: 0.4 }}
               >
                 <Button variant="hero" size="lg" className="mt-4 w-full" asChild>
-                  <Link to="/diagnostico?start=true">
-                    Diagnóstico Gratuito
-                  </Link>
+                  <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
+                    Falar com a Cineze
+                  </a>
                 </Button>
               </motion.div>
             </nav>

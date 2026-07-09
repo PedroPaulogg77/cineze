@@ -9,23 +9,23 @@ import {
 const faqs = [
   {
     question: "Como a Cineze gera novos clientes para o meu negócio?",
-    answer: "Através de tráfego pago no Meta e Google, conteúdo estratégico e automação de WhatsApp — tudo integrado numa operação que captura leads, nutre e converte. Você acompanha tudo em relatórios quinzenais com métricas reais.",
+    answer: "A gente monta a operação de marketing do seu negócio: estratégia, anúncio no Google e no Meta, conteúdo e o atendimento automatizado no WhatsApp. Tudo pensado junto, com relatório claro do que está funcionando.",
   },
   {
     question: "Em quanto tempo começo a ver resultado?",
-    answer: "Campanhas de tráfego pago geram os primeiros leads nas primeiras semanas. O algoritmo otimiza ao longo de 60 a 90 dias, reduzindo o custo por lead progressivamente. Trabalhamos com contratos de no mínimo 3 meses justamente para esse ciclo funcionar.",
+    answer: "Anúncio traz os primeiros contatos já nas primeiras semanas. O resultado firme vem com o ajuste ao longo de 60 a 90 dias, e é por isso que trabalhamos com no mínimo 3 meses. Quem promete milagre em 7 dias está te enrolando.",
   },
   {
     question: "Preciso ter um site para contratar vocês?",
-    answer: "Não. Criamos landing pages estratégicas como parte do serviço. Se você não tem site ou o site atual não converte, isso faz parte da nossa entrega.",
+    answer: "Não. Se precisar, a gente cria a página como parte do trabalho. E se o seu site atual não converte, resolver isso também entra.",
   },
   {
-    question: "Como funciona o processo de contratação?",
-    answer: "Tudo começa com o Diagnóstico Digital Gratuito. Em 20 minutos analisamos sua presença digital atual, identificamos os principais gargalos e apresentamos o que precisa ser feito. Sem compromisso.",
+    question: "Como começa a trabalhar com a Cineze?",
+    answer: "Começa com uma conversa no WhatsApp pra entender seu negócio e seu momento. A gente monta um plano começando pelo que move a agulha primeiro, sem despejar tudo de uma vez, e você decide. Sem pressão e sem formulário interminável.",
   },
   {
     question: "A Cineze atende fora de Belo Horizonte?",
-    answer: "Nossa Assessoria de Marketing é feita remotamente, permitindo atender clientes em todo o Brasil. O suporte presencial e reuniões estratégicas são focados em Belo Horizonte e região metropolitana.",
+    answer: "A assessoria é remota e atende o Brasil todo. Reunião presencial e apoio de perto ficam concentrados em Belo Horizonte e região metropolitana.",
   },
 ];
 

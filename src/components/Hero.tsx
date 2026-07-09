@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, Award } from "lucide-react";
 import { Button } from "./ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
-import { Link } from "react-router-dom";
 
 const WHATSAPP_LINK = "https://wa.me/5531985335573";
 
@@ -67,7 +66,7 @@ export function Hero() {
               <Award className="w-4 h-4 text-secondary" />
             </motion.div>
             <span className="text-sm text-muted-foreground">
-              Agência de Growth Marketing · Belo Horizonte
+              Assessoria de marketing · Belo Horizonte
             </span>
           </motion.div>
 
@@ -96,8 +95,8 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
             className="text-base md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10 px-2 sm:px-0"
           >
-            Clínicas de estética, imobiliárias e empresas de serviço em BH que perdem clientes para concorrentes com produto pior mas{" "}
-            <strong className="text-foreground">marketing melhor</strong>. A Cineze resolve isso.
+            Você é bom no que faz. Só que, na hora de pesquisar, quem decide acha o seu concorrente primeiro — às vezes um que entrega pior, mas tem{" "}
+            <strong className="text-foreground">marketing melhor</strong>. A gente existe pra virar esse jogo.
           </motion.p>
 
           {/* CTA */}
@@ -113,13 +112,15 @@ export function Hero() {
               className="w-full sm:w-auto"
             >
               <Button variant="hero" size="xl" asChild className="w-full sm:w-auto text-sm sm:text-base whitespace-normal h-auto py-4">
-                <Link
-                  to="/diagnostico?start=true"
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group flex items-center justify-center gap-2 text-center"
                 >
-                  QUERO UM DIAGNÓSTICO GRATUITO
+                  FALAR COM A CINEZE NO WHATSAPP
                   <ArrowRight className="w-5 h-5 shrink-0 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </Button>
             </motion.div>
             <motion.p
@@ -128,7 +129,7 @@ export function Hero() {
               transition={{ delay: 0.7 }}
               className="text-sm text-muted-foreground text-center px-2"
             >
-              Análise completa da sua presença digital em 20 minutos. Sem compromisso.
+              Uma conversa direta sobre o marketing do seu negócio. Sem formulário, sem robô, sem compromisso.
             </motion.p>
           </motion.div>
         </div>

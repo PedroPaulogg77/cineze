@@ -4,21 +4,21 @@ import { TrendingUp, BarChart3, Shield } from "lucide-react";
 const objections = [
   {
     icon: TrendingUp,
-    title: "Leads que viram clientes",
+    title: "Estratégia antes de gastar",
     description:
-      "Não entregamos métricas de vaidade. Entregamos contatos de pessoas reais interessadas no seu serviço — com número para provar todo mês.",
+      "A maioria começa pelo anúncio. A gente começa entendendo por que o cliente ainda não te acha e o que muda isso. Anúncio sem estratégia é dinheiro no lixo.",
   },
   {
     icon: BarChart3,
-    title: "Marketing que se paga",
+    title: "Feito por gente, não por template",
     description:
-      "Cada real investido em mídia é rastreado. Você sabe quantos leads gerou, quanto custou cada um e quantos viraram receita.",
+      "Você não recebe o mesmo pacote da padaria da esquina. Estratégia, texto e campanha saem da mão de quem faz isso há mais de 10 anos.",
   },
   {
     icon: Shield,
-    title: "Automação que trabalha por você",
+    title: "O lead respondido na hora",
     description:
-      "WhatsApp, CRM e integrações que respondem o lead em segundos e nutrem o relacionamento enquanto você foca no seu negócio.",
+      "De nada adianta gerar contato e demorar pra responder. A gente monta o WhatsApp e o CRM que falam com o cliente em segundos, enquanto você toca o negócio.",
   },
 ];
 

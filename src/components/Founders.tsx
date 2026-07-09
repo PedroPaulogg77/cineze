@@ -9,7 +9,7 @@ const founders = [
     image: davidsonImg,
     icon: Shield,
     description:
-      "Davidson garante que cada lead gerado pelo marketing seja capturado, respondido e acompanhado. Ele é o responsável pelas automações de WhatsApp, integrações de CRM e toda a infraestrutura que transforma interesse em agendamento — sem depender de processo manual.",
+      "Davidson cuida pra que todo lead gerado pelo marketing seja capturado, respondido e acompanhado. São dele as automações de WhatsApp, as integrações de CRM e o sistema que transforma interesse em agendamento, sem depender de processo manual.",
   },
   {
     name: "Pedro",
@@ -17,7 +17,7 @@ const founders = [
     image: "/assets/pedro.webp",
     icon: Rocket,
     description:
-      "Pedro lidera a estratégia de growth marketing da Cineze. Designer com mais de 10 anos de experiência, utiliza inteligência artificial para criar conteúdo e campanhas em escala sem abrir mão da qualidade — com foco 100% em resultado mensurável para o cliente.",
+      "Pedro lidera a estratégia e a criação da Cineze. Designer há mais de 10 anos, junta estratégia de marketing e execução com apoio de IA pra entregar em escala sem perder a mão. Foco em resultado que dá pra medir, não em post bonito.",
   },
 ];
 
@@ -69,8 +69,9 @@ export function Founders() {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto px-2 sm:px-0"
           >
-            A Cineze não é apenas uma empresa; é a convergência de duas visões
-            complementares, nascida da experiência dos irmãos Davidson e Pedro.
+            Somos dois irmãos: Pedro, que cuida da estratégia e da criação, e
+            Davidson, que cuida da automação que faz o marketing andar sem
+            depender de ninguém lembrar de responder.
           </motion.p>
         </motion.div>
 
