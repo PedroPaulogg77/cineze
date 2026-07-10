@@ -77,14 +77,14 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
           >
-            Seu negócio merece parecer{" "}
+            Seu concorrente não é melhor.{" "}
             <motion.span
               className="gradient-text inline-block"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              tão bom quanto é.
+              Ele só aparece mais.
             </motion.span>
           </motion.h1>
 
@@ -95,8 +95,8 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
             className="text-base md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10 px-2 sm:px-0"
           >
-            Você é bom no que faz. Só que, na hora de pesquisar, quem decide acha o seu concorrente primeiro — às vezes um que entrega pior, mas tem{" "}
-            <strong className="text-foreground">marketing melhor</strong>. A gente existe pra virar esse jogo.
+            A gente cuida do marketing do seu negócio pra que o cliente ache você primeiro. Do{" "}
+            <strong className="text-foreground">anúncio ao WhatsApp que responde na hora</strong>, sem você precisar entender de marketing.
           </motion.p>
 
           {/* CTA */}
@@ -118,7 +118,7 @@ export function Hero() {
                   rel="noopener noreferrer"
                   className="group flex items-center justify-center gap-2 text-center"
                 >
-                  FALAR COM A CINEZE NO WHATSAPP
+                  QUERO FALAR COM A CINEZE
                   <ArrowRight className="w-5 h-5 shrink-0 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
@@ -129,7 +129,7 @@ export function Hero() {
               transition={{ delay: 0.7 }}
               className="text-sm text-muted-foreground text-center px-2"
             >
-              Uma conversa direta sobre o marketing do seu negócio. Sem formulário, sem robô, sem compromisso.
+              Uma conversa no WhatsApp sobre o seu negócio. Sem robô, sem compromisso.
             </motion.p>
           </motion.div>
         </div>

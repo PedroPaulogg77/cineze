@@ -7,9 +7,10 @@ import logoCineze from "@/assets/logo-cineze.png";
 const WHATSAPP_LINK = "https://wa.me/5531985335573";
 
 const navLinks = [
-  { href: "#objecoes", label: "Diferenciais" },
+  { href: "#entrega", label: "Como Fazemos" },
+  { href: "#solucoes", label: "Serviços" },
+  { href: "#case", label: "Cases" },
   { href: "#fundadores", label: "Quem Somos" },
-  { href: "#solucoes", label: "Soluções" },
   { href: "#faq", label: "FAQ" },
 ];
 

@@ -9,7 +9,7 @@ const founders = [
     image: davidsonImg,
     icon: Shield,
     description:
-      "Davidson cuida pra que todo lead gerado pelo marketing seja capturado, respondido e acompanhado. São dele as automações de WhatsApp, as integrações de CRM e o sistema que transforma interesse em agendamento, sem depender de processo manual.",
+      "Davidson faz a parte que segura o cliente depois que ele chega. Automação de WhatsApp, CRM e as integrações que transformam um 'oi' em agendamento, sem ninguém precisar responder na mão.",
   },
   {
     name: "Pedro",
@@ -17,7 +17,7 @@ const founders = [
     image: "/assets/pedro.webp",
     icon: Rocket,
     description:
-      "Pedro lidera a estratégia e a criação da Cineze. Designer há mais de 10 anos, junta estratégia de marketing e execução com apoio de IA pra entregar em escala sem perder a mão. Foco em resultado que dá pra medir, não em post bonito.",
+      "Pedro toca a estratégia e a criação. Designer há mais de 10 anos, usa IA pra dar conta do volume sem perder a qualidade. O que ele persegue é resultado que dá pra medir.",
   },
 ];
 
@@ -50,8 +50,11 @@ export function Founders() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            A Cineze nasceu de uma convicção:{" "}
+          <span className="text-sm font-semibold uppercase tracking-wide text-secondary">
+            Quem está por trás
+          </span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
+            A gente começou por um incômodo:{" "}
             <motion.span
               className="gradient-text inline-block"
               initial={{ opacity: 0 }}
@@ -59,7 +62,7 @@ export function Founders() {
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              bom serviço merece ser encontrado.
+              negócio bom que ninguém acha.
             </motion.span>
           </h2>
           <motion.p
@@ -142,9 +145,9 @@ export function Founders() {
             </motion.div>
             <h3 className="text-2xl md:text-3xl font-bold mb-4">A Convergência</h3>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Toda semana, negócios competentes em BH perdem clientes para concorrentes com produto pior mas marketing melhor. Isso é injusto — e tem solução. A Cineze foi criada para isso: unir{" "}
-              <strong className="text-foreground">estratégia de marketing</strong>, design profissional e{" "}
-              <strong className="text-foreground">automação inteligente</strong> numa operação que gera resultado real, não presença decorativa.
+              Toda semana um negócio bom em BH perde cliente pro concorrente que entrega pior mas aparece mais. A gente montou a Cineze pra corrigir isso, com{" "}
+              <strong className="text-foreground">estratégia</strong>, design e{" "}
+              <strong className="text-foreground">automação</strong> trabalhando junto e focados em cliente que chega.
             </p>
           </motion.div>
         </motion.div>

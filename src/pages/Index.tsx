@@ -1,10 +1,11 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { ObjectionBreaker } from "@/components/ObjectionBreaker";
-import { Founders } from "@/components/Founders";
+import { Problema } from "@/components/Problema";
+import { Entrega } from "@/components/Entrega";
 import { Solutions } from "@/components/Solutions";
-import { CaseDestaque } from "@/components/CaseDestaque";
 import { SocialProof } from "@/components/SocialProof";
+import { Processo } from "@/components/Processo";
+import { Founders } from "@/components/Founders";
 import { FAQ } from "@/components/FAQ";
 import { FinalCTA } from "@/components/FinalCTA";
 
@@ -14,11 +15,12 @@ const Index = () => {
       <Header />
       <main className="flex-1">
         <Hero />
-        <ObjectionBreaker />
-        <Founders />
+        <Problema />
+        <Entrega />
         <Solutions />
-        <CaseDestaque />
         <SocialProof />
+        <Processo />
+        <Founders />
         <FAQ />
         <FinalCTA />
       </main>

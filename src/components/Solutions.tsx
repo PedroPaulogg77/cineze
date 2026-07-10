@@ -29,13 +29,13 @@ const marketingServices: Service[] = [
     icon: MousePointerClick,
     title: "Tráfego Pago (Gestão de Anúncios)",
     what: "Gestão de anúncios no Google Ads e no Meta Ads, do planejamento ao acompanhamento.",
-    diferencial: "Foco em lead e venda, não em métrica de vaidade. Cada campanha é ajustada pelo resultado real, não pelo que fica bonito no print.",
+    diferencial: "O que importa é lead e venda. A gente rastreia cada real investido e ajusta a campanha pelo resultado que aparece no caixa.",
     beneficio: "Captação mais previsível, com custo por lead rastreado e relatório claro a cada quinzena.",
   },
   {
     icon: Globe,
     title: "Criação de Páginas (Sites e Landing Pages)",
-    what: "Sites e landing pages feitos pra transformar visitante em contato, não só pra ficar bonito.",
+    what: "Sites e landing pages rápidos, construídos pra virar contato de verdade.",
     diferencial: "Página pensada por quem entende de copy e design juntos. Estética a serviço da conversão.",
     beneficio: "Mais visitante virando contato de verdade.",
   },
@@ -43,14 +43,14 @@ const marketingServices: Service[] = [
     icon: Palette,
     title: "Criativos (Anúncios e Posts)",
     what: "Criação dos anúncios e posts que rodam nas campanhas e no perfil.",
-    diferencial: "Feito com apoio de IA pra ganhar escala, mas com a mão de um designer de 10 anos por trás. Não é template.",
+    diferencial: "A gente usa IA pra ganhar velocidade, mas quem finaliza é um designer de 10 anos. Dá pra perceber a diferença.",
     beneficio: "Conteúdo que prende a atenção certa e leva pro próximo passo.",
   },
   {
     icon: Target,
     title: "Assessoria de Marketing (Gestão Completa)",
     what: "A gente cuida do marketing do seu negócio do começo ao fim: estratégia, execução e ajuste, mês a mês.",
-    diferencial: "Você trata com quem pensa a estratégia e também põe a mão na massa. Sem repassar pro estagiário, sem pacote genérico.",
+    diferencial: "Você fala direto com quem pensa a estratégia e também executa. Ninguém vai repassar o seu negócio pro estagiário.",
     beneficio: "Um time de marketing inteiro sem o custo de montar um departamento interno.",
   },
 ];
@@ -75,17 +75,17 @@ const automacaoServices: Service[] = [
     title: "Integrações entre Plataformas",
     what: "Meta Ads, Google Ads, WhatsApp, CRM e site conversando entre si, sem retrabalho manual.",
     diferencial: "O lead que veio do anúncio já entra no CRM e recebe follow-up na hora.",
-    beneficio: "Marketing que funciona como sistema, não como um monte de tarefa solta.",
+    beneficio: "Seu marketing rodando como um sistema só, sem retrabalho manual.",
   },
 ];
 
 const servicesMap: Record<TabKey, { description: string; services: Service[] }> = {
   marketing: {
-    description: "Estratégia, tráfego pago, conteúdo, site e criativo pensados juntos — não peças soltas. Com relatório claro do que está funcionando e do que não está.",
+    description: "Tráfego pago, conteúdo, site e criativo puxando pro mesmo lado. Todo mês você recebe um relatório do que funcionou e do que a gente vai ajustar.",
     services: marketingServices,
   },
   automacao: {
-    description: "De nada adianta gerar contato e demorar pra responder. A gente monta o sistema que fala com o lead na hora, qualifica e agenda — enquanto você atende quem já está na sua frente.",
+    description: "Não adianta gerar contato e deixar o cliente esperando. A gente monta o sistema que responde na hora, qualifica e agenda sozinho, enquanto você atende quem já está na sua frente.",
     services: automacaoServices,
   },
 };
@@ -108,7 +108,10 @@ export function Solutions() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+          <span className="text-sm font-semibold uppercase tracking-wide text-secondary">
+            O que a gente faz
+          </span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
             Seu marketing inteiro{" "}
             <span className="gradient-text">numa operação só.</span>
           </h2>

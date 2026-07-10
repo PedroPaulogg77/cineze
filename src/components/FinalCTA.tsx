@@ -69,7 +69,7 @@ export function FinalCTA() {
                   rel="noopener noreferrer"
                   className="group flex items-center justify-center gap-2 text-center"
                 >
-                  FALAR COM A CINEZE NO WHATSAPP
+                  QUERO COMEÇAR COM A CINEZE
                   <ArrowRight className="w-5 h-5 shrink-0 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
